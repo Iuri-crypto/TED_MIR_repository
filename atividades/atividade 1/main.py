@@ -18,10 +18,6 @@ from levantamento_tecnico_distribuicao import levantamento_tecnico
 
 
 
- 
-                     
-
-
 class Data_Analise:
     """ Analise de dados """
     def __init__(self, alimentador, mes, dia, ponto):
@@ -41,33 +37,6 @@ class Data_Analise:
         self.curvas_somadas = {}
         self.curva_alimentador_dic = {}
         self.cargas_classificacao = {}
-
-
-
-
-
-    def carrega_dados_linhas(self):
-        """ Carrega linhas de média e linhas de baixa """
-
-        colunas = ["cod_id", "ctmt", "ct_cod_op", "sub", "tip_inst", "comp"]
-        colunas_str = ", ".join(colunas)
-        query = f"SELECT {colunas_str} FROM ssdbt"
-        self.cur.execute(query)
-        self.resul_ssdbt = self.cur.fetchall()
-
-        colunas = ["cod_id", "ctmt", "ct_cod_op", "sub", "tip_inst", "comp"]
-        colunas_str = ", ".join(colunas)
-        query = f"SELECT {colunas_str} FROM ssdmt"
-        self.cur.execute(query)
-        self.resul_ssdmt = self.cur.fetchall()
-
-        return self.resul_ssdmt, self.resul_ssdbt
-
-
-
-
-
-
 
 
 if __name__ == "__main__":
