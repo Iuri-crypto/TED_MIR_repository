@@ -1,0 +1,15 @@
+
+bancos:
+  energisa_mt:
+    host: localhost
+    port: 5432
+    dbname: BDGD_2023_ENERGISA_MT
+    user: iuri
+    password: aa11bb22
+
+  aneel:
+    host: localhost
+    port: 5432
+    dbname: ANEEL
+    user: iuri
+    password: aa11bb22
