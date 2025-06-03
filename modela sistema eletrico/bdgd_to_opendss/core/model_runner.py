@@ -68,15 +68,15 @@ class ModelRunner:
 
             df_linecodes_baixa_tensao = load_bdgd.linecodes_baixa_tensao(conn_mt)
             df_linecodes_baixa_tensao = ValidatorLinecodesBaixaTensao().validate_dataframe(df_linecodes_baixa_tensao)
-            modelated_inecodes_media_tensao = LinecodeLowVoltage().to_dss(df_linecodes_baixa_tensao)
+            modelated_linecodes_baixa_tensao = LinecodeLowVoltage().to_dss(df_linecodes_baixa_tensao)
             
             df_linecodes_media_tensao = load_bdgd.linecodes_media_tensao(conn_mt)
             df_linecodes_media_tensao = ValidatorLinecodesMediaTensao().validate_dataframe(df_linecodes_media_tensao)
-            modelated_inecodes_media_tensao = LinecodeMediumVoltage().to_dss(df_linecodes_media_tensao)
+            modelated_linecodes_media_tensao = LinecodeMediumVoltage().to_dss(df_linecodes_media_tensao)
 
             df_linecodes_ramais = load_bdgd.linecodes_ramais(conn_mt)
             df_linecodes_ramais = ValidatorLinecodesRamais().validate_dataframe(df_linecodes_ramais)
-            modelated_inecodes_media_tensao = LinecodeRamais().to_dss(df_linecodes_ramais)
+            modelated_linecodes_ramais = LinecodeRamais().to_dss(df_linecodes_ramais)
 
             df_linhas_baixa_tensao = load_bdgd.linhas_baixa_tensao(conn_mt)
             df_linhas_baixa_tensao = ValidatorLinhasBaixaTensao().validate_dataframe(df_linhas_baixa_tensao)
@@ -124,7 +124,8 @@ class ModelRunner:
             # Escrita da modelagem
             write_cenario_1(caminho).to_dss(modelated_slacks, modelated_compensadores_reativo_media, modelated_compensadores_reativo_baixa,
                                      modelated_chaves_seccionadoras_baixa_tensao, modelated_chaves_seccionadoras_media_tensao,
-                                     modelated_geradores_media_tensao, modelated_inecodes_media_tensao, modelated_linhas_baixa_tensao,
+                                     modelated_geradores_media_tensao, modelated_linecodes_baixa_tensao, modelated_linecodes_media_tensao,
+                                     modelated_linhas_baixa_tensao, modelated_linecodes_ramais,
                                      modelated_linhas_media_tensao, modelated_Ramais_Ligacao, modelated_cargas_baixa_tensa,
                                      modelated_cargas_media_tensao, modelated_gd_baixa_tensao, modelated_gd_media_tensao,
                                      modelated_Cargas_PIP, modelated_transformadores_Media_tensao, modelated_Reguladores_Media_Tensao,
