@@ -416,13 +416,13 @@ class loashape_class:
         
         query = """
                 SELECT 
-                         ctmt.ene_10 ,
+                        ctmt.ene_10 ,
             
                         ctmt.perd_med, ctmt.cod_id
                         
                 FROM ctmt
                 """
-            
+
         # carregamento dos dados
         self.cur.execute(query)
         

@@ -1,10 +1,15 @@
-import os
-import re
+
+from tqdm import tqdm  # Certifique-se de instalar: pip install tqdm
+
 import networkx as nx
+from networkx.drawing.nx_agraph import to_agraph
+import pandas as pd
+import re
+
 import matplotlib.pyplot as plt
 
 # Diretório base
-caminho_base = r"C:\TED_MIR\repositorios\TED_MIR_repository\modela sistema eletrico\bdgd_to_opendss\cenarios\cenario_1\001001\run.dss"
+caminho_base = r"C:\TED MIDR\TED_MIR_repository\modela sistema eletrico\bdgd_to_opendss\cenarios\cenario_1\001001\run.dss"
 
 # Grafo para armazenar conexões
 grafo = nx.Graph()
@@ -21,7 +26,6 @@ def carregar_linhas_arquivo(caminho):
     except Exception as e:
         print(f"Erro ao abrir o arquivo: {e}")
         return []
-
 
 
 
@@ -51,6 +55,8 @@ def extrair_barra_slack(linhas):
                 if match_bus1 and match_bus2:
                     bus1 = match_bus1.group(1)
                     bus2 = match_bus2.group(1)
+
+                    grafo.add_edge(bus1, bus2)
 
                     if bus1.split('.')[0].lower() == "sourcebus":
                         nome_barra = bus2.split('.')[0]
@@ -126,6 +132,8 @@ def extrair_tensoes_transformadores(linhas):
                 tensoes_transformadores[pac1] = kv1
                 tensoes_transformadores[pac2] = kv2
 
+                grafo.add_edge(pac1, pac2)
+
                 # Função auxiliar para atualizar fases se a nova quantidade for maior
                 def atualiza_fases_trafos(pac, novas_fases):
                     if pac not in pacs_fases_trafos:
@@ -147,7 +155,6 @@ def extrair_tensoes_transformadores(linhas):
 
 
 def vincular_segmentos(linhas):
-    grafo = nx.Graph()
     pac_fases = {}
 
     for linha in linhas:
@@ -195,7 +202,7 @@ def vincular_segmentos(linhas):
 
 
 
-tensoes_buses = []
+tensoes_buses = {}
 def extrair_transformadores(linhas):
     for i, linha in enumerate(linhas):
         if "New Transformer" in linha and i + 2 < len(linhas):
@@ -233,6 +240,191 @@ def propagar_tensoes():
 
 
 
+def extrair_linhas_para_dict(linhas_raw):
+    linhas_dict = {}
+    contador = 0
+    for linha in linhas_raw:
+        if "New Line" in linha:
+            match_bus1 = re.search(r"bus1\s*=\s*([\w\d\.]+)", linha, re.IGNORECASE)
+            match_bus2 = re.search(r"bus2\s*=\s*([\w\d\.]+)", linha, re.IGNORECASE)
+            match_phases = re.search(r"phases\s*=\s*([\d]+)", linha, re.IGNORECASE)
+
+            if match_bus1 and match_bus2:
+                bus1 = match_bus1.group(1).split('.')[0]
+                bus2 = match_bus2.group(1).split('.')[0]
+
+                fases = []
+                if match_phases:
+                    num_fases = int(match_phases.group(1))
+                    # A, B, C → 1, 2, 3
+                    fases = ['1', '2', '3'][:num_fases]
+
+                linhas_dict[f"Linha_{contador}"] = {
+                    "Bus1": bus1,
+                    "Bus2": bus2,
+                    "Phases": fases
+                }
+                contador += 1
+    return linhas_dict
+
+
+
+def ajustar_fases_para_cargas_rapido(grafo, pac_cargas, pac_fases, pacs_fases_trafos, linhas):
+    import networkx as nx
+    from tqdm import tqdm
+
+    alteracoes = {}
+
+    # Pré-calcular caminhos mínimos dos transformadores para todos os nós
+    caminhos_minimos = nx.multi_source_dijkstra_path(grafo, pacs_fases_trafos)
+
+    carga_escolhida = None
+    caminho_barramentos_para_carga = []
+
+    for carga, fases_carga in tqdm(pac_cargas.items(), desc="Ajustando fases com propagação"):
+        if carga not in grafo.nodes:
+            continue
+
+        fases_carga_set = set(fases_carga)
+
+        # Barramentos conectados à carga
+        barramentos_conectados = list(grafo.neighbors(carga))
+        if not barramentos_conectados:
+            continue
+
+        for barramento_inicial in barramentos_conectados:
+            if barramento_inicial not in caminhos_minimos:
+                continue
+
+            caminho = caminhos_minimos[barramento_inicial]
+
+
+            houve_alteracao = False
+
+            for barramento in caminho:
+                if barramento not in pac_fases:
+                    pac_fases[barramento] = []
+
+                fases_atuais = set(pac_fases[barramento])
+                if not fases_carga_set.issubset(fases_atuais):
+                    novas_fases = fases_atuais.union(fases_carga_set)
+                    if barramento not in alteracoes:
+                        alteracoes[barramento] = {
+                            "antes": list(fases_atuais),
+                            "depois": list(novas_fases)
+                        }
+                    pac_fases[barramento] = list(novas_fases)
+                    houve_alteracao = True
+
+            if houve_alteracao and carga_escolhida is None:
+                carga_escolhida = carga
+                caminho_barramentos_para_carga = caminho
+                break  # para a iteração de barramentos
+
+        if carga_escolhida is not None:
+            break  # já encontrou uma carga com alteração
+
+    # Atualiza fases das linhas
+    for linha_id, linha_info in linhas.items():
+        bus1 = linha_info.get('Bus1')
+        bus2 = linha_info.get('Bus2')
+
+        fases_bus1 = set(pac_fases.get(bus1, []))
+        fases_bus2 = set(pac_fases.get(bus2, []))
+
+        fases_linha = fases_bus1.union(fases_bus2)
+        fases_atuais_linha = set(linha_info.get('Phases', []))
+
+        if fases_linha != fases_atuais_linha:
+            linhas[linha_id]['Phases'] = list(fases_linha)
+
+    return alteracoes, carga_escolhida, caminho_barramentos_para_carga
+
+
+
+def mapear_caminhos_carga_para_trafo(grafo, pac_cargas, pacs_fases_trafos):
+    caminhos_cargas = {}
+
+    # Caminhos de todos os nós até os trafos mais próximos
+    caminhos_completos = nx.multi_source_dijkstra_path(grafo, pacs_fases_trafos)
+
+    for carga in tqdm(pac_cargas.keys(), desc="Mapeando caminhos carga-trafo"):
+        if carga not in grafo.nodes:
+            continue
+
+        # Vizinhos conectados à carga
+        barramentos_conectados = list(grafo.neighbors(carga))
+        if not barramentos_conectados:
+            continue
+
+        menor_caminho = None
+        menor_tamanho = float("inf")
+
+        for barramento in barramentos_conectados:
+            if barramento not in caminhos_completos:
+                continue
+
+            caminho = caminhos_completos[barramento]  # já é o caminho do barramento ao trafo
+            caminho_completo = [carga] + caminho
+
+            if len(caminho_completo) < menor_tamanho:
+                menor_tamanho = len(caminho_completo)
+                menor_caminho = caminho_completo
+
+        if menor_caminho:
+            caminhos_cargas[carga] = menor_caminho
+
+    return caminhos_cargas
+
+
+
+
+
+def hierarchy_pos(G, root, width=1.0, vert_gap=0.2, vert_loc=0, xcenter=0.5, pos=None, parent=None):
+    """
+    Gera posições para plot hierárquico (sem usar pygraphviz).
+    """
+    if pos is None:
+        pos = {root: (xcenter, vert_loc)}
+    else:
+        pos[root] = (xcenter, vert_loc)
+    
+    neighbors = list(G.neighbors(root))
+    if parent:
+        if parent in neighbors:
+            neighbors.remove(parent)
+    if neighbors:
+        dx = width / len(neighbors)
+        next_x = xcenter - width/2 - dx/2
+        for neighbor in neighbors:
+            next_x += dx
+            pos = hierarchy_pos(G, neighbor, width=dx, vert_gap=vert_gap,
+                                vert_loc=vert_loc - vert_gap, xcenter=next_x,
+                                pos=pos, parent=root)
+    return pos
+
+
+def plotar_grafo_radial(grafo, raiz):
+    arvore = nx.bfs_tree(grafo, raiz)
+    pos = hierarchy_pos(arvore, raiz, width=2.0)  # alargar horizontalmente
+
+    plt.figure(figsize=(30, 15))  # aproveita melhor a tela
+    nx.draw(
+        arvore,
+        pos=pos,
+        with_labels=False,
+        node_size=5,             # maior que antes
+        node_color="skyblue",
+        edge_color="red",
+        linewidths=0.5,
+        alpha=0.9
+    )
+    plt.axis("off")
+    plt.tight_layout()
+    plt.show()
+
+
+
 
 linhas = carregar_linhas_arquivo(caminho_base)
 
@@ -241,11 +433,20 @@ pac_cargas = extrair_buses_cargas(linhas)
 
 
 tensoes_transformadores, pacs_fases_trafos = extrair_tensoes_transformadores(linhas)
-vincular_segmentos(linhas)
+grafo, pac_fases = vincular_segmentos(linhas)
 
-visitados = set(nx.dfs_preorder_nodes(grafo, pac_fases_slack))
-cargas_conectadas = pac_cargas.intersection(visitados)
-cargas_desconectadas = pac_cargas.difference(visitados)
+
+caminhos_carga_trafo = mapear_caminhos_carga_para_trafo(grafo, pac_cargas, pacs_fases_trafos)
+
+
+nó_inicial = list(pac_fases_slack.keys())[0]
+visitados = set(nx.dfs_preorder_nodes(grafo, nó_inicial))
+
+cargas_conectadas = set(pac_cargas.keys()).intersection(visitados)
+cargas_desconectadas = set(pac_cargas.keys()).difference(visitados)
+
+
+#plotar_grafo_radial(grafo, nó_inicial)
 
 print("Cargas conectadas:", cargas_conectadas)
 print("Cargas desconectadas:", cargas_desconectadas)
@@ -257,6 +458,24 @@ propagar_tensoes()
 
 print("Tensões dos buses:")
 for bus, tensao in tensoes_buses.items():
-    print(f"Bus: {bus}, Tensão: {tensao} kV")
+   print(f"Bus: {bus}, Tensão: {tensao} kV")
 
 
+linhas_raw = carregar_linhas_arquivo(caminho_base)
+linhas_dict = extrair_linhas_para_dict(linhas_raw)
+
+
+alteracoes, carga_escolhida, caminho_barramentos_para_carga = ajustar_fases_para_cargas_rapido(grafo, pac_cargas, pac_fases, pacs_fases_trafos, linhas_dict)
+
+
+
+
+df_alteracoes = pd.DataFrame([
+    {"pac": pac, "fases_antes": info["antes"], "fases_depois": info["depois"]}
+    for pac, info in alteracoes.items()
+])
+
+# Mostra os barramentos modificados
+print("\n=== Barramentos com alteração de fases ===")
+for pac, info in alteracoes.items():
+    print(f"Barramento: {pac} | Antes: {info['antes']} -> Depois: {info['depois']}")

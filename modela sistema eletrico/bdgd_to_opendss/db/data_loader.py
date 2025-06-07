@@ -693,5 +693,60 @@ class load_bdgd:
 
 
 
+    @staticmethod
+    def Consulta_Cargas_Agregadas(conn) -> pd.DataFrame:
+        """Extração dos dados das cargas e os trafos que elas estão vinculadas"""
+
+        query = ( """
+            SELECT 
+                ucbt_tab.uni_tr_mt, 
+                ucbt_tab.cod_id, 
+                ucbt_tab.ctmt, 
+                ctmt.nome 
+            FROM 
+                ucbt_tab
+            JOIN 
+                ctmt 
+                ON ctmt.cod_id = ucbt_tab.ctmt;
+                """
+        )
+
+        try:
+            df = pd.read_sql(query, conn)
+            return df
+        except Exception as e:
+            print(f"Erro ao carregar a Consulta de Cargas agregadas: {e}")
+            return pd.DataFrame()
+
+
+
+    @staticmethod
+    def Consulta_GD_FV_BT_Agregados(conn) -> pd.DataFrame:
+        """Extração dos dados das GD's de BT aos seus trafos vinculados """
+
+        query = ( """
+            SELECT 
+                ugbt_tab.uni_tr_mt, 
+                ugbt_tab.cod_id, 
+                ugbt_tab.ctmt, 
+                ctmt.nome 
+            FROM 
+                ugbt_tab
+            JOIN 
+                ctmt 
+                ON ctmt.cod_id = ugbt_tab.ctmt;
+                """
+        )
+
+        try:
+            df = pd.read_sql(query, conn)
+            return df
+        except Exception as e:
+            print(f"Erro ao carregar a Consulta de GD's Agregadas: {e}")
+            return pd.DataFrame()
+
+
+
+
 
                     

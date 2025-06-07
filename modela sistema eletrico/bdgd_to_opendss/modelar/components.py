@@ -262,9 +262,9 @@ class SwitchMediumVoltage:
                 chave = cod_id[i]
                 linha = (
                     f"New line.{chave}_Chave_seccionadora_media_tensao "
-                    f"phases = {phases[i]} "
-                    f"bus1 = {pac_1[i]}{rec_fases[i]} "
-                    f"bus2 = {pac_2[i]}{rec_fases[i]} "
+                    f"phases = 3 "
+                    f"bus1 = {pac_1[i]}.1.2.3 "
+                    f"bus2 = {pac_2[i]}.1.2.3 "
                     f"switch = {pn_ope[i]}\n\n"
                 )
                 chunk_result.setdefault(nome[i], []).append(linha)  # ✅ use chunk_result aqui
@@ -361,8 +361,16 @@ class LinecodeLowVoltage:
             chunk["nome"] = chunk["nome"].astype(str)
 
             # Monta a string DSS vetorialmente
+            # chunk["linha"] = (
+            #     "New linecode." + chunk["tip_cnd"] + "_linecode_baixa nphases=" + chunk["phases"] + " BaseFreq=60\n" +
+            #     "~ r1=" + chunk["r1"] + "\n" +
+            #     "~ x1=" + chunk["x1"] + "\n" +
+            #     "~ c1=0\n" +
+            #     "~ Normamps = " + chunk["cnom"] + "\n" +
+            #     "~ Emergamps = " + chunk["cmax_renamed"] + "\n\n"
+            # )
             chunk["linha"] = (
-                "New linecode." + chunk["tip_cnd"] + "_linecode_baixa nphases=" + chunk["phases"] + " BaseFreq=60\n" +
+                "New linecode." + chunk["tip_cnd"] + "_linecode_baixa nphases=" + '3' + " BaseFreq=60\n" +
                 "~ r1=" + chunk["r1"] + "\n" +
                 "~ x1=" + chunk["x1"] + "\n" +
                 "~ c1=0\n" +
@@ -414,14 +422,23 @@ class LinecodeMediumVoltage:
             chunk["nome"] = chunk["nome"].astype(str)
 
             # Construção vetorial da string DSS
+            # chunk["linha"] = (
+            #     "New linecode." + chunk["tip_cnd"] + "_linecode_media nphases=" + chunk["phases"] + " BaseFreq=60\n" +
+            #     "~ r1=" + chunk["r1"] + "\n" +
+            #     "~ x1=" + chunk["x1"] + "\n" +
+            #     "~ c1=0\n" +
+            #     "~ Normamps=" + chunk["cnom"] + "\n" +
+            #     "~ Emergamps=" + chunk["cmax_renamed"] + "\n\n"
+            # )
             chunk["linha"] = (
-                "New linecode." + chunk["tip_cnd"] + "_linecode_media nphases=" + chunk["phases"] + " BaseFreq=60\n" +
+                "New linecode." + chunk["tip_cnd"] + "_linecode_media nphases=" + '3' + " BaseFreq=60\n" +
                 "~ r1=" + chunk["r1"] + "\n" +
                 "~ x1=" + chunk["x1"] + "\n" +
                 "~ c1=0\n" +
                 "~ Normamps=" + chunk["cnom"] + "\n" +
                 "~ Emergamps=" + chunk["cmax_renamed"] + "\n\n"
             )
+
 
             return chunk.groupby("nome")["linha"].agg(list).to_dict()
 
@@ -467,8 +484,17 @@ class LinecodeRamais:
             chunk["tip_cnd"] = chunk["tip_cnd"].astype(str)
             chunk["nome"] = chunk["nome"].astype(str)
 
+            # chunk["linha"] = (
+            #     "New linecode." + chunk["tip_cnd"] + "_linecode_ramais nphases=" + chunk["phases"] + " BaseFreq=60\n" +
+            #     "~ r1=" + chunk["r1"] + "\n" +
+            #     "~ x1=" + chunk["x1"] + "\n" +
+            #     "~ c1=0\n" +
+            #     "~ Normamps=" + chunk["cnom"] + "\n" +
+            #     "~ Emergamps=" + chunk["cmax_renamed"] + "\n\n"
+            # )
+
             chunk["linha"] = (
-                "New linecode." + chunk["tip_cnd"] + "_linecode_ramais nphases=" + chunk["phases"] + " BaseFreq=60\n" +
+                "New linecode." + chunk["tip_cnd"] + "_linecode_ramais nphases=" + '3' + " BaseFreq=60\n" +
                 "~ r1=" + chunk["r1"] + "\n" +
                 "~ x1=" + chunk["x1"] + "\n" +
                 "~ c1=0\n" +
@@ -586,9 +612,9 @@ class LineMediumVoltage:
             # Cria a coluna 'linha' com a string DSS usando concatenação vetorizada
             chunk["linha"] = (
                 "New Line." + chunk["cod_id"] + "_linha_media " +
-                "Phases = " + chunk["phases"] + " " +
-                "Bus1 = " + chunk["pac_1"] + chunk["rec_fases"] + " " +
-                "Bus2 = " + chunk["pac_2"] + chunk["rec_fases"] + " " +
+                "Phases = " + '3' + " " +
+                "Bus1 = " + chunk["pac_1"] + '.1.2.3' + " " +
+                "Bus2 = " + chunk["pac_2"] + '.1.2.3' + " " +
                 "Linecode = " + chunk["tip_cnd"] + "_linecode_media " +
                 "Length = " + chunk["comp"] + " units = m\n"
             )
@@ -683,8 +709,10 @@ class LoadLowVoltage:
             ten_nom_voltage = ten_nom_voltage.where(chunk["phases"] >= 2,
                                                     ten_nom_voltage / math.sqrt(3))
             
+            # Ajustar rec_fases: adicionar '.4' apenas onde phase == 1 e não termina com '.4'
             rec_fases = chunk["rec_fases"].astype(str)
-            rec_fases = rec_fases.apply(lambda x: x if '.4' in x else x + '.4')
+            mask = (chunk["phases"] == 1) & (~rec_fases.str.endswith('.4'))
+            rec_fases[mask] = rec_fases[mask] + '.4'
 
 
             # Substituir espaços por tabs na string de potências
@@ -745,7 +773,10 @@ class LoadMediumVoltage:
             ten_nom_voltage = ten_nom_voltage.where(chunk["phases"] >= 2,
                                                     ten_nom_voltage / math.sqrt(3))
             rec_fases = chunk["rec_fases"].astype(str)
-            rec_fases = rec_fases.apply(lambda x: x if '.4' in x else x + '.4')
+            # Ajustar rec_fases: adicionar '.4' apenas onde phase == 1 e não termina com '.4'
+            rec_fases = chunk["rec_fases"].astype(str)
+            mask = (chunk["phases"] == 1) & (~rec_fases.str.endswith('.4'))
+            rec_fases[mask] = rec_fases[mask] + '.4'
 
 
             # Substituir espaços por tabs na string de potências
@@ -757,7 +788,7 @@ class LoadMediumVoltage:
                 'New Load.nome_' + chunk["cod_id"].astype(str)
                 + '_curva_diaria_' + chunk["tip_cc"].astype(str)
                 + '_curva_anual_' + potencias_tab
-                + '_carga_baixa '
+                + '_carga_media '
                 + 'Bus1=' + chunk["pac"].astype(str) +  rec_fases.astype(str) + ' '
                 + 'Phases=' + chunk["phases"].astype(str) + '\n'
                 + '~ Conn=' + chunk["conn"].astype(str)
@@ -827,14 +858,13 @@ class GD_FV_BT:
                 if phases < 2:
                     ten_nom_voltage = ten_nom_voltage / math.sqrt(3)
                 
-                fases = rec_fases.strip('.').split('.')  # ['1', '2', '3']
+                fases = rec_fases.strip('.').split('.')  # Ex: ['1', '2', '3']
 
-                if '4' not in fases:
+                # Adiciona '.4' somente se phases == 1 e ainda não contém '4'
+                if phases == 1 and '4' not in fases:
                     fases.append('4')
 
-                # Recria a string no mesmo formato: '.1.2.3.4'
                 rec = '.' + '.'.join(fases)
-
 
                 linha = (
                     f"New xycurve.mypvst_{cod_id} npts = 4 xarray=[0 25 75 100] yarray=[1.2 1.0 0.8 0.6]\n"
@@ -843,7 +873,7 @@ class GD_FV_BT:
                     f"New tshape.mytemp_{cod_id} npts = 1 interval = 1 temp = [25]\n\n"
                     f"New pvsystem.pv_{cod_id} phases = {phases} conn = wye bus1 = {pac}{rec}\n"
                     f"~ kv = {ten_nom_voltage} kva = {mdpotenciaoutorgada} pmpp = {mdpotenciainstalada}\n"
-                    f"~ pf = 0.92 %cutin = 0.00005 %cutout = 0.00005 varfollowinverter = Yes effcurve = myeff_{cod_id}\n"
+                    f"~ pf = 1 %cutin = 0.00005 %cutout = 0.00005 varfollowinverter = Yes effcurve = myeff_{cod_id}\n"
                     f"~ p-tcurve = mypvst_{cod_id} daily = myirrad_{cod_id} tdaily = mytemp_{cod_id}\n\n"
                     f"New load.{cod_id}_carga_no_pv bus1 = {pac}{rec} phases = {phases}\n"
                     f"~ conn = wye model = 1 kv = {ten_nom_voltage} kw = 0.0001\n\n"
@@ -890,14 +920,13 @@ class GD_FV_MT:
                 if phases < 2:
                     ten_nom_voltage = ten_nom_voltage / math.sqrt(3)
 
-                fases = rec_fases.strip('.').split('.')  # ['1', '2', '3']
+                fases = rec_fases.strip('.').split('.')  # Ex: ['1', '2', '3']
 
-                if '4' not in fases:
+                # Adiciona '.4' somente se phases == 1 e ainda não contém '4'
+                if phases == 1 and '4' not in fases:
                     fases.append('4')
 
-                # Recria a string no mesmo formato: '.1.2.3.4'
                 rec = '.' + '.'.join(fases)
-
 
                 linha =  (
                     f"New xycurve.mypvst_{cod_id} npts = 4 xarray=[0 25 75 100] yarray=[1.2 1.0 0.8 0.6]\n"
@@ -906,7 +935,7 @@ class GD_FV_MT:
                     f"New tshape.mytemp_{cod_id} npts = 1 interval = 1 temp = [25]\n\n"
                     f"New pvsystem.pv_{cod_id} phases = {phases} conn = wye bus1 = {pac}{rec}\n"
                     f"~ kv = {ten_nom_voltage} kva = {mdpotenciaoutorgada} pmpp = {mdpotenciainstalada}\n"
-                    f"~ pf = 0.92 %cutin = 0.00005 %cutout = 0.00005 varfollowinverter = Yes effcurve = myeff_{cod_id}\n"
+                    f"~ pf = 1 %cutin = 0.00005 %cutout = 0.00005 varfollowinverter = Yes effcurve = myeff_{cod_id}\n"
                     f"~ p-tcurve = mypvst_{cod_id} daily = myirrad_{cod_id} tdaily = mytemp_{cod_id}\n\n"
                     f"New load.{cod_id}_carga_no_pv bus1 = {pac}{rec} phases = {phases}\n"
                     f"~ conn = wye model = 1 kv = {ten_nom_voltage} kw = 0.0001\n\n"
@@ -941,7 +970,7 @@ class PublicLightingLoad:
             for start in range(0, len(df), chunk_size):
                 chunk = df.iloc[start:start + chunk_size].copy()
 
-                # Conversões vetoriais
+              # Conversões vetoriais
                 chunk["cod_id"] = chunk["cod_id"].astype(str)
                 chunk["pac"] = chunk["pac"].astype(str)
                 chunk["rec_fases"] = chunk["rec_fases"].astype(str)
@@ -952,17 +981,41 @@ class PublicLightingLoad:
                 monofasicas = chunk["phases"] < 2
                 chunk.loc[monofasicas, "ten_nom_voltage"] = chunk.loc[monofasicas, "ten_nom_voltage"] / math.sqrt(3)
 
+                # Ajustar rec_fases: adicionar '.4' apenas onde phase == 1 e não termina com '.4'
                 rec_fases = chunk["rec_fases"].astype(str)
-                rec_fases = rec_fases.apply(lambda x: x if '.4' in x else x + '.4')
+                mask = (chunk["phases"] == 1) & (~rec_fases.str.endswith('.4'))
+                rec_fases[mask] = rec_fases[mask] + '.4'
 
+                # Curva diária base: 96 valores (15 min), 1.0 fora das 6h-18h, 0.0 dentro
+                curva_base_diaria = [0.0 if 6 <= (i * 0.25) < 18 else 1.0 for i in range(96)]
 
                 # Geração das strings
-                chunk["linha"] = (
-                    "New Load.nome_" + chunk["cod_id"] + "_carga_pip Bus1 = " + chunk["pac"] +  rec_fases +
-                    " Phases = " + chunk["phases"].astype(str) + "\n"
-                    "~ Conn = wye Model = 1 Kv = " + chunk["ten_nom_voltage"].round(5).astype(str) +
-                    " Kw = " + chunk["pot_lamp"].round(5).astype(str) + " pf = 0.92\n\n"
-                )
+                linhas = []
+                for i, row in chunk.iterrows():
+                    cod_id = row["cod_id"]
+                    tip_cc = str(row["tip_cc"])
+                    pot_kw = round(row["pot_lamp"], 5)
+
+                    curva_diaria = "_".join([str(round(v, 5)) for v in curva_base_diaria])
+                    curva_anual = "_".join([str(pot_kw)] * 12)
+
+                    nome_completo = (
+                        "nome_" + cod_id +
+                        "_curva_diaria_" + tip_cc + "_" + curva_diaria +
+                        "_curva_anual_" + curva_anual +
+                        "_carga_pip"
+                    )
+
+                    linha = (
+                        "New Load." + nome_completo + " Bus1 = " + row["pac"] + rec_fases.loc[i] +
+                        " Phases = " + str(row["phases"]) + "\n"
+                        "~ Conn = wye Model = 1 Kv = " + str(round(row["ten_nom_voltage"], 5)) +
+                        " Kw = " + str(pot_kw) + " pf = 0.92\n\n"
+                    )
+
+                    linhas.append((row["nome"], linha))
+
+                chunk["linha"] = [linha for _, linha in linhas]
 
                 # Agrupamento por nome
                 agrupado = chunk.groupby("nome")["linha"].apply(list).to_dict()
@@ -973,6 +1026,8 @@ class PublicLightingLoad:
                 progress.update(task, advance=len(chunk))
 
         return chunk_dict
+
+
 
 
 class TransformerMediumVoltage:
@@ -996,7 +1051,7 @@ class TransformerMediumVoltage:
             for start in range(0, len(df), chunk_size):
                 chunk = df.iloc[start:start + chunk_size].copy()
 
-                # Pré-processamento vetorial
+                # Pré-processamento
                 chunk["cod_id"] = chunk["cod_id"].astype(str)
                 chunk["pac_1"] = chunk["pac_1"].astype(str)
                 chunk["pac_2"] = chunk["pac_2"].astype(str)
@@ -1004,20 +1059,25 @@ class TransformerMediumVoltage:
                 chunk["ten_pri"] = chunk["ten_pri"] / 1000
                 chunk["ten_sec"] = chunk["ten_sec"] / 1000
 
-                # Cria coluna rec_fases_t para fases 1 ou 2
-                mask_monobifasico = chunk["phases_p"].isin([1, 2])
-                def inverter_fases(fase_str):
-                    if isinstance(fase_str, str):
-                        fases = fase_str.replace('.', ' ').split()
-                        if not fases:
-                            return ""
-                        return '.' + '.'.join(fases[::-1])
+                # Inversão para fases monofásicas
+                def inverter_fase_monofasica(fase: str) -> str:
+                    if isinstance(fase, str) and fase.count('.') == 2:
+                        partes = fase.strip('.').split('.')
+                        if len(partes) == 2:
+                            return f".{partes[1]}.{partes[0]}"
                     return ""
 
-                chunk.loc[mask_monobifasico, "rec_fases_t"] = chunk.loc[mask_monobifasico, "rec_fases_s"].apply(inverter_fases)
+                mask_monofasico = chunk["phases_p"] == 1
+                chunk.loc[mask_monofasico, "rec_fases_t"] = chunk.loc[mask_monofasico, "rec_fases_p"].apply(inverter_fase_monofasica)
 
+                # Substitui .4 por .0 nas fases
+                def substituir_quatro_por_zero(fase: str) -> str:
+                    if isinstance(fase, str):
+                        return fase.replace(".4", ".0")
+                    return ""
 
-                linhas = []
+                for col in ["rec_fases_p", "rec_fases_s", "rec_fases_t"]:
+                    chunk[col] = chunk[col].apply(substituir_quatro_por_zero)
 
                 def gerar_linha(row):
                     cod_id, pac_1, pac_2 = row["cod_id"], row["pac_1"], row["pac_2"]
@@ -1028,33 +1088,56 @@ class TransformerMediumVoltage:
                     xhl, per_fer, r = row["xhl"], row["per_fer"], row["r"]
                     rec_fases_t = row.get("rec_fases_t", "")
 
+                    # Ajuste especial no bus1 para trafo monofásico — remove .0 se existir
+                    bus1_fase = rec_fases_p
+                    if phases_p == 1 and rec_fases_p.endswith(".0"):
+                        bus1_fase = rec_fases_p.replace(".0", "")
+
                     if phases_p == 1:
-                        ten_pri = round(ten_pri / math.sqrt(3), 3)
-                        ten_sec = round(ten_sec / math.sqrt(3), 3)
+                        #ten_pri = round(ten_pri / math.sqrt(3), 3)
+                        #ten_sec = round(ten_sec / math.sqrt(3), 3)
+                        # return (
+                        #     f"New Transformer.{cod_id} Phases=1 Windings=3 xhl={xhl} %noloadloss={per_fer}\n"
+                        #     f"~ wdg=1 bus={pac_1}{bus1_fase} conn=wye kv={ten_pri} kva={pot_nom} %r={r/2} tap=1\n"
+                        #     f"~ wdg=2 bus={pac_2}{rec_fases_p} conn=wye kv={ten_sec} kva={pot_nom} %r={r} tap=1\n"
+                        #     f"~ wdg=3 bus={pac_2}{rec_fases_t} conn=wye kv={ten_sec} kva={pot_nom} %r={r} tap=1\n\n"
+                        # )
+
+                        # return (
+                        #     f"New Transformer.{cod_id} Phases=1 Windings=2 xhl={xhl} %noloadloss={per_fer}\n"
+                        #     f"~ wdg=1 bus={pac_1}{rec_fases_p} conn=wye kv={ten_pri} kva={pot_nom} %r={r} tap=1\n"
+                        #     f"~ wdg=2 bus={pac_2}{rec_fases_p} conn=wye kv={ten_sec} kva={pot_nom} %r={r} tap=1\n\n"
+                        # )
+                    
                         return (
-                            f"New Transformer.{cod_id} Phases={phases_p} Windings=3 xhl={xhl} %noloadloss={per_fer}\n"
-                            f"~ wdg=1 bus={pac_1}{rec_fases_p} conn=wye kv={ten_pri} kva={pot_nom} %r={r/2} tap=1\n"
-                            f"~ wdg=2 bus={pac_2}{rec_fases_s} conn=wye kv={ten_sec} kva={pot_nom} %r={r} tap=1\n"
-                            f"~ wdg=3 bus={pac_2}{rec_fases_t} conn=wye kv={ten_sec} kva={pot_nom} %r={r} tap=1\n\n"
+                            f"New Transformer.{cod_id} Phases=3 Windings=2 xhl={xhl} %noloadloss={per_fer}\n"
+                            f"~ wdg=1 bus={pac_1}.1.2.3 conn=delta kv={ten_pri} kva={pot_nom} %r={r} tap=1\n"
+                            f"~ wdg=2 bus={pac_2}.1.2.3.0 conn=wye kv={ten_sec} kva={pot_nom} %r={r} tap=1\n\n"
                         )
 
                     elif phases_p == 2:
                         ten_sec = round(ten_sec / math.sqrt(3), 3)
                         return (
-                            f"New Transformer.{cod_id} Phases={phases_p} Windings=3 xhl={xhl} %noloadloss={per_fer}\n"
+                            f"New Transformer.{cod_id} Phases=2 Windings=3 xhl={xhl} %noloadloss={per_fer}\n"
                             f"~ wdg=1 bus={pac_1}{rec_fases_p} conn=delta kv={ten_pri} kva={pot_nom} %r={r/2} tap=1\n"
                             f"~ wdg=2 bus={pac_2}{rec_fases_s} conn=wye kv={ten_sec} kva={pot_nom} %r={r} tap=1\n"
                             f"~ wdg=3 bus={pac_2}{rec_fases_t} conn=wye kv={ten_sec} kva={pot_nom} %r={r} tap=1\n\n"
                         )
 
                     elif phases_p == 3:
+                        # return (
+                        #     f"New Transformer.{cod_id} Phases=3 Windings=2 xhl={xhl} %noloadloss={per_fer}\n"
+                        #     f"~ wdg=1 bus={pac_1}{rec_fases_p} conn=delta kv={ten_pri} kva={pot_nom} %r={r} tap=1\n"
+                        #     f"~ wdg=2 bus={pac_2}{rec_fases_s} conn=wye kv={ten_sec} kva={pot_nom} %r={r} tap=1\n\n"
+                        # )
+                    
                         return (
-                            f"New Transformer.{cod_id} Phases={phases_p} Windings=2 xhl={xhl} %noloadloss={per_fer}\n"
-                            f"~ wdg=1 bus={pac_1}{rec_fases_p} conn=delta kv={ten_pri} kva={pot_nom} %r={r} tap=1\n"
-                            f"~ wdg=2 bus={pac_2}{rec_fases_s} conn=wye kv={ten_sec} kva={pot_nom} %r={r} tap=1\n\n"
+                            f"New Transformer.{cod_id} Phases=3 Windings=2 xhl={xhl} %noloadloss={per_fer}\n"
+                            f"~ wdg=1 bus={pac_1}.1.2.3 conn=delta kv={ten_pri} kva={pot_nom} %r={r} tap=1\n"
+                            f"~ wdg=2 bus={pac_2}.1.2.3.0 conn=wye kv={ten_sec} kva={pot_nom} %r={r} tap=1\n\n"
                         )
 
-                    return None  # Caso não esperado
+                    return None
 
                 chunk["linha"] = chunk.apply(gerar_linha, axis=1)
 
@@ -1066,6 +1149,7 @@ class TransformerMediumVoltage:
                 progress.update(task, advance=len(chunk))
 
         return linhas_dss
+
 
 
 

@@ -9,10 +9,10 @@ def main():
     # 2. Escolha apenas um cenário para ser modelado
     # ----> scenario pode vir com ex: cenario_1, ou:
     # ----> scenario pode vir com 1, indicando erro !!!
-    scenario = ScenarioManager().get_scenario(cenario_1 = True, cenario_2 = False, cenario_3 = False)
+    scenario = ScenarioManager().get_scenario(cenario_1 = False, cenario_2 = True, cenario_3 = False)
     
     # Caminho onde será salvo o cenário modelado
-    caminho = 'modela sistema eletrico\\bdgd_to_opendss\\cenarios\\cenario_1'
+    caminho = "C:\\modelagens\\cenario_2"
 
     # 3. Rodar a modelagem
     model_runner = ModelRunner(scenario)
@@ -22,3 +22,4 @@ if __name__ == "__main__":
     main()
  
  
+    
