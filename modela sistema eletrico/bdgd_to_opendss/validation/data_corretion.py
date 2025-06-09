@@ -977,3 +977,12 @@ class ValidadorReguladoresMediaTensao:
 
 
 
+class ValidadorCurvas_Cargas:
+    def validate_dataframe(self, df: pd.DataFrame) -> pd.DataFrame:
+        # Identifica as colunas de potência (pot_01 a pot_96)
+        pot_cols = [col for col in df.columns if col.startswith("pot_")]
+
+        # Normaliza os valores pelo valor máximo da linha e arredonda com 3 casas decimais
+        df[pot_cols] = df[pot_cols].div(df[pot_cols].max(axis=1), axis=0).round(3)
+
+        return df.reset_index(drop=True)
