@@ -1,0 +1,46 @@
+
+
+bdgd_to_opendss/
++-- bdgd_to_opendss/              # Pacote principal
+¦   +-- __init__.py
+¦   +-- main.py                   # Script de entrada (executa o processo completo)
+¦
+¦   +-- core/                     # Lógica de alto nível de orquestração
+¦   ¦   +-- model_runner.py       # Classe que gerencia o processo de modelagem
+¦   ¦   +-- scenario_manager.py   # Gerencia escolha e aplicação de cenários
+¦
+¦   +-- db/                       # Conexão e extração de dados do banco PostgreSQL
+¦   ¦   +-- __init__.py
+¦   ¦   +-- db_connector.py       # Classe para conectar e consultar o PostgreSQL
+¦   ¦   +-- data_loader.py        # Converte tabelas BDGD em objetos internos
+¦
+¦   +-- validation/               # coreecao de erros dos dados de cada modelo
+¦   ¦   +-- __init__.py
+¦   ¦   +-- bus.py
+¦   ¦   +-- line.py
+¦   ¦   +-- transformer.py
+¦   ¦   +-- load.py
+¦   ¦   +-- generator.py
+¦   ¦  
+¦
+¦   +-- modelar/                  # Onde a modelagem é feita (por tipo de componente)
+¦   ¦   +-- __init__.py
+¦   ¦   +-- model_bus.py
+¦   ¦   +-- model_line.py
+¦   ¦   +-- model_transformer.py
+¦   ¦   +-- model_load.py
+¦   ¦   +-- model_generator.py
+¦
+¦   +-- export/                   # Geração do arquivo final (ex: OpenDSS)
+¦   ¦   +-- __init__.py
+¦   ¦   +-- dss_writer.py         # Constrói arquivos .dss a partir dos objetos
+¦   ¦   +-- file_manager.py       # Salva arquivos, logs, etc.
+¦
+¦   +-- config/                   # Configurações e parâmetros do sistema
+¦   ¦   +-- __init__.py
+¦   ¦   +-- db_config.yaml        # Parâmetros do PostgreSQL
+¦   ¦   +-- scenario_config.yaml  # Cenários possíveis
+¦
++-- requirements.txt
++-- README.md
++-- setup.py
