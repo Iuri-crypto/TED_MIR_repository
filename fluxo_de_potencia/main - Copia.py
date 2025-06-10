@@ -76,7 +76,7 @@ def processar_alimentador(caminho_arquivo):
 
 
 if __name__ == "__main__":
-    caminho_base = r"C:\modelagens\cenario_2"
+    caminho_base = r"C:\TED_MIDR\modelagens\cenario_2"
     arquivos_dss = []
 
     for root, _, files in os.walk(caminho_base):

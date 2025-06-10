@@ -84,7 +84,7 @@ class write_cenario_2:
         self.caminho_saida = caminho
 
     def to_dss(self,
-       modelated_slacks, modelated_compensadores_reativo_media, modelated_compensadores_reativo_baixa, 
+       modelated_slacks, modelated_compensadores_reativo_media, modelated_compensadores_reativo_baixa,
        modelated_chaves_seccionadoras_media_tensao, modelated_cargas_baixa_tensa, modelated_cargas_media_tensao,
        modelated_geradores_media_tensao, modelated_linecodes_media_tensao, modelated_gd_baixa_tensao,
        modelated_Cargas_PIP, modelated_linhas_media_tensao, modelated_gd_media_tensao,
@@ -92,16 +92,23 @@ class write_cenario_2:
     ):
         # Lista de dicionários a serem escritos nos arquivos
         demais_dicionarios = [
-            modelated_compensadores_reativo_media, modelated_compensadores_reativo_baixa, 
+            modelated_compensadores_reativo_media, modelated_compensadores_reativo_baixa,
             modelated_chaves_seccionadoras_media_tensao, modelated_cargas_baixa_tensa, modelated_cargas_media_tensao,
             modelated_geradores_media_tensao, modelated_linecodes_media_tensao, modelated_gd_baixa_tensao,
             modelated_Cargas_PIP, modelated_linhas_media_tensao, modelated_gd_media_tensao,
             modelated_transformadores_Media_tensao
         ]
 
+        # Definir curvas_path antes do bloco condicional
+        curvas_path = os.path.join(self.caminho_saida, "curvas_de_carga.txt")
+
         # Criar curvas de carga uma única vez na pasta principal
         if not df_curvas_de_carga.empty:
-            curvas_path = os.path.join(self.caminho_saida, "curvas_de_carga.txt")
+            # caminho da pasta do arquivo
+            pasta = os.path.dirname(curvas_path)
+            if not os.path.exists(pasta):
+                os.makedirs(pasta)
+            # curvas_path já está definida aqui
             with open(curvas_path, "w", encoding="utf-8") as f_txt:
                 for _, linha in df_curvas_de_carga.iterrows():
                     cod = linha["crvcrg_cod_id"]

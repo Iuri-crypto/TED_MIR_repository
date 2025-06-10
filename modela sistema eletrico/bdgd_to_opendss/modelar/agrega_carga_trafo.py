@@ -252,7 +252,11 @@ class Agrega_Carga_Trafos:
         re_carga_agregada_existente = re.compile(r"(?i)new\s+load\.nome_.*?_carga_pip\b")
 
         lista_pastas = list(os.walk(self.caminho))
+        r=0
         for root, _, files in tqdm(lista_pastas, desc="Pastas processadas"):
+            r=r+1
+            if r == 10:
+                break
             ...
             if 'run.dss' not in files:
                 continue
@@ -430,12 +434,28 @@ class Agrega_Carga_Trafos:
 
 
 
-
+  
     def criar_run_cargas_e_gd_agregadas(self, caminho, trafos_cargas):
         def gerar_hash(texto):
             return hashlib.sha256(texto.encode()).hexdigest()
 
+        # Lê o arquivo de curvas de carga uma vez
+        curvas_de_carga = {}
+        caminho_curvas = os.path.join(caminho, 'curvas_de_carga.dss')  # ajuste conforme necessário
+        if os.path.exists(caminho_curvas):
+            with open(caminho_curvas, 'r', encoding='utf-8') as f:
+                for linha in f:
+                    match = re.match(r"(\w+(?:-\w+)*):\w+\s*=\s*\[(.*?)\]", linha)
+                    if match:
+                        nome, valores = match.groups()
+                        lista = [float(v.strip()) for v in valores.split(',') if v.strip()]
+                        curvas_de_carga[nome.strip()] = lista
+
+        r = 0
         for root, dirs, files in os.walk(caminho):
+            r+=1
+            if r == 10:
+                break
             if 'run_cargas_agregadas.dss' not in files:
                 continue
 
@@ -444,79 +464,142 @@ class Agrega_Carga_Trafos:
                 continue
 
             caminho_arquivo = os.path.join(root, 'run_cargas_agregadas.dss')
-
             with open(caminho_arquivo, 'r', encoding='utf-8') as f:
                 linhas_existentes = f.readlines()
 
             linhas_pvsystems = []
+            linhas_cargas_media = []
 
             for trafo, dados in trafos_cargas[nome_pasta].items():
-                if "gd" not in dados:
-                    continue
+                if "gd" in dados:
+                    # Lógica de GD agregada (mesmo código anterior)
+                    lista_gd = dados["gd"]
+                    kva_total = 0.0
+                    pmpp_total = 0.0
+                    bus = dados.get("bus2")
+                    tensao = dados.get("tensao_secundario_kv", 0.22)
+                    phases = 3
+                    hash_id = gerar_hash(trafo)
 
-                lista_gd = dados["gd"]
-                kva_total = 0.0
-                pmpp_total = 0.0
-                bus = dados.get("bus2")
-                tensao = dados.get("tensao_secundario_kv", 0.22)
-                phases = 3
-                hash_id = gerar_hash(trafo)
+                    for bloco in lista_gd:
+                        if not isinstance(bloco, str):
+                            continue
 
-                for bloco in lista_gd:
-                    if not isinstance(bloco, str):
-                        continue
+                        match_kv = re.search(r"~\s*kv\s*=\s*([\d\.]+)", bloco)
+                        if not match_kv or float(match_kv.group(1)) >= 1.0:
+                            continue
 
-                    match_kv = re.search(r"~\s*kv\s*=\s*([\d\.]+)", bloco)
-                    if not match_kv or float(match_kv.group(1)) >= 1.0:
-                        continue
+                        match_kva = re.search(r"\bkva\s*=\s*([\d\.]+)", bloco, re.IGNORECASE)
+                        match_pmpp = re.search(r"\bpmpp\s*=\s*([\d\.]+)", bloco, re.IGNORECASE)
 
-                    match_kva = re.search(r"\bkva\s*=\s*([\d\.]+)", bloco, re.IGNORECASE)
-                    match_pmpp = re.search(r"\bpmpp\s*=\s*([\d\.]+)", bloco, re.IGNORECASE)
+                        if match_kva:
+                            kva_total += float(match_kva.group(1))
+                        if match_pmpp:
+                            pmpp_total += float(match_pmpp.group(1))
 
-                    if match_kva:
-                        kva_total += float(match_kva.group(1))
-                    if match_pmpp:
-                        pmpp_total += float(match_pmpp.group(1))
+                    if kva_total > 0 and pmpp_total > 0:
+                        if kva_total > 200 or pmpp_total > 200:
+                            print(f"[{nome_pasta}] GD com potência alta (kVA: {kva_total:.1f}, Pmpp: {pmpp_total:.1f}) → limitando para 200.")
+                            kva_total = min(kva_total, 200)
+                            pmpp_total = min(pmpp_total, 200)
 
-                # Só adiciona se tiver potência
-                if kva_total > 0 and pmpp_total > 0:
-                    # Limita a 200 se qualquer um ultrapassar
-                    if kva_total > 200 or pmpp_total > 200:
-                        print(f"[{nome_pasta}] GD com potência alta (kVA: {kva_total:.1f}, Pmpp: {pmpp_total:.1f}) → limitando para 200.")
-                        kva_total = min(kva_total, 200)
-                        pmpp_total = min(pmpp_total, 200)
+                        nome_pv = f"pv_{hash_id}"
+                        nome_ptcurve = f"mypvst_{hash_id}"
+                        nome_effcurve = f"myeff_{hash_id}"
+                        nome_irrad = f"myirrad_{hash_id}"
+                        nome_temp = f"mytemp_{hash_id}"
 
-                    nome_pv = f"pv_{hash_id}"
-                    nome_ptcurve = f"mypvst_{hash_id}"
-                    nome_effcurve = f"myeff_{hash_id}"
-                    nome_irrad = f"myirrad_{hash_id}"
-                    nome_temp = f"mytemp_{hash_id}"
+                        bloco_curvas = (
+                            f"New xycurve.{nome_ptcurve} npts=4 xarray=[0 25 75 100] yarray=[1.2 1.0 0.8 0.6]\n"
+                            f"New xycurve.{nome_effcurve} npts=4 xarray=[.1 .2 .4 1.0] yarray=[.86 .9 .93 .97]\n"
+                            f"New loadshape.{nome_irrad} npts=1 interval=1 mult=[1]\n"
+                            f"New tshape.{nome_temp} npts=1 interval=1 temp=[25]\n\n"
+                        )
 
-                    bloco_curvas = (
-                        f"New xycurve.{nome_ptcurve} npts=4 xarray=[0 25 75 100] yarray=[1.2 1.0 0.8 0.6]\n"
-                        f"New xycurve.{nome_effcurve} npts=4 xarray=[.1 .2 .4 1.0] yarray=[.86 .9 .93 .97]\n"
-                        f"New loadshape.{nome_irrad} npts=1 interval=1 mult=[1]\n"
-                        f"New tshape.{nome_temp} npts=1 interval=1 temp=[25]\n\n"
-                    )
+                        bloco_pv = (
+                            f"New PVSystem.{nome_pv}_gd_baixa_tensao phases={phases} conn=wye bus1={bus}\n"
+                            f"~ kv={tensao} kva={kva_total:.2f} pmpp={pmpp_total:.2f}\n"
+                            f"~ pf=0.92 %cutin=0.00005 %cutout=0.00005 varfollowinverter=Yes effcurve={nome_effcurve}\n"
+                            f"~ p-tcurve={nome_ptcurve} daily={nome_irrad} tdaily={nome_temp}\n\n"
+                        )
 
-                    bloco_pv = (
-                        f"New PVSystem.{nome_pv}_gd_baixa_tensao phases={phases} conn=wye bus1={bus}\n"
-                        f"~ kv={tensao} kva={kva_total:.2f} pmpp={pmpp_total:.2f}\n"
-                        f"~ pf=0.92 %cutin=0.00005 %cutout=0.00005 varfollowinverter=Yes effcurve={nome_effcurve}\n"
-                        f"~ p-tcurve={nome_ptcurve} daily={nome_irrad} tdaily={nome_temp}\n\n"
-                    )
+                        linhas_pvsystems.append(bloco_curvas + bloco_pv)
+               
 
-                    linhas_pvsystems.append(bloco_curvas + bloco_pv)
-
-            # Escreve de volta no arquivo, adicionando os novos blocos ao final com espaçamento
             with open(caminho_arquivo, 'w', encoding='utf-8') as f:
                 f.writelines(linhas_existentes)
                 if linhas_pvsystems:
-                    f.write('\n')  # Garantir espaço entre o conteúdo original e os novos blocos
+                    f.write('\n')
                     f.writelines(linhas_pvsystems)
 
 
 
+
+
+
+    def adicionar_curvas_normalizadas_medias(self, caminho, trafos_cargas):
+        # Lê o arquivo de curvas de carga uma vez
+        curvas_de_carga = {}
+        caminho_curvas = os.path.join(caminho, 'curvas_de_carga.txt')
+        if os.path.exists(caminho_curvas):
+            with open(caminho_curvas, 'r', encoding='utf-8') as f:
+                for linha in f:
+                    match = re.match(r"(\w+(?:-\w+)*):\w+\s*=\s*\[(.*?)\]", linha)
+                    if match:
+                        nome, valores = match.groups()
+                        lista = [float(v.strip()) for v in valores.split(',') if v.strip()]
+                        curvas_de_carga[nome.strip()] = lista
+
+        r = 0
+        for root, dirs, files in os.walk(caminho):
+            r +=1
+            if r == 10:
+                break
+            if 'run_cargas_agregadas.dss' not in files:
+                continue
+
+            nome_pasta = os.path.basename(root)
+            if nome_pasta not in trafos_cargas:
+                continue
+
+            caminho_arquivo = os.path.join(root, 'run_cargas_agregadas.dss')
+            with open(caminho_arquivo, 'r', encoding='utf-8') as f:
+                linhas_existentes = f.readlines()
+
+            novas_linhas = []
+            for linha in linhas_existentes:
+                if 'carga_media ' not in linha:
+                    novas_linhas.append(linha)
+                    continue
+
+                match_nome_curva = re.search(r"curva_diaria_([A-Za-z0-9\-]+)", linha)
+                if not match_nome_curva:
+                    novas_linhas.append(linha)
+                    continue
+
+                nome_curva = match_nome_curva.group(1)
+                if nome_curva not in curvas_de_carga:
+                    print(f"⚠️ Curva '{nome_curva}' não encontrada para a linha: {linha.strip()}")
+                    novas_linhas.append(linha)
+                    continue
+
+                curva = curvas_de_carga[nome_curva]
+                max_val = max(curva)
+                curva_norm = [round(v / max_val, 4) if max_val > 0 else 0.0 for v in curva]
+                curva_str = "_".join(f"{v:.4f}" for v in curva_norm)
+
+                match_insercao = re.search(
+                    r"(curva_diaria_" + re.escape(nome_curva) + r")(_curva_anual_)", linha
+                )
+                if match_insercao:
+                    ponto_insercao = match_insercao.end(1)
+                    nova_linha = linha[:ponto_insercao] + f"_{curva_str}" + linha[ponto_insercao:]
+                    novas_linhas.append(nova_linha)
+                else:
+                    novas_linhas.append(linha)
+
+            with open(caminho_arquivo, 'w', encoding='utf-8') as f:
+                f.writelines(novas_linhas)
 
 
     def run(self):
@@ -526,6 +609,7 @@ class Agrega_Carga_Trafos:
 
         self.criar_run_cargas_agregadas(trafos_cargas_e_gd)
         self.criar_run_cargas_e_gd_agregadas(self.caminho, trafos_cargas_e_gd)
+        self.adicionar_curvas_normalizadas_medias(self.caminho, trafos_cargas_e_gd)
 
         return 0
 
