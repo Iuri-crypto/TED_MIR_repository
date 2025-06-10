@@ -19,7 +19,7 @@ class class_Fluxo_de_Potencia:
 
         class_Fluxo_de_Potencia.config_cargas(usar_cargas_bt, usar_cargas_mt)
         class_Fluxo_de_Potencia.modelo_carga(modelo_carga)
-        class_Fluxo_de_Potencia.config_cargas(usar_cargas_bt, usar_cargas_mt)
+        class_Fluxo_de_Potencia.config_gd(usar_gd_bt, usar_gd_mt)
         class_Fluxo_de_Potencia.config_cargas(usar_cargas_bt, usar_cargas_mt)
         class_Fluxo_de_Potencia.config_cargas(usar_cargas_bt, usar_cargas_mt)
 
@@ -42,6 +42,27 @@ class class_Fluxo_de_Potencia:
                     dss.text(f"disable load.{nome}")
                     dss.loads.next()
         return 0
+
+
+    @staticmethod
+    def config_gd(usar_gd_bt, usar_gd_mt):
+        """ Este método configura as cargas quanto a quais vão ser simuladas """
+
+        if usar_gd_bt == False:
+            dss.pvsystems.first()
+            for nome in dss.pvsystems.names:
+                if 'pv_baixa' in nome:
+                    dss.text(f"disable pvsystem.{nome}")
+                    dss.pvsystems.next()
+
+        if usar_gd_mt == False:
+            dss.pvsystems.first()
+            for nome in dss.pvsystems.names:
+                if 'pv_media' in nome:
+                    dss.text(f"disable pvsystem.{nome}")
+                    dss.pvsystems.next()
+        return 0
+
 
 
     @staticmethod
