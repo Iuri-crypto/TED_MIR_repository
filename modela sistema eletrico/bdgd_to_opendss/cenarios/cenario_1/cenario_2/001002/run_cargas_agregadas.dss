@@ -1,0 +1,720 @@
+New Object = Circuit.001002_Barra_Slack
+~ basekv = 13.8 pu = 1.029 angle = 0
+New line.001002001002 phases = 3 bus1 = SourceBus bus2 = 59904185827576240MT.1.2.3 switch = y
+New linecode.16512325H-3_linecode_media nphases=3 BaseFreq=60
+~ r1=0.0006129999999999999
+~ x1=0.00033
+~ c1=0
+~ Normamps=235.0
+~ Emergamps=329.0
+New linecode.16512325H-3P_linecode_media nphases=3 BaseFreq=60
+~ r1=0.0006129999999999999
+~ x1=0.00033
+~ c1=0
+~ Normamps=235.0
+~ Emergamps=329.0
+New linecode.16512328H-3_linecode_media nphases=3 BaseFreq=60
+~ r1=0.000306
+~ x1=0.00038500000000000003
+~ c1=0
+~ Normamps=365.0
+~ Emergamps=511.0
+New linecode.16512329H-3_linecode_media nphases=3 BaseFreq=60
+~ r1=0.000975
+~ x1=0.000347
+~ c1=0
+~ Normamps=175.0
+~ Emergamps=245.0
+New linecode.16512329H-3P_linecode_media nphases=3 BaseFreq=60
+~ r1=0.000975
+~ x1=0.000347
+~ c1=0
+~ Normamps=175.0
+~ Emergamps=245.0
+New linecode.16512375H-3_linecode_media nphases=3 BaseFreq=60
+~ r1=0.000195
+~ x1=0.00029099999999999997
+~ c1=0
+~ Normamps=495.0
+~ Emergamps=693.0
+New linecode.5281622H-3P_linecode_media nphases=3 BaseFreq=60
+~ r1=0.00131
+~ x1=0.00041
+~ c1=0
+~ Normamps=68.0
+~ Emergamps=68.0
+New linecode.5281627C-3_linecode_media nphases=3 BaseFreq=60
+~ r1=0.000992
+~ x1=0.00011700000000000001
+~ c1=0
+~ Normamps=70.0
+~ Emergamps=70.0
+New linecode.5281627C-3P_linecode_media nphases=3 BaseFreq=60
+~ r1=0.000992
+~ x1=0.00011700000000000001
+~ c1=0
+~ Normamps=70.0
+~ Emergamps=70.0
+New linecode.5281628C-3_linecode_media nphases=3 BaseFreq=60
+~ r1=0.000247
+~ x1=0.000259
+~ c1=0
+~ Normamps=291.0
+~ Emergamps=291.0
+New linecode.5281631C-3_linecode_media nphases=3 BaseFreq=60
+~ r1=0.000739
+~ x1=0.000303
+~ c1=0
+~ Normamps=152.0
+~ Emergamps=181.0
+New linecode.5281632C-3_linecode_media nphases=3 BaseFreq=60
+~ r1=0.00019700000000000002
+~ x1=0.000251
+~ c1=0
+~ Normamps=368.0
+~ Emergamps=400.0
+New Capacitor.34559319_Banco_de_Capacitor Bus1 = 59715864827499662MT.1.3 kv = 13.800 kVAR = 17 phases = 2 conn = wye
+New line.1207380_Chave_seccionadora_media_tensao phases = 3 bus1 = 0011207356.1.2.3 bus2 = 0011207380.1.2.3 switch = F
+New line.1207364_Chave_seccionadora_media_tensao phases = 3 bus1 = 0011207380.1.2.3 bus2 = 59904185827576240MT.1.2.3 switch = F
+New line.1207356_Chave_seccionadora_media_tensao phases = 3 bus1 = 0015329860.1.2.3 bus2 = 0011207356.1.2.3 switch = F
+New line.64751776_Chave_seccionadora_media_tensao phases = 3 bus1 = 59697771827497267MT.1.2.3 bus2 = 59697846827497137MT.1.2.3 switch = A
+New line.64751782_Chave_seccionadora_media_tensao phases = 3 bus1 = 59698096827486174MT.1.2.3 bus2 = 59698241827486136MT.1.2.3 switch = F
+New line.64751787_Chave_seccionadora_media_tensao phases = 3 bus1 = 59700191827495940MT.1.2.3 bus2 = 59700043827495918MT.1.2.3 switch = F
+New line.64751777_Chave_seccionadora_media_tensao phases = 3 bus1 = 59701222827497197MT.1.2.3 bus2 = 59701366827497241MT.1.2.3 switch = A
+New line.34651280CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59701570827496361MT.1.2.3 bus2 = 59701570827496361ET.1.2.3 switch = F
+New line.64740228_Chave_seccionadora_media_tensao phases = 3 bus1 = 59702941827496796MT.1.2.3 bus2 = 59702961827496647MT.1.2.3 switch = F
+New line.34657845CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59703356827489595MT.1.2.3 bus2 = 34657845CTISSO.1.2.3 switch = F
+New line.34654153CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59703356827489595MT.1.2.3 bus2 = 59703356827489595ET.1.2.3 switch = F
+New line.34777087CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59703359827490448MT.1.2.3 bus2 = 59703359827490448ET.1.2.3 switch = F
+New line.64751779_Chave_seccionadora_media_tensao phases = 3 bus1 = 59706391827497749MT.1.2.3 bus2 = 59706246827497709MT.1.2.3 switch = F
+New line.34751065CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59717044827507973MT.1.2.3 bus2 = 59717044827507973ET.1.2.3 switch = F
+New line.34703388CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59719266827500348MT.1.2.3 bus2 = 59719266827500348ET.1.2.3 switch = F
+New line.64706477_Chave_seccionadora_media_tensao phases = 3 bus1 = 59720261827512231MT.1.2.3 bus2 = 59720126827512166MT.1.2.3 switch = F
+New line.64751789_Chave_seccionadora_media_tensao phases = 3 bus1 = 59722491827509448MT.1.2.3 bus2 = 59722400827509568MT.1.2.3 switch = F
+New line.64751788_Chave_seccionadora_media_tensao phases = 3 bus1 = 59722849827524612MT.1.2.3 bus2 = 59722949827524724MT.1.2.3 switch = F
+New line.34651815CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59727738827508523MT.1.2.3 bus2 = 59727738827508523ET.1.2.3 switch = F
+New line.64751783_Chave_seccionadora_media_tensao phases = 3 bus1 = 59727890827527241MT.1.2.3 bus2 = 59728039827527220MT.1.2.3 switch = F
+New line.64751778_Chave_seccionadora_media_tensao phases = 3 bus1 = 59729567827500575MT.1.2.3 bus2 = 59729601827500429MT.1.2.3 switch = F
+New line.34629110CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59729925827494859MT.1.2.3 bus2 = 59729925827494859ET.1.2.3 switch = F
+New line.34776848CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59730301827533163MT.1.2.3 bus2 = 59730301827533163ET.1.2.3 switch = F
+New line.64659096_Chave_seccionadora_media_tensao phases = 3 bus1 = 59730480827496687MT.1.2.3 bus2 = 59730331827496674MT.1.2.3 switch = F
+New line.34596085CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59731582827487733MT.1.2.3 bus2 = 59731582827487733ET.1.2.3 switch = F
+New line.34741744CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59731663827491823MT.1.2.3 bus2 = 59731663827491823ET.1.2.3 switch = F
+New line.64670655_Chave_seccionadora_media_tensao phases = 3 bus1 = 59732313827488050MT.1.2.3 bus2 = 59732175827487990MT.1.2.3 switch = F
+New line.34674947CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59734623827537869MT.1.2.3 bus2 = 59734623827537869ET.1.2.3 switch = F
+New line.34792559CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59735151827538412MT.1.2.3 bus2 = 59735151827538412ET.1.2.3 switch = F
+New line.64751774_Chave_seccionadora_media_tensao phases = 3 bus1 = 59735238827518212MT.1.2.3 bus2 = 59735197827518356MT.1.2.3 switch = A
+New line.34781158CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59736722827514801MT.1.2.3 bus2 = 59736722827514801ET.1.2.3 switch = F
+New line.64751780_Chave_seccionadora_media_tensao phases = 3 bus1 = 59740044827506873MT.1.2.3 bus2 = 59739989827507012MT.1.2.3 switch = F
+New line.64751772_Chave_seccionadora_media_tensao phases = 3 bus1 = 59742045827497910MT.1.2.3 bus2 = 59742136827497791MT.1.2.3 switch = A
+New line.34630183CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59742062827514965MT.1.2.3 bus2 = 59742062827514965ET.1.2.3 switch = F
+New line.64675825_Chave_seccionadora_media_tensao phases = 3 bus1 = 59742187827499767MT.1.2.3 bus2 = 59742318827499839MT.1.2.3 switch = F
+New line.64751694_Chave_seccionadora_media_tensao phases = 3 bus1 = 59742447827497945MT.1.2.3 bus2 = 59742475827497987MT.1.2.3 switch = A
+New line.64751786_Chave_seccionadora_media_tensao phases = 3 bus1 = 59742494827498243MT.1.2.3 bus2 = 59742534827498162MT.1.2.3 switch = F
+New line.34705891CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59745769827505002MT.1.2.3 bus2 = 59745769827505002ET.1.2.3 switch = F
+New line.34769157CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59748187827521019MT.1.2.3 bus2 = 59748187827521019ET.1.2.3 switch = F
+New line.64670654_Chave_seccionadora_media_tensao phases = 3 bus1 = 59749174827521391MT.1.2.3 bus2 = 59749034827521338MT.1.2.3 switch = F
+New line.34704132CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59749735827519790MT.1.2.3 bus2 = 59749735827519790ET.1.2.3 switch = F
+New line.34755506CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59752471827512776MT.1.2.3 bus2 = 59752471827512776ET.1.2.3 switch = F
+New line.34682101CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59752819827511918MT.1.2.3 bus2 = 59752819827511918ET.1.2.3 switch = F
+New line.64698704_Chave_seccionadora_media_tensao phases = 3 bus1 = 59754027827509150MT.1.2.3 bus2 = 59753967827509287MT.1.2.3 switch = F
+New line.34798802CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59755655827501175MT.1.2.3 bus2 = 59755655827501175ET.1.2.3 switch = F
+New line.34804823CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59755961827506976MT.1.2.3 bus2 = 59755961827506976ET.1.2.3 switch = F
+New line.34667192CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59756248827496437MT.1.2.3 bus2 = 59756248827496437ET.1.2.3 switch = F
+New line.64659097_Chave_seccionadora_media_tensao phases = 3 bus1 = 59761056827501254MT.1.2.3 bus2 = 59760911827501215MT.1.2.3 switch = F
+New line.34589241CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59762124827497594MT.1.2.3 bus2 = 59762124827497594ET.1.2.3 switch = F
+New line.64740227_Chave_seccionadora_media_tensao phases = 3 bus1 = 59764196827509535MT.1.2.3 bus2 = 59764154827509679MT.1.2.3 switch = F
+New line.34581371CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59765802827512445MT.1.2.3 bus2 = 59765802827512445ET.1.2.3 switch = F
+New line.64709884_Chave_seccionadora_media_tensao phases = 3 bus1 = 59767765827510675MT.1.2.3 bus2 = 59767789827510527MT.1.2.3 switch = F
+New line.34719405CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59769451827505176MT.1.2.3 bus2 = 59769451827505176ET.1.2.3 switch = F
+New line.64751784_Chave_seccionadora_media_tensao phases = 3 bus1 = 59769638827516027MT.1.2.3 bus2 = 59769347827515904MT.1.2.3 switch = F
+New line.64751771_Chave_seccionadora_media_tensao phases = 3 bus1 = 59769778827516435MT.1.2.3 bus2 = 59769637827516383MT.1.2.3 switch = A
+New line.64751695_Chave_seccionadora_media_tensao phases = 3 bus1 = 59769788827516087MT.1.2.3 bus2 = 59769638827516027MT.1.2.3 switch = F
+New line.64751785_Chave_seccionadora_media_tensao phases = 3 bus1 = 59769937827516071MT.1.2.3 bus2 = 59769788827516087MT.1.2.3 switch = F
+New line.34621609CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59770391827514640MT.1.2.3 bus2 = 59770391827514640ET.1.2.3 switch = F
+New line.64670653_Chave_seccionadora_media_tensao phases = 3 bus1 = 59771318827516500MT.1.2.3 bus2 = 59771251827516366MT.1.2.3 switch = F
+New line.34676976CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59801075827527977MT.1.2.3 bus2 = 59801075827527977ET.1.2.3 switch = F
+New line.34724002CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59806821827530244MT.1.2.3 bus2 = 59806821827530244ET.1.2.3 switch = F
+New line.34719409CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59854681827548506MT.1.2.3 bus2 = 59854681827548506ET.1.2.3 switch = F
+New line.64751781_Chave_seccionadora_media_tensao phases = 3 bus1 = 59872357827555249MT.1.2.3 bus2 = 59872218827555193MT.1.2.3 switch = F
+New line.34760174CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59884204827574489MT.1.2.3 bus2 = 59884204827574489ET.1.2.3 switch = F
+New line.34756002CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 59902179827569261MT.1.2.3 bus2 = 59902179827569261ET.1.2.3 switch = F
+New line.64709883_Chave_seccionadora_media_tensao phases = 3 bus1 = 59902819827568278MT.1.2.3 bus2 = 59902737827568404MT.1.2.3 switch = F
+New line.1207372_Chave_seccionadora_media_tensao phases = 3 bus1 = 59904185827576240MT.1.2.3 bus2 = 0011207372.1.2.3 switch = A
+New line.64751790_Chave_seccionadora_media_tensao phases = 3 bus1 = 59905479827569846MT.1.2.3 bus2 = 59905599827569756MT.1.2.3 switch = F
+New Load.nome_00a1f2cf64df27b4da2e762b7fe87f42a1f4d7ade34da89d5494f66293c1f4fb_curva_diaria_MT-Tipo10_curva_anual_309.65_246.72_253.96_268.2_264.36_270.61_228.19_328.15_408.25_488.37_479.03_457.03_carga_media Bus1=59731663827491823MT.1.2.3 Phases=3
+~ Conn=wye Model=1 Kv=13.8 Kw=1 pf=0.92
+New Load.nome_07a9598cd68af8f0978a045a63deaea21b9a485074453416ce663d8b6be6f56c_curva_diaria_MT-Tipo9_curva_anual_68.63_58.61_60.88_65.76_68.84_65.8_64.57_75.96_78.88_80.1_77.4_71.5_carga_media Bus1=59726432827496334MT.1.2.3 Phases=3
+~ Conn=wye Model=1 Kv=13.8 Kw=1 pf=0.92
+New Load.nome_8092aa127b199444500bee8e1ea3ffb07642831886e95318bd7b75fde456c711_curva_diaria_MT-Tipo5_curva_anual_1272.69_1061.35_1341.31_1162.55_1275.37_1062.26_1150.88_1456.11_1546.93_1774.54_1559.5_1571.7_carga_media Bus1=59735151827538412MT.1.2.3 Phases=3
+~ Conn=wye Model=1 Kv=13.8 Kw=1 pf=0.92
+New Load.nome_b20ab548a2ff09b133046997e050acfaed58c318554b8f93157275cdd04cb349_curva_diaria_MT-Tipo8_curva_anual_200.98_166.67_208.56_187.25_207.4_184.5_195.54_238.85_240.22_241.3_217.41_220.93_carga_media Bus1=59734623827537869MT.1.2.3 Phases=3
+~ Conn=wye Model=1 Kv=13.8 Kw=1 pf=0.92
+New Load.nome_dd7810a65ad0868c7a0f84f04788310c03fc8ef936e18b67d3be0c9d17cdd5dc_curva_diaria_MT-Tipo5_curva_anual_260.35_214.58_279.37_226.18_255.05_197.89_227.9_314.85_338.13_403.85_350.33_312.94_carga_media Bus1=59755655827501175MT.1.2.3 Phases=3
+~ Conn=wye Model=1 Kv=13.8 Kw=1 pf=0.92
+New linecode.16512325H-3_linecode_media nphases=3 BaseFreq=60
+~ r1=0.0006129999999999999
+~ x1=0.00033
+~ c1=0
+~ Normamps=235.0
+~ Emergamps=329.0
+New linecode.16512325H-3P_linecode_media nphases=3 BaseFreq=60
+~ r1=0.0006129999999999999
+~ x1=0.00033
+~ c1=0
+~ Normamps=235.0
+~ Emergamps=329.0
+New linecode.16512328H-3_linecode_media nphases=3 BaseFreq=60
+~ r1=0.000306
+~ x1=0.00038500000000000003
+~ c1=0
+~ Normamps=365.0
+~ Emergamps=511.0
+New linecode.16512329H-3_linecode_media nphases=3 BaseFreq=60
+~ r1=0.000975
+~ x1=0.000347
+~ c1=0
+~ Normamps=175.0
+~ Emergamps=245.0
+New linecode.16512329H-3P_linecode_media nphases=3 BaseFreq=60
+~ r1=0.000975
+~ x1=0.000347
+~ c1=0
+~ Normamps=175.0
+~ Emergamps=245.0
+New linecode.16512375H-3_linecode_media nphases=3 BaseFreq=60
+~ r1=0.000195
+~ x1=0.00029099999999999997
+~ c1=0
+~ Normamps=495.0
+~ Emergamps=693.0
+New linecode.5281622H-3P_linecode_media nphases=3 BaseFreq=60
+~ r1=0.00131
+~ x1=0.00041
+~ c1=0
+~ Normamps=68.0
+~ Emergamps=68.0
+New linecode.5281627C-3_linecode_media nphases=3 BaseFreq=60
+~ r1=0.000992
+~ x1=0.00011700000000000001
+~ c1=0
+~ Normamps=70.0
+~ Emergamps=70.0
+New linecode.5281627C-3P_linecode_media nphases=3 BaseFreq=60
+~ r1=0.000992
+~ x1=0.00011700000000000001
+~ c1=0
+~ Normamps=70.0
+~ Emergamps=70.0
+New linecode.5281628C-3_linecode_media nphases=3 BaseFreq=60
+~ r1=0.000247
+~ x1=0.000259
+~ c1=0
+~ Normamps=291.0
+~ Emergamps=291.0
+New linecode.5281631C-3_linecode_media nphases=3 BaseFreq=60
+~ r1=0.000739
+~ x1=0.000303
+~ c1=0
+~ Normamps=152.0
+~ Emergamps=181.0
+New linecode.5281632C-3_linecode_media nphases=3 BaseFreq=60
+~ r1=0.00019700000000000002
+~ x1=0.000251
+~ c1=0
+~ Normamps=368.0
+~ Emergamps=400.0
+New Line.16757453_linha_media Phases = 3 Bus1 = 59761494827499801MT.1.2.3 Bus2 = 59762124827497594MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 22.952 units = m
+New Line.17048658_linha_media Phases = 3 Bus1 = 59742318827499839MT.1.2.3 Bus2 = 59743486827500480MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 14.818 units = m
+New Line.12658753_linha_media Phases = 3 Bus1 = 59727000827503864MT.1.2.3 Bus2 = 59724457827507004MT.1.2.3 Linecode = 5281628C-3_linecode_media Length = 38.529 units = m
+New Line.16757454_linha_media Phases = 3 Bus1 = 59759643827505320MT.1.2.3 Bus2 = 59760722827502231MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 32.72 units = m
+New Line.15942356_linha_media Phases = 3 Bus1 = 59884204827574489MT.1.2.3 Bus2 = 59882223827571150MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 38.824 units = m
+New Line.15901506_linha_media Phases = 3 Bus1 = 59755961827506976MT.1.2.3 Bus2 = 59755060827506769MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 9.245 units = m
+New Line.15028628_linha_media Phases = 3 Bus1 = 59720407827512296MT.1.2.3 Bus2 = 59720261827512231MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 1.598 units = m
+New Line.16004796_linha_media Phases = 3 Bus1 = 59765623827510036MT.1.2.3 Bus2 = 59764196827509535MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 15.124 units = m
+New Line.15028632_linha_media Phases = 3 Bus1 = 59732465827488100MT.1.2.3 Bus2 = 59732313827488050MT.1.2.3 Linecode = 16512329H-3P_linecode_media Length = 1.6 units = m
+New Line.15028624_linha_media Phases = 3 Bus1 = 59770032827516199MT.1.2.3 Bus2 = 59769778827516435MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 1.598 units = m
+New Line.16728909_linha_media Phases = 3 Bus1 = 59732421827535534MT.1.2.3 Bus2 = 59734623827537869MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 32.095 units = m
+New Line.15901505_linha_media Phases = 3 Bus1 = 59755060827506769MT.1.2.3 Bus2 = 59755088827506101MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 6.686 units = m
+New Line.14885973_linha_media Phases = 3 Bus1 = 59706932827499966MT.1.2.3 Bus2 = 59705652827498596MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 18.749 units = m
+New Line.15901897_linha_media Phases = 3 Bus1 = 59902737827568404MT.1.2.3 Bus2 = 59902179827569261MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 11.73 units = m
+New Line.16005077_linha_media Phases = 3 Bus1 = 59891390827586113MT.1.2.3 Bus2 = 59889095827585436MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 23.928 units = m
+New Line.16005055_linha_media Phases = 3 Bus1 = 59894771827582736MT.1.2.3 Bus2 = 59894079827584809MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 21.855 units = m
+New Line.13692058_linha_media Phases = 3 Bus1 = 59755088827506101MT.1.2.3 Bus2 = 59755403827502989MT.1.2.3 Linecode = 5281631C-3_linecode_media Length = 29.564 units = m
+New Line.15901507_linha_media Phases = 3 Bus1 = 59741044827504172MT.1.2.3 Bus2 = 59740044827506873MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 28.802 units = m
+New Line.13703792_linha_media Phases = 3 Bus1 = 59792867827524880MT.1.2.3 Bus2 = 59789268827523621MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 36.825 units = m
+New Line.16004793_linha_media Phases = 3 Bus1 = 59733003827502810MT.1.2.3 Bus2 = 59729458827502233MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 35.917 units = m
+New Line.16005048_linha_media Phases = 3 Bus1 = 59861072827550792MT.1.2.3 Bus2 = 59857847827549624MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 34.3 units = m
+New Line.16005049_linha_media Phases = 3 Bus1 = 59863417827551874MT.1.2.3 Bus2 = 59861072827550792MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 25.826 units = m
+New Line.16005053_linha_media Phases = 3 Bus1 = 59886357827577086MT.1.2.3 Bus2 = 59884204827574489MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 33.734 units = m
+New Line.13736096_linha_media Phases = 3 Bus1 = 59742950827504473MT.1.2.3 Bus2 = 59741044827504172MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 17.227 units = m
+New Line.14844446_linha_media Phases = 3 Bus1 = 59698296827496250MT.1.2.3 Bus2 = 59698052827496782MT.1.2.3 Linecode = 16512328H-3_linecode_media Length = 5.853 units = m
+New Line.16004863_linha_media Phases = 3 Bus1 = 59768169827508131MT.1.2.3 Bus2 = 59769451827505176MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 32.211 units = m
+New Line.13478792_linha_media Phases = 3 Bus1 = 59755655827501175MT.1.2.3 Bus2 = 59755841827499728MT.1.2.3 Linecode = 5281631C-3_linecode_media Length = 14.589 units = m
+New Line.13736106_linha_media Phases = 3 Bus1 = 59739728827503888MT.1.2.3 Bus2 = 59736314827503352MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 34.558 units = m
+New Line.13706206_linha_media Phases = 3 Bus1 = 59876466827558735MT.1.2.3 Bus2 = 59875874827556588MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 19.658 units = m
+New Line.16785377_linha_media Phases = 3 Bus1 = 59900389827568410MT.1.2.3 Bus2 = 59898716827571418MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 34.419 units = m
+New Line.16485622_linha_media Phases = 3 Bus1 = 59726108827528248MT.1.2.3 Bus2 = 59727607827530161MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 24.303 units = m
+New Line.16005010_linha_media Phases = 3 Bus1 = 59797954827526486MT.1.2.3 Bus2 = 59795657827525968MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 23.547 units = m
+New Line.13159753_linha_media Phases = 3 Bus1 = 59698728827495724MT.1.2.3 Bus2 = 59698296827496250MT.1.2.3 Linecode = 16512328H-3_linecode_media Length = 5.411 units = m
+New Line.16006603_linha_media Phases = 3 Bus1 = 59703309827492930MT.1.2.3 Bus2 = 59703359827490448MT.1.2.3 Linecode = 16512329H-3P_linecode_media Length = 24.825 units = m
+New Line.13703785_linha_media Phases = 3 Bus1 = 59872775827568096MT.1.2.3 Bus2 = 59874011827565490MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 27.417 units = m
+New Line.15368131_linha_media Phases = 3 Bus1 = 59907967827569935MT.1.2.3 Bus2 = 59910107827570260MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 23.143 units = m
+New Line.16005043_linha_media Phases = 3 Bus1 = 59845645827544953MT.1.2.3 Bus2 = 59842154827543712MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 37.05 units = m
+New Line.15028619_linha_media Phases = 3 Bus1 = 59727890827527241MT.1.2.3 Bus2 = 59727944827527090MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 1.604 units = m
+New Line.16785378_linha_media Phases = 3 Bus1 = 59898716827571418MT.1.2.3 Bus2 = 59897833827574401MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 31.109 units = m
+New Line.16005045_linha_media Phases = 3 Bus1 = 59851649827547427MT.1.2.3 Bus2 = 59848791827546226MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 31.001 units = m
+New Line.15028631_linha_media Phases = 3 Bus1 = 59771282827516655MT.1.2.3 Bus2 = 59771318827516500MT.1.2.3 Linecode = 16512329H-3P_linecode_media Length = 1.591 units = m
+New Line.18292482_linha_media Phases = 3 Bus1 = 59752819827511918MT.1.2.3 Bus2 = 59752471827512776MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 9.259 units = m
+New Line.16005041_linha_media Phases = 3 Bus1 = 59838663827542356MT.1.2.3 Bus2 = 59835079827540905MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 38.666 units = m
+New Line.16757792_linha_media Phases = 3 Bus1 = 59758746827507851MT.1.2.3 Bus2 = 59758425827508782MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 9.848 units = m
+New Line.16005008_linha_media Phases = 3 Bus1 = 59789268827523621MT.1.2.3 Bus2 = 59785960827522415MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 35.21 units = m
+New Line.16004790_linha_media Phases = 3 Bus1 = 59718432827514941MT.1.2.3 Bus2 = 59716729827517370MT.1.2.3 Linecode = 5281628C-3_linecode_media Length = 29.665 units = m
+New Line.13546737_linha_media Phases = 3 Bus1 = 59730161827497990MT.1.2.3 Bus2 = 59730480827496687MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 13.415 units = m
+New Line.16005015_linha_media Phases = 3 Bus1 = 59817177827534102MT.1.2.3 Bus2 = 59814420827533035MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 29.563 units = m
+New Line.13089482_linha_media Phases = 3 Bus1 = 59730480827496687MT.1.2.3 Bus2 = 59730834827495055MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 16.7 units = m
+New Line.15366491_linha_media Phases = 3 Bus1 = 59728503827502072MT.1.2.3 Bus2 = 59729567827500575MT.1.2.3 Linecode = 5281628C-3_linecode_media Length = 18.366 units = m
+New Line.16005071_linha_media Phases = 3 Bus1 = 59715864827499662MT.1.2.3 Bus2 = 59712355827498966MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 35.774 units = m
+New Line.16004792_linha_media Phases = 3 Bus1 = 59729458827502233MT.1.2.3 Bus2 = 59728503827502072MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 9.685 units = m
+New Line.15364970_linha_media Phases = 3 Bus1 = 59729601827500429MT.1.2.3 Bus2 = 59730161827497990MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 26.524 units = m
+New Line.14885043_linha_media Phases = 3 Bus1 = 59904185827576240MT.1.2.3 Bus2 = 59903688827576127MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 5.097 units = m
+New Line.16005012_linha_media Phases = 3 Bus1 = 59809599827531164MT.1.2.3 Bus2 = 59806821827530244MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 29.264 units = m
+New Line.13705927_linha_media Phases = 3 Bus1 = 59875695827568351MT.1.2.3 Bus2 = 59872775827568096MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 27.202 units = m
+New Line.15901508_linha_media Phases = 3 Bus1 = 59728503827502072MT.1.2.3 Bus2 = 59727000827503864MT.1.2.3 Linecode = 5281628C-3_linecode_media Length = 23.389 units = m
+New Line.16728916_linha_media Phases = 3 Bus1 = 59739989827507012MT.1.2.3 Bus2 = 59738416827510981MT.1.2.3 Linecode = 16512325H-3_linecode_media Length = 44.188 units = m
+New Line.13159755_linha_media Phases = 3 Bus1 = 59716729827517370MT.1.2.3 Bus2 = 59718279827519735MT.1.2.3 Linecode = 5281628C-3_linecode_media Length = 28.046 units = m
+New Line.13705920_linha_media Phases = 3 Bus1 = 59889095827585436MT.1.2.3 Bus2 = 59885922827582460MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 43.502 units = m
+New Line.15028623_linha_media Phases = 3 Bus1 = 59698241827486136MT.1.2.3 Bus2 = 59698275827486127MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 1.851 units = m
+New Line.13705924_linha_media Phases = 3 Bus1 = 59888112827580012MT.1.2.3 Bus2 = 59886357827577086MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 32.89 units = m
+New Line.13169491_linha_media Phases = 3 Bus1 = 59719735827510100MT.1.2.3 Bus2 = 59717044827507973MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 34.301 units = m
+New Line.16004795_linha_media Phases = 3 Bus1 = 59752597827506298MT.1.2.3 Bus2 = 59749822827505771MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 28.246 units = m
+New Line.13108552_linha_media Phases = 3 Bus1 = 59771251827516366MT.1.2.3 Bus2 = 59770391827514640MT.1.2.3 Linecode = 5281627C-3P_linecode_media Length = 20.782 units = m
+New Line.16929574_linha_media Phases = 3 Bus1 = 59902819827568278MT.1.2.3 Bus2 = 59900389827568410MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 24.336 units = m
+New Line.16005070_linha_media Phases = 3 Bus1 = 59745769827505002MT.1.2.3 Bus2 = 59742950827504473MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 28.682 units = m
+New Line.13723133_linha_media Phases = 3 Bus1 = 59765125827514511MT.1.2.3 Bus2 = 59765802827512445MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 19.28 units = m
+New Line.16005067_linha_media Phases = 3 Bus1 = 59767789827510527MT.1.2.3 Bus2 = 59768169827508131MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 25.759 units = m
+New Line.15366566_linha_media Phases = 3 Bus1 = 59753967827509287MT.1.2.3 Bus2 = 59752819827511918MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 30.201 units = m
+New Line.15366493_linha_media Phases = 3 Bus1 = 59736722827514801MT.1.2.3 Bus2 = 59735238827518212MT.1.2.3 Linecode = 16512325H-3_linecode_media Length = 37.198 units = m
+New Line.16005052_linha_media Phases = 3 Bus1 = 59880024827569114MT.1.2.3 Bus2 = 59877200827566627MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 37.63 units = m
+New Line.14885974_linha_media Phases = 3 Bus1 = 59709071827501643MT.1.2.3 Bus2 = 59706932827499966MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 27.18 units = m
+New Line.16004862_linha_media Phases = 3 Bus1 = 59768389827515487MT.1.2.3 Bus2 = 59765125827514511MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 34.068 units = m
+New Line.15366486_linha_media Phases = 3 Bus1 = 59725379827527457MT.1.2.3 Bus2 = 59726108827528248MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 10.757 units = m
+New Line.15366485_linha_media Phases = 3 Bus1 = 59726108827528248MT.1.2.3 Bus2 = 59725041827529029MT.1.2.3 Linecode = 16512325H-3P_linecode_media Length = 13.223 units = m
+New Line.16005046_linha_media Phases = 3 Bus1 = 59854681827548506MT.1.2.3 Bus2 = 59851649827547427MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 32.183 units = m
+New Line.15365260_linha_media Phases = 3 Bus1 = 59766513827510291MT.1.2.3 Bus2 = 59767107827508481MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 19.05 units = m
+New Line.16005013_linha_media Phases = 3 Bus1 = 59812140827532263MT.1.2.3 Bus2 = 59809599827531164MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 27.685 units = m
+New Line.13705926_linha_media Phases = 3 Bus1 = 59877200827566627MT.1.2.3 Bus2 = 59875695827568351MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 22.885 units = m
+New Line.15366567_linha_media Phases = 3 Bus1 = 59755060827506769MT.1.2.3 Bus2 = 59754027827509150MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 25.954 units = m
+New Line.15901504_linha_media Phases = 3 Bus1 = 59766513827510291MT.1.2.3 Bus2 = 59767765827510675MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 13.096 units = m
+New Line.15028630_linha_media Phases = 3 Bus1 = 59742551827498094MT.1.2.3 Bus2 = 59742494827498243MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 1.595 units = m
+New Line.18437729_linha_media Phases = 3 Bus1 = 59872218827555193MT.1.2.3 Bus2 = 59869211827553977MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 33.934 units = m
+New Line.17176136_linha_media Phases = 3 Bus1 = 59698728827495724MT.1.2.3 Bus2 = 59698632827492346MT.1.2.3 Linecode = 16512328H-3_linecode_media Length = 32.035 units = m
+New Line.16004794_linha_media Phases = 3 Bus1 = 59749822827505771MT.1.2.3 Bus2 = 59745769827505002MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 41.253 units = m
+New Line.13543348_linha_media Phases = 3 Bus1 = 59749034827521338MT.1.2.3 Bus2 = 59748187827521019MT.1.2.3 Linecode = 5281622H-3P_linecode_media Length = 10.548 units = m
+New Line.16005056_linha_media Phases = 3 Bus1 = 59896949827577124MT.1.2.3 Bus2 = 59895634827580089MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 32.435 units = m
+New Line.12710362_linha_media Phases = 3 Bus1 = 59897833827574401MT.1.2.3 Bus2 = 59896949827577124MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 28.629 units = m
+New Line.13089483_linha_media Phases = 3 Bus1 = 59730331827496674MT.1.2.3 Bus2 = 59726432827496334MT.1.2.3 Linecode = 5281627C-3_linecode_media Length = 40.634 units = m
+New Line.16133279_linha_media Phases = 3 Bus1 = 59737617827512813MT.1.2.3 Bus2 = 59736628827512383MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 10.784 units = m
+New Line.13169490_linha_media Phases = 3 Bus1 = 59721116827511261MT.1.2.3 Bus2 = 59719735827510100MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 18.042 units = m
+New Line.16004787_linha_media Phases = 3 Bus1 = 59722587827501020MT.1.2.3 Bus2 = 59719266827500348MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 33.883 units = m
+New Line.14862555_linha_media Phases = 3 Bus1 = 59905599827569756MT.1.2.3 Bus2 = 59902819827568278MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 35.904 units = m
+New Line.16004791_linha_media Phases = 3 Bus1 = 59718279827519735MT.1.2.3 Bus2 = 59720652827522522MT.1.2.3 Linecode = 5281628C-3_linecode_media Length = 36.604 units = m
+New Line.16102313_linha_media Phases = 3 Bus1 = 59733547827511038MT.1.2.3 Bus2 = 59730209827509585MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 36.405 units = m
+New Line.13727366_linha_media Phases = 3 Bus1 = 59730834827495055MT.1.2.3 Bus2 = 59729925827494859MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 6.419 units = m
+New Line.13650426_linha_media Phases = 3 Bus1 = 59726035827501664MT.1.2.3 Bus2 = 59722587827501020MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 35.076 units = m
+New Line.16005058_linha_media Phases = 3 Bus1 = 59755060827506769MT.1.2.3 Bus2 = 59752597827506298MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 25.076 units = m
+New Line.15901411_linha_media Phases = 3 Bus1 = 59706246827497709MT.1.2.3 Bus2 = 59702941827496796MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 35.792 units = m
+New Line.15942355_linha_media Phases = 3 Bus1 = 59894079827584809MT.1.2.3 Bus2 = 59891390827586113MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 29.885 units = m
+New Line.15942691_linha_media Phases = 3 Bus1 = 59764154827509679MT.1.2.3 Bus2 = 59763718827511186MT.1.2.3 Linecode = 16512329H-3P_linecode_media Length = 17.188 units = m
+New Line.13650427_linha_media Phases = 3 Bus1 = 59728503827502072MT.1.2.3 Bus2 = 59726035827501664MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 25.015 units = m
+New Line.14925543_linha_media Phases = 3 Bus1 = 59698167827486317MT.1.2.3 Bus2 = 59698396827485756MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 5.588 units = m
+New Line.18239792_linha_media Phases = 3 Bus1 = 59720126827512166MT.1.2.3 Bus2 = 59718400827511330MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 20.676 units = m
+New Line.13191442_linha_media Phases = 3 Bus1 = 59700043827495918MT.1.2.3 Bus2 = 59698728827495724MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 14.789 units = m
+New Line.16005009_linha_media Phases = 3 Bus1 = 59795657827525968MT.1.2.3 Bus2 = 59792867827524880MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 29.946 units = m
+New Line.14862551_linha_media Phases = 3 Bus1 = 59904137827574061MT.1.2.3 Bus2 = 59904945827571662MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 25.314 units = m
+New Line.16005051_linha_media Phases = 3 Bus1 = 59869211827553977MT.1.2.3 Bus2 = 59866018827552743MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 34.232 units = m
+New Line.16005007_linha_media Phases = 3 Bus1 = 59785960827522415MT.1.2.3 Bus2 = 59783086827521317MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 30.766 units = m
+New Line.16005044_linha_media Phases = 3 Bus1 = 59848791827546226MT.1.2.3 Bus2 = 59845645827544953MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 33.938 units = m
+New Line.13665315_linha_media Phases = 3 Bus1 = 59717044827507973MT.1.2.3 Bus2 = 59714379827505873MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 33.93 units = m
+New Line.15366492_linha_media Phases = 3 Bus1 = 59730209827509585MT.1.2.3 Bus2 = 59727738827508523MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 26.896 units = m
+New Line.14862546_linha_media Phases = 3 Bus1 = 59903688827576127MT.1.2.3 Bus2 = 59903830827575032MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 11.042 units = m
+New Line.15941580_linha_media Phases = 3 Bus1 = 59722949827524724MT.1.2.3 Bus2 = 59725379827527457MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 38.072 units = m
+New Line.18292483_linha_media Phases = 3 Bus1 = 59752471827512776MT.1.2.3 Bus2 = 59751644827514863MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 22.449 units = m
+New Line.16005080_linha_media Phases = 3 Bus1 = 59720652827522522MT.1.2.3 Bus2 = 59722849827524612MT.1.2.3 Linecode = 5281628C-3_linecode_media Length = 30.323 units = m
+New Line.16005019_linha_media Phases = 3 Bus1 = 59829367827538743MT.1.2.3 Bus2 = 59826557827537630MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 30.224 units = m
+New Line.13705922_linha_media Phases = 3 Bus1 = 59886834827581037MT.1.2.3 Bus2 = 59888112827580012MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 16.383 units = m
+New Line.16005039_linha_media Phases = 3 Bus1 = 59832206827539784MT.1.2.3 Bus2 = 59829367827538743MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 30.238 units = m
+New Line.16004786_linha_media Phases = 3 Bus1 = 59712355827498966MT.1.2.3 Bus2 = 59709655827498406MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 27.575 units = m
+New Line.13546739_linha_media Phases = 3 Bus1 = 59732465827488100MT.1.2.3 Bus2 = 59732748827486770MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 13.31 units = m
+New Line.15028636_linha_media Phases = 3 Bus1 = 59698275827486127MT.1.2.3 Bus2 = 59698080827485885MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 4.609 units = m
+New Line.13193663_linha_media Phases = 3 Bus1 = 59760911827501215MT.1.2.3 Bus2 = 59760312827501056MT.1.2.3 Linecode = 5281627C-3_linecode_media Length = 7.699 units = m
+New Line.16005068_linha_media Phases = 3 Bus1 = 59780385827520275MT.1.2.3 Bus2 = 59776522827518736MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 41.583 units = m
+New Line.15366424_linha_media Phases = 3 Bus1 = 59774463827518252MT.1.2.3 Bus2 = 59771282827516655MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 35.594 units = m
+New Line.15366568_linha_media Phases = 3 Bus1 = 59741044827504172MT.1.2.3 Bus2 = 59741349827503423MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 8.087 units = m
+New Line.16006602_linha_media Phases = 3 Bus1 = 59702941827496796MT.1.2.3 Bus2 = 59701570827496361MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 14.384 units = m
+New Line.13692059_linha_media Phases = 3 Bus1 = 59755403827502989MT.1.2.3 Bus2 = 59755655827501175MT.1.2.3 Linecode = 5281631C-3_linecode_media Length = 18.314 units = m
+New Line.16102369_linha_media Phases = 3 Bus1 = 59737617827512813MT.1.2.3 Bus2 = 59738914827513522MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 14.781 units = m
+New Line.16789512_linha_media Phases = 3 Bus1 = 59895348827580997MT.1.2.3 Bus2 = 59894771827582736MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 18.322 units = m
+New Line.16525970_linha_media Phases = 3 Bus1 = 59738914827513522MT.1.2.3 Bus2 = 59742062827514965MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 34.63 units = m
+New Line.16005016_linha_media Phases = 3 Bus1 = 59819957827535135MT.1.2.3 Bus2 = 59817177827534102MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 29.657 units = m
+New Line.17213246_linha_media Phases = 3 Bus1 = 59701570827496361MT.1.2.3 Bus2 = 59700191827495940MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 14.418 units = m
+New Line.16757790_linha_media Phases = 3 Bus1 = 59759905827508160MT.1.2.3 Bus2 = 59758746827507851MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 11.995 units = m
+New Line.16842105_linha_media Phases = 3 Bus1 = 59895634827580089MT.1.2.3 Bus2 = 59895348827580997MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 9.52 units = m
+New Line.13674021_linha_media Phases = 3 Bus1 = 59699368827490214MT.1.2.3 Bus2 = 59698567827487443MT.1.2.3 Linecode = 16512328H-3_linecode_media Length = 28.844 units = m
+New Line.13141484_linha_media Phases = 3 Bus1 = 59742187827499767MT.1.2.3 Bus2 = 59742551827498094MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 17.121 units = m
+New Line.15901423_linha_media Phases = 3 Bus1 = 59734623827537869MT.1.2.3 Bus2 = 59735151827538412MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 7.574 units = m
+New Line.16004861_linha_media Phases = 3 Bus1 = 59765802827512445MT.1.2.3 Bus2 = 59766513827510291MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 22.683 units = m
+New Line.13736107_linha_media Phases = 3 Bus1 = 59751644827514863MT.1.2.3 Bus2 = 59750135827518708MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 39.278 units = m
+New Line.16005017_linha_media Phases = 3 Bus1 = 59823364827536454MT.1.2.3 Bus2 = 59819957827535135MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 36.534 units = m
+New Line.16525810_linha_media Phases = 3 Bus1 = 59721116827511261MT.1.2.3 Bus2 = 59722830827512781MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 22.909 units = m
+New Line.16006604_linha_media Phases = 3 Bus1 = 59703108827495568MT.1.2.3 Bus2 = 59703309827492930MT.1.2.3 Linecode = 16512329H-3P_linecode_media Length = 26.456 units = m
+New Line.15028629_linha_media Phases = 3 Bus1 = 59769347827515904MT.1.2.3 Bus2 = 59769235827515860MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 2.702 units = m
+New Line.16005081_linha_media Phases = 3 Bus1 = 59764196827509535MT.1.2.3 Bus2 = 59759905827508160MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 45.059 units = m
+New Line.14885975_linha_media Phases = 3 Bus1 = 59714379827505873MT.1.2.3 Bus2 = 59711959827503913MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 29.517 units = m
+New Line.13703780_linha_media Phases = 3 Bus1 = 59885922827582460MT.1.2.3 Bus2 = 59886834827581037MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 15.809 units = m
+New Line.14862552_linha_media Phases = 3 Bus1 = 59904945827571662MT.1.2.3 Bus2 = 59905479827569846MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 18.929 units = m
+New Line.15028626_linha_media Phases = 3 Bus1 = 59742551827498094MT.1.2.3 Bus2 = 59742045827497910MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 1.599 units = m
+New Line.13520567_linha_media Phases = 3 Bus1 = 59742062827514965MT.1.2.3 Bus2 = 59744895827516275MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 31.212 units = m
+New Line.18437727_linha_media Phases = 3 Bus1 = 59875874827556588MT.1.2.3 Bus2 = 59872357827555249MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 37.633 units = m
+New Line.13193662_linha_media Phases = 3 Bus1 = 59761056827501254MT.1.2.3 Bus2 = 59761494827499801MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 15.176 units = m
+New Line.17239163_linha_media Phases = 3 Bus1 = 59804371827529224MT.1.2.3 Bus2 = 59801075827527977MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 35.24 units = m
+New Line.16728908_linha_media Phases = 3 Bus1 = 59730301827533163MT.1.2.3 Bus2 = 59732421827535534MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 31.806 units = m
+New Line.14885976_linha_media Phases = 3 Bus1 = 59711959827503913MT.1.2.3 Bus2 = 59709071827501643MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 36.733 units = m
+New Line.16005042_linha_media Phases = 3 Bus1 = 59842154827543712MT.1.2.3 Bus2 = 59838663827542356MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 37.451 units = m
+New Line.13703788_linha_media Phases = 3 Bus1 = 59876072827560925MT.1.2.3 Bus2 = 59876466827558735MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 20.825 units = m
+New Line.16757793_linha_media Phases = 3 Bus1 = 59758746827507851MT.1.2.3 Bus2 = 59759643827505320MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 26.853 units = m
+New Line.17238868_linha_media Phases = 3 Bus1 = 59806821827530244MT.1.2.3 Bus2 = 59804371827529224MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 26.538 units = m
+New Line.13791531_linha_media Phases = 3 Bus1 = 59720407827512296MT.1.2.3 Bus2 = 59718432827514941MT.1.2.3 Linecode = 5281628C-3_linecode_media Length = 31.457 units = m
+New Line.16005018_linha_media Phases = 3 Bus1 = 59826557827537630MT.1.2.3 Bus2 = 59823364827536454MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 34.027 units = m
+New Line.15366490_linha_media Phases = 3 Bus1 = 59719266827500348MT.1.2.3 Bus2 = 59715864827499662MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 34.705 units = m
+New Line.13665316_linha_media Phases = 3 Bus1 = 59698567827487443MT.1.2.3 Bus2 = 59698167827486317MT.1.2.3 Linecode = 16512328H-3_linecode_media Length = 10.025 units = m
+New Line.16005050_linha_media Phases = 3 Bus1 = 59866018827552743MT.1.2.3 Bus2 = 59863417827551874MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 27.423 units = m
+New Line.13177301_linha_media Phases = 3 Bus1 = 59698052827496782MT.1.2.3 Bus2 = 59697846827497137MT.1.2.3 Linecode = 16512328H-3_linecode_media Length = 5.605 units = m
+New Line.16005047_linha_media Phases = 3 Bus1 = 59857847827549624MT.1.2.3 Bus2 = 59854681827548506MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 33.576 units = m
+New Line.16005079_linha_media Phases = 3 Bus1 = 59721116827511261MT.1.2.3 Bus2 = 59720407827512296MT.1.2.3 Linecode = 5281628C-3_linecode_media Length = 12.546 units = m
+New Line.13124915_linha_media Phases = 3 Bus1 = 59771282827516655MT.1.2.3 Bus2 = 59770032827516199MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 10.826 units = m
+New Line.18608652_linha_media Phases = 3 Bus1 = 59726108827528248MT.1.2.3 Bus2 = 59727135827527915MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 10.796 units = m
+New Line.16004864_linha_media Phases = 3 Bus1 = 59776522827518736MT.1.2.3 Bus2 = 59774463827518252MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 21.151 units = m
+New Line.17213409_linha_media Phases = 3 Bus1 = 59755841827499728MT.1.2.3 Bus2 = 59756248827496437MT.1.2.3 Linecode = 5281631C-3_linecode_media Length = 33.161 units = m
+New Line.13736381_linha_media Phases = 3 Bus1 = 59736314827503352MT.1.2.3 Bus2 = 59733003827502810MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 33.551 units = m
+New Line.16005040_linha_media Phases = 3 Bus1 = 59835079827540905MT.1.2.3 Bus2 = 59832206827539784MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 30.84 units = m
+New Line.16005014_linha_media Phases = 3 Bus1 = 59814420827533035MT.1.2.3 Bus2 = 59812140827532263MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 24.072 units = m
+New Line.16929575_linha_media Phases = 3 Bus1 = 59905599827569756MT.1.2.3 Bus2 = 59907967827569935MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 25.787 units = m
+New Line.13546738_linha_media Phases = 3 Bus1 = 59731663827491823MT.1.2.3 Bus2 = 59732465827488100MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 38.084 units = m
+New Line.15028616_linha_media Phases = 3 Bus1 = 59728039827527220MT.1.2.3 Bus2 = 59728263827527188MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 3.767 units = m
+New Line.16004785_linha_media Phases = 3 Bus1 = 59709655827498406MT.1.2.3 Bus2 = 59706391827497749MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 33.295 units = m
+New Line.16005078_linha_media Phases = 3 Bus1 = 59882223827571150MT.1.2.3 Bus2 = 59880024827569114MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 29.968 units = m
+New Line.15342180_linha_media Phases = 3 Bus1 = 59727135827527915MT.1.2.3 Bus2 = 59727890827527241MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 10.121 units = m
+New Line.16757791_linha_media Phases = 3 Bus1 = 59758746827507851MT.1.2.3 Bus2 = 59755961827506976MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 29.192 units = m
+New Line.13546735_linha_media Phases = 3 Bus1 = 59730834827495055MT.1.2.3 Bus2 = 59731663827491823MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 31.568 units = m
+New Line.13705929_linha_media Phases = 3 Bus1 = 59874011827565490MT.1.2.3 Bus2 = 59876072827560925MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 47.664 units = m
+New Line.16004788_linha_media Phases = 3 Bus1 = 59724457827507004MT.1.2.3 Bus2 = 59722491827509448MT.1.2.3 Linecode = 5281628C-3_linecode_media Length = 31.366 units = m
+New Line.16005060_linha_media Phases = 3 Bus1 = 59741044827504172MT.1.2.3 Bus2 = 59739728827503888MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 13.463 units = m
+New Line.16004789_linha_media Phases = 3 Bus1 = 59722400827509568MT.1.2.3 Bus2 = 59721116827511261MT.1.2.3 Linecode = 5281628C-3_linecode_media Length = 22.754 units = m
+New Line.16005057_linha_media Phases = 3 Bus1 = 59766513827510291MT.1.2.3 Bus2 = 59765623827510036MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 9.258 units = m
+New Line.16728915_linha_media Phases = 3 Bus1 = 59738416827510981MT.1.2.3 Bus2 = 59737617827512813MT.1.2.3 Linecode = 16512325H-3_linecode_media Length = 19.987 units = m
+New Line.13169492_linha_media Phases = 3 Bus1 = 59722830827512781MT.1.2.3 Bus2 = 59724120827513785MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 15.981 units = m
+New Line.15901425_linha_media Phases = 3 Bus1 = 59737617827512813MT.1.2.3 Bus2 = 59736722827514801MT.1.2.3 Linecode = 16512325H-3_linecode_media Length = 21.802 units = m
+New Line.16102314_linha_media Phases = 3 Bus1 = 59736628827512383MT.1.2.3 Bus2 = 59733547827511038MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 33.618 units = m
+New Line.14862548_linha_media Phases = 3 Bus1 = 59903830827575032MT.1.2.3 Bus2 = 59904137827574061MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 10.184 units = m
+New Line.14885972_linha_media Phases = 3 Bus1 = 59705652827498596MT.1.2.3 Bus2 = 59701366827497241MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 43.779 units = m
+New Line.15901896_linha_media Phases = 3 Bus1 = 59907967827569935MT.1.2.3 Bus2 = 59908059827569200MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 8.909 units = m
+New Line.16005069_linha_media Phases = 3 Bus1 = 59783086827521317MT.1.2.3 Bus2 = 59780385827520275MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 28.95 units = m
+New Line.15366580_linha_media Phases = 3 Bus1 = 59698632827492346MT.1.2.3 Bus2 = 59699368827490214MT.1.2.3 Linecode = 16512328H-3_linecode_media Length = 22.555 units = m
+New Line.14545612_linha_media Phases = 3 Bus1 = 59703359827490448MT.1.2.3 Bus2 = 59703356827489595MT.1.2.3 Linecode = 16512329H-3P_linecode_media Length = 8.53 units = m
+New Line.13193661_linha_media Phases = 3 Bus1 = 59760722827502231MT.1.2.3 Bus2 = 59761056827501254MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 10.325 units = m
+New Line.15028634_linha_media Phases = 3 Bus1 = 59770032827516199MT.1.2.3 Bus2 = 59769937827516071MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 1.594 units = m
+New Line.16005059_linha_media Phases = 3 Bus1 = 59741349827503423MT.1.2.3 Bus2 = 59742187827499767MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 37.508 units = m
+New Line.14885977_linha_media Phases = 3 Bus1 = 59698296827496250MT.1.2.3 Bus2 = 59701222827497197MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 28.944 units = m
+New Line.15028620_linha_media Phases = 3 Bus1 = 59727944827527090MT.1.2.3 Bus2 = 59727988827527068MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 1.995 units = m
+New Line.15028625_linha_media Phases = 3 Bus1 = 59769235827515860MT.1.2.3 Bus2 = 59769637827516383MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 6.385 units = m
+New Line.13546736_linha_media Phases = 3 Bus1 = 59732175827487990MT.1.2.3 Bus2 = 59731582827487733MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 7.968 units = m
+New Line.15028635_linha_media Phases = 3 Bus1 = 59698167827486317MT.1.2.3 Bus2 = 59698096827486174MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 1.597 units = m
+New Line.14161432_linha_media Phases = 3 Bus1 = 59750135827518708MT.1.2.3 Bus2 = 59749735827519790MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 11.536 units = m
+New Line.16006605_linha_media Phases = 3 Bus1 = 59702961827496647MT.1.2.3 Bus2 = 59703108827495568MT.1.2.3 Linecode = 16512329H-3P_linecode_media Length = 12.393 units = m
+New Line.16488154_linha_media Phases = 3 Bus1 = 59727607827530161MT.1.2.3 Bus2 = 59730301827533163MT.1.2.3 Linecode = 5281632C-3_linecode_media Length = 40.336 units = m
+New Line.14161433_linha_media Phases = 3 Bus1 = 59749735827519790MT.1.2.3 Bus2 = 59749174827521391MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 16.964 units = m
+New Line.13124914_linha_media Phases = 3 Bus1 = 59769235827515860MT.1.2.3 Bus2 = 59768389827515487MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 9.246 units = m
+New Line.16005011_linha_media Phases = 3 Bus1 = 59801075827527977MT.1.2.3 Bus2 = 59797954827526486MT.1.2.3 Linecode = 16512375H-3_linecode_media Length = 34.589 units = m
+New Transformer.34581371 Phases=3 Windings=2 xhl=3.63 %noloadloss=0.123
+~ wdg=1 bus=59765802827512445ET.1.2.3 conn=delta kv=13.8 kva=112.5 %r=1.68 tap=1
+~ wdg=2 bus=59765597827512393BT.1.2.3.0 conn=wye kv=0.22 kva=112.5 %r=1.68 tap=1
+New Transformer.34589241 Phases=3 Windings=2 xhl=3.63 %noloadloss=0.123
+~ wdg=1 bus=59762124827497594ET.1.2.3 conn=delta kv=13.8 kva=112.5 %r=1.68 tap=1
+~ wdg=2 bus=59762013827497493BT.1.2.3.0 conn=wye kv=0.22 kva=112.5 %r=1.68 tap=1
+New Transformer.34596085 Phases=3 Windings=2 xhl=5.0 %noloadloss=0.5
+~ wdg=1 bus=59731582827487733ET.1.2.3 conn=delta kv=13.8 kva=750.0 %r=4.0 tap=1
+~ wdg=2 bus=59731414827487687BT.1.2.3.0 conn=wye kv=0.22 kva=750.0 %r=4.0 tap=1
+New Transformer.34621609 Phases=3 Windings=2 xhl=3.63 %noloadloss=0.123
+~ wdg=1 bus=59770391827514640ET.1.2.3 conn=delta kv=13.8 kva=75.0 %r=1.68 tap=1
+~ wdg=2 bus=59770320827514488BT.1.2.3.0 conn=wye kv=0.22 kva=75.0 %r=1.68 tap=1
+New Transformer.34629110 Phases=3 Windings=2 xhl=5.0 %noloadloss=0.5
+~ wdg=1 bus=59729925827494859ET.1.2.3 conn=delta kv=13.8 kva=509.0 %r=4.0 tap=1
+~ wdg=2 bus=59729717827494818BT.1.2.3.0 conn=wye kv=0.22 kva=509.0 %r=4.0 tap=1
+New Transformer.34630183 Phases=3 Windings=2 xhl=3.63 %noloadloss=0.123
+~ wdg=1 bus=59742062827514965ET.1.2.3 conn=delta kv=13.8 kva=112.5 %r=1.68 tap=1
+~ wdg=2 bus=59741986827515095BT.1.2.3.0 conn=wye kv=0.22 kva=112.5 %r=1.68 tap=1
+New Transformer.34651280 Phases=3 Windings=2 xhl=3.63 %noloadloss=0.123
+~ wdg=1 bus=59701570827496361ET.1.2.3 conn=delta kv=13.8 kva=150.0 %r=1.68 tap=1
+~ wdg=2 bus=59701525827496195BT.1.2.3.0 conn=wye kv=0.22 kva=150.0 %r=1.68 tap=1
+New Transformer.34651815 Phases=3 Windings=2 xhl=3.63 %noloadloss=0.123
+~ wdg=1 bus=59727738827508523ET.1.2.3 conn=delta kv=13.8 kva=75.0 %r=1.68 tap=1
+~ wdg=2 bus=59727671827508682BT.1.2.3.0 conn=wye kv=0.22 kva=75.0 %r=1.68 tap=1
+New Transformer.34654153 Phases=3 Windings=2 xhl=3.275 %noloadloss=0.121
+~ wdg=1 bus=59703356827489595ET.1.2.3 conn=delta kv=13.8 kva=10.0 %r=2.033 tap=1
+~ wdg=2 bus=59703241827489572BT.1.2.3.0 conn=wye kv=0.22 kva=10.0 %r=2.033 tap=1
+New Transformer.34657845 Phases=3 Windings=2 xhl=3.275 %noloadloss=0.121
+~ wdg=1 bus=59703356827489595ET.1.2.3 conn=delta kv=13.8 kva=10.0 %r=2.033 tap=1
+~ wdg=2 bus=59703473827489565BT.1.2.3.0 conn=wye kv=0.22 kva=10.0 %r=2.033 tap=1
+New Transformer.34667192 Phases=3 Windings=2 xhl=3.63 %noloadloss=0.123
+~ wdg=1 bus=59756248827496437ET.1.2.3 conn=delta kv=13.8 kva=75.0 %r=1.68 tap=1
+~ wdg=2 bus=59756422827496463BT.1.2.3.0 conn=wye kv=0.22 kva=75.0 %r=1.68 tap=1
+New Transformer.34674947 Phases=3 Windings=2 xhl=5.0 %noloadloss=0.5
+~ wdg=1 bus=59734623827537869ET.1.2.3 conn=delta kv=13.8 kva=400.0 %r=4.0 tap=1
+~ wdg=2 bus=59734761827537734BT.1.2.3.0 conn=wye kv=0.22 kva=400.0 %r=4.0 tap=1
+New Transformer.34676976 Phases=3 Windings=2 xhl=3.63 %noloadloss=0.123
+~ wdg=1 bus=59801075827527977ET.1.2.3 conn=delta kv=13.8 kva=75.0 %r=1.68 tap=1
+~ wdg=2 bus=59801259827528013BT.1.2.3.0 conn=wye kv=0.22 kva=75.0 %r=1.68 tap=1
+New Transformer.34682101 Phases=3 Windings=2 xhl=3.63 %noloadloss=0.123
+~ wdg=1 bus=59752819827511918ET.1.2.3 conn=delta kv=13.8 kva=112.5 %r=1.68 tap=1
+~ wdg=2 bus=59752994827511974BT.1.2.3.0 conn=wye kv=0.22 kva=112.5 %r=1.68 tap=1
+New Transformer.34683400 Phases=3 Windings=2 xhl=3.63 %noloadloss=0.123
+~ wdg=1 bus=59718400827511330MT.1.2.3 conn=delta kv=13.8 kva=112.5 %r=1.68 tap=1
+~ wdg=2 bus=59718306827511522BT.1.2.3.0 conn=wye kv=0.22 kva=112.5 %r=1.68 tap=1
+New Transformer.34692798 Phases=3 Windings=2 xhl=4.423 %noloadloss=0.5
+~ wdg=1 bus=59743486827500480MT.1.2.3 conn=delta kv=13.8 kva=225.0 %r=4.0 tap=1
+~ wdg=2 bus=59743644827500564BT.1.2.3.0 conn=wye kv=0.22 kva=225.0 %r=4.0 tap=1
+New Transformer.34699157 Phases=3 Windings=2 xhl=3.63 %noloadloss=0.123
+~ wdg=1 bus=59760312827501056MT.1.2.3 conn=delta kv=13.8 kva=150.0 %r=1.68 tap=1
+~ wdg=2 bus=59760167827501017BT.1.2.3.0 conn=wye kv=0.22 kva=150.0 %r=1.68 tap=1
+New Transformer.34703388 Phases=3 Windings=2 xhl=3.63 %noloadloss=0.123
+~ wdg=1 bus=59719266827500348ET.1.2.3 conn=delta kv=13.8 kva=75.0 %r=1.68 tap=1
+~ wdg=2 bus=59719311827500172BT.1.2.3.0 conn=wye kv=0.22 kva=75.0 %r=1.68 tap=1
+New Transformer.34704132 Phases=3 Windings=2 xhl=3.63 %noloadloss=0.123
+~ wdg=1 bus=59749735827519790ET.1.2.3 conn=delta kv=13.8 kva=75.0 %r=1.68 tap=1
+~ wdg=2 bus=59749580827519706BT.1.2.3.0 conn=wye kv=0.22 kva=75.0 %r=1.68 tap=1
+New Transformer.34705891 Phases=3 Windings=2 xhl=3.63 %noloadloss=0.123
+~ wdg=1 bus=59745769827505002ET.1.2.3 conn=delta kv=13.8 kva=112.5 %r=1.68 tap=1
+~ wdg=2 bus=59745790827504839BT.1.2.3.0 conn=wye kv=0.22 kva=112.5 %r=1.68 tap=1
+New Transformer.34711003 Phases=3 Windings=2 xhl=3.63 %noloadloss=0.123
+~ wdg=1 bus=59763718827511186MT.1.2.3 conn=delta kv=13.8 kva=75.0 %r=1.68 tap=1
+~ wdg=2 bus=59763669827511338BT.1.2.3.0 conn=wye kv=0.22 kva=75.0 %r=1.68 tap=1
+New Transformer.34719405 Phases=3 Windings=2 xhl=3.63 %noloadloss=0.123
+~ wdg=1 bus=59769451827505176ET.1.2.3 conn=delta kv=13.8 kva=112.5 %r=1.68 tap=1
+~ wdg=2 bus=59769620827505253BT.1.2.3.0 conn=wye kv=0.22 kva=112.5 %r=1.68 tap=1
+New Transformer.34719409 Phases=3 Windings=2 xhl=3.63 %noloadloss=0.123
+~ wdg=1 bus=59854681827548506ET.1.2.3 conn=delta kv=13.8 kva=112.5 %r=1.68 tap=1
+~ wdg=2 bus=59854585827548770BT.1.2.3.0 conn=wye kv=0.22 kva=112.5 %r=1.68 tap=1
+New Transformer.34724002 Phases=3 Windings=2 xhl=3.63 %noloadloss=0.123
+~ wdg=1 bus=59806821827530244ET.1.2.3 conn=delta kv=13.8 kva=75.0 %r=1.68 tap=1
+~ wdg=2 bus=59806819827530123BT.1.2.3.0 conn=wye kv=0.22 kva=75.0 %r=1.68 tap=1
+New Transformer.34741744 Phases=3 Windings=2 xhl=4.0 %noloadloss=0.5
+~ wdg=1 bus=59731663827491823ET.1.2.3 conn=delta kv=13.8 kva=45.0 %r=3.0 tap=1
+~ wdg=2 bus=59731839827491863BT.1.2.3.0 conn=wye kv=0.22 kva=45.0 %r=3.0 tap=1
+New Transformer.34751065 Phases=3 Windings=2 xhl=3.63 %noloadloss=0.123
+~ wdg=1 bus=59717044827507973ET.1.2.3 conn=delta kv=13.8 kva=75.0 %r=1.68 tap=1
+~ wdg=2 bus=59716933827508112BT.1.2.3.0 conn=wye kv=0.22 kva=75.0 %r=1.68 tap=1
+New Transformer.34755506 Phases=3 Windings=2 xhl=3.63 %noloadloss=0.123
+~ wdg=1 bus=59752471827512776ET.1.2.3 conn=delta kv=13.8 kva=150.0 %r=1.68 tap=1
+~ wdg=2 bus=59752671827512849BT.1.2.3.0 conn=wye kv=0.22 kva=150.0 %r=1.68 tap=1
+New Transformer.34756002 Phases=3 Windings=2 xhl=4.0 %noloadloss=0.5
+~ wdg=1 bus=59902179827569261ET.1.2.3 conn=delta kv=13.8 kva=45.0 %r=3.0 tap=1
+~ wdg=2 bus=59902043827569096BT.1.2.3.0 conn=wye kv=0.22 kva=45.0 %r=3.0 tap=1
+New Transformer.34760174 Phases=3 Windings=2 xhl=3.63 %noloadloss=0.123
+~ wdg=1 bus=59884204827574489ET.1.2.3 conn=delta kv=13.8 kva=112.5 %r=1.68 tap=1
+~ wdg=2 bus=59884156827574350BT.1.2.3.0 conn=wye kv=0.22 kva=112.5 %r=1.68 tap=1
+New Transformer.34764930 Phases=3 Windings=2 xhl=5.0 %noloadloss=0.5
+~ wdg=1 bus=59726432827496334MT.1.2.3 conn=delta kv=13.8 kva=300.0 %r=4.0 tap=1
+~ wdg=2 bus=59726254827496297BT.1.2.3.0 conn=wye kv=0.22 kva=300.0 %r=4.0 tap=1
+New Transformer.34769157 Phases=3 Windings=2 xhl=4.423 %noloadloss=0.5
+~ wdg=1 bus=59748187827521019ET.1.2.3 conn=delta kv=13.8 kva=225.0 %r=4.0 tap=1
+~ wdg=2 bus=59748002827520966BT.1.2.3.0 conn=wye kv=0.22 kva=225.0 %r=4.0 tap=1
+New Transformer.34776848 Phases=3 Windings=2 xhl=3.63 %noloadloss=0.123
+~ wdg=1 bus=59730301827533163ET.1.2.3 conn=delta kv=13.8 kva=112.5 %r=1.68 tap=1
+~ wdg=2 bus=59730126827533316BT.1.2.3.0 conn=wye kv=0.22 kva=112.5 %r=1.68 tap=1
+New Transformer.34777087 Phases=3 Windings=2 xhl=5.0 %noloadloss=0.5
+~ wdg=1 bus=59703359827490448ET.1.2.3 conn=delta kv=13.8 kva=509.0 %r=4.0 tap=1
+~ wdg=2 bus=59703506827490435BT.1.2.3.0 conn=wye kv=0.22 kva=509.0 %r=4.0 tap=1
+New Transformer.34781158 Phases=3 Windings=2 xhl=3.63 %noloadloss=0.123
+~ wdg=1 bus=59736722827514801ET.1.2.3 conn=delta kv=13.8 kva=112.5 %r=1.68 tap=1
+~ wdg=2 bus=59736512827514805BT.1.2.3.0 conn=wye kv=0.22 kva=112.5 %r=1.68 tap=1
+New Transformer.34792559 Phases=3 Windings=2 xhl=5.0 %noloadloss=0.5
+~ wdg=1 bus=59735151827538412ET.1.2.3 conn=delta kv=13.8 kva=1000.0 %r=4.0 tap=1
+~ wdg=2 bus=59735285827538292BT.1.2.3.0 conn=wye kv=0.22 kva=1000.0 %r=4.0 tap=1
+New Transformer.34792908 Phases=3 Windings=2 xhl=3.63 %noloadloss=0.123
+~ wdg=1 bus=59703359827490448ET.1.2.3 conn=delta kv=13.8 kva=150.0 %r=1.68 tap=1
+~ wdg=2 bus=59703253827490425BT.1.2.3.0 conn=wye kv=0.22 kva=150.0 %r=1.68 tap=1
+New Transformer.34798802 Phases=3 Windings=2 xhl=5.0 %noloadloss=0.5
+~ wdg=1 bus=59755655827501175ET.1.2.3 conn=delta kv=13.8 kva=1250.0 %r=4.0 tap=1
+~ wdg=2 bus=59755831827501192BT.1.2.3.0 conn=wye kv=0.38 kva=1250.0 %r=4.0 tap=1
+New Transformer.34804823 Phases=3 Windings=2 xhl=3.63 %noloadloss=0.123
+~ wdg=1 bus=59755961827506976ET.1.2.3 conn=delta kv=13.8 kva=112.5 %r=1.68 tap=1
+~ wdg=2 bus=59755995827506829BT.1.2.3.0 conn=wye kv=0.22 kva=112.5 %r=1.68 tap=1
+New Transformer.34809867 Phases=3 Windings=2 xhl=3.63 %noloadloss=0.123
+~ wdg=1 bus=59729925827494859ET.1.2.3 conn=delta kv=13.8 kva=150.0 %r=1.68 tap=1
+~ wdg=2 bus=59729955827494699BT.1.2.3.0 conn=wye kv=0.22 kva=150.0 %r=1.68 tap=1
+New loadshape.myirrad_00a1f2cf64df27b4da2e762b7fe87f42a1f4d7ade34da89d5494f66293c1f4fb npts = 1 interval = 1 mult = [1]
+New tshape.mytemp_00a1f2cf64df27b4da2e762b7fe87f42a1f4d7ade34da89d5494f66293c1f4fb npts = 1 interval = 1 temp = [25]
+New xycurve.mypvst_00a1f2cf64df27b4da2e762b7fe87f42a1f4d7ade34da89d5494f66293c1f4fb npts = 4 xarray=[0 25 75 100] yarray=[1.2 1.0 0.8 0.6]
+New xycurve.myeff_00a1f2cf64df27b4da2e762b7fe87f42a1f4d7ade34da89d5494f66293c1f4fb npts = 4 xarray=[.1 .2 .4 1.0] yarray=[.86 .9 .93 .97]
+New Load.nome_34703388_curva_diaria_COM-Tipo1_0.6653_0.6639_0.6459_0.6392_0.6346_0.6299_0.6232_0.6174_0.6069_0.6075_0.5927_0.5925_0.5936_0.5856_0.5815_0.5780_0.5730_0.5642_0.5657_0.5552_0.5579_0.5713_0.5598_0.5570_0.5586_0.5617_0.5453_0.5406_0.5538_0.5296_0.5264_0.5366_0.5345_0.5385_0.5526_0.5612_0.5554_0.5830_0.5656_0.6096_0.5866_0.5944_0.5795_0.5859_0.6052_0.6124_0.6257_0.6359_0.6203_0.6200_0.6277_0.6228_0.6428_0.6553_0.6508_0.6557_0.6569_0.6691_0.6736_0.6722_0.6569_0.6672_0.6729_0.6828_0.6775_0.6683_0.6779_0.6571_0.6792_0.6951_0.7294_0.7402_0.7953_0.7990_0.8107_0.8384_0.8181_0.8355_0.8111_0.8033_0.7832_0.7912_0.7698_0.7601_0.7664_0.7376_0.7235_0.7060_0.7145_0.6908_0.6840_0.6666_0.6606_0.6548_0.6732_0.6867_curva_anual_50.17_46.19_57.05_44.00_45.51_39.24_31.63_51.92_65.39_68.87_75.85_63.41_carga_agregada Bus1=59719311827500172BT.1.2.3.0 Phases=3
+~ Conn=wye Model=1 Kv=0.22 Kw=1 pf=0.92
+New Load.nome_34755506_curva_diaria_RES-Tipo3_0.7381_0.7175_0.7311_0.7139_0.6939_0.6899_0.6731_0.6762_0.6763_0.6583_0.6749_0.6649_0.6279_0.6477_0.6325_0.6272_0.5932_0.6027_0.6164_0.6018_0.6112_0.5924_0.5922_0.5472_0.5174_0.5009_0.4937_0.5120_0.4905_0.4382_0.4406_0.4584_0.4230_0.4749_0.4295_0.4053_0.3922_0.4112_0.4062_0.4144_0.4139_0.3961_0.3881_0.4378_0.4356_0.4496_0.4705_0.4730_0.4751_0.5144_0.4826_0.4722_0.5385_0.5440_0.5447_0.5300_0.5139_0.5452_0.5533_0.5570_0.5259_0.5305_0.5490_0.5650_0.5341_0.5490_0.5210_0.5153_0.5451_0.5593_0.5733_0.6123_0.6816_0.6853_0.7523_0.7785_0.8030_0.7914_0.8714_0.8464_0.8182_0.8380_0.8286_0.8077_0.7887_0.7566_0.7683_0.7351_0.7564_0.7517_0.7428_0.7354_0.7361_0.7425_0.7499_0.7277_curva_anual_70.85_67.16_82.29_64.14_67.40_59.50_59.69_98.08_119.67_125.44_136.47_123.92_carga_agregada Bus1=59752671827512849BT.1.2.3.0 Phases=3
+~ Conn=wye Model=1 Kv=0.22 Kw=1 pf=0.92
+New Load.nome_34719409_curva_diaria_RES-Tipo10_0.7004_0.6813_0.6587_0.6466_0.6441_0.6375_0.6293_0.6176_0.6141_0.6106_0.5948_0.5886_0.5972_0.5902_0.5831_0.5788_0.5619_0.5563_0.5572_0.5496_0.5468_0.5503_0.5378_0.5339_0.5270_0.5044_0.5164_0.5154_0.5068_0.4834_0.4962_0.4948_0.4791_0.4854_0.4955_0.4974_0.4956_0.5159_0.5084_0.5423_0.5193_0.5233_0.5236_0.5258_0.5367_0.5656_0.5714_0.5892_0.5905_0.6035_0.5838_0.5739_0.5988_0.6017_0.5988_0.5907_0.5837_0.5936_0.6036_0.6060_0.5969_0.6022_0.6096_0.6092_0.6004_0.5973_0.5896_0.5876_0.5955_0.6109_0.6292_0.6580_0.7147_0.7215_0.7412_0.7741_0.7760_0.7935_0.7716_0.7609_0.7653_0.7877_0.7815_0.7790_0.7924_0.7707_0.7548_0.7369_0.7433_0.7225_0.7283_0.7168_0.7162_0.7049_0.6947_0.6995_curva_anual_114.87_100.49_124.24_103.74_107.00_90.43_94.44_134.90_152.25_178.42_213.83_191.98_carga_agregada Bus1=59854585827548770BT.1.2.3.0 Phases=3
+~ Conn=wye Model=1 Kv=0.22 Kw=1 pf=0.92
+New Load.nome_34760174_curva_diaria_RES-Tipo10_0.7107_0.6952_0.6653_0.6551_0.6528_0.6474_0.6384_0.6259_0.6200_0.6185_0.6007_0.5952_0.6033_0.5971_0.5903_0.5884_0.5688_0.5637_0.5613_0.5547_0.5510_0.5588_0.5449_0.5443_0.5342_0.5115_0.5204_0.5166_0.4977_0.4674_0.4726_0.4624_0.4380_0.4389_0.4499_0.4505_0.4493_0.4741_0.4610_0.4914_0.4711_0.4719_0.4695_0.4717_0.4855_0.5211_0.5343_0.5590_0.5621_0.5723_0.5478_0.5356_0.5610_0.5616_0.5585_0.5538_0.5392_0.5495_0.5578_0.5620_0.5509_0.5534_0.5612_0.5604_0.5516_0.5510_0.5446_0.5475_0.5623_0.5838_0.6203_0.6529_0.7293_0.7462_0.7646_0.8064_0.7992_0.8327_0.7908_0.7855_0.7836_0.7981_0.7998_0.7958_0.8120_0.7833_0.7732_0.7579_0.7688_0.7436_0.7489_0.7355_0.7365_0.7221_0.7132_0.7191_curva_anual_63.57_51.26_64.87_55.45_64.15_53.50_54.31_75.47_89.96_108.17_106.69_107.19_carga_agregada Bus1=59884156827574350BT.1.2.3.0 Phases=3
+~ Conn=wye Model=1 Kv=0.22 Kw=1 pf=0.92
+New Load.nome_34630183_curva_diaria_RES-Tipo10_0.6763_0.6681_0.6466_0.6367_0.6323_0.6304_0.6213_0.6105_0.6041_0.6057_0.5966_0.5906_0.5962_0.5918_0.5843_0.5834_0.5700_0.5617_0.5553_0.5501_0.5467_0.5529_0.5546_0.5629_0.5632_0.5476_0.5424_0.5494_0.5488_0.5373_0.5546_0.5685_0.5519_0.5662_0.5738_0.5880_0.5822_0.6146_0.6136_0.6313_0.6246_0.6280_0.6314_0.6434_0.6493_0.6690_0.6691_0.6870_0.6961_0.7011_0.6961_0.6885_0.7130_0.7075_0.7131_0.7087_0.6910_0.6961_0.7086_0.7041_0.6965_0.7065_0.7170_0.7220_0.7201_0.7095_0.6985_0.7017_0.7036_0.7279_0.7588_0.7791_0.8203_0.8318_0.8441_0.9001_0.8852_0.8931_0.8829_0.8581_0.8348_0.8379_0.8370_0.8249_0.8366_0.8200_0.7995_0.7780_0.7695_0.7458_0.7445_0.7325_0.7154_0.7031_0.6830_0.6746_curva_anual_50.00_50.44_64.85_48.49_50.27_43.99_25.78_47.10_71.19_62.51_89.43_96.95_carga_agregada Bus1=59741986827515095BT.1.2.3.0 Phases=3
+~ Conn=wye Model=1 Kv=0.22 Kw=1 pf=0.92
+New Load.nome_34651280_curva_diaria_COM-Tipo1_0.6128_0.6096_0.5795_0.5748_0.5619_0.5507_0.5462_0.5560_0.5525_0.5397_0.5266_0.5200_0.5206_0.5313_0.5137_0.5196_0.5030_0.5101_0.5130_0.5101_0.5062_0.5325_0.5137_0.5135_0.5129_0.5103_0.5159_0.5524_0.5464_0.5611_0.5833_0.6322_0.6508_0.6957_0.7104_0.7395_0.7161_0.7318_0.7312_0.7783_0.7608_0.7708_0.7642_0.7826_0.7794_0.7908_0.7652_0.7492_0.7523_0.7573_0.7339_0.7326_0.7536_0.7540_0.7539_0.7511_0.7522_0.7648_0.7759_0.7662_0.7678_0.7709_0.7793_0.7675_0.7798_0.7537_0.7685_0.7556_0.7466_0.7494_0.7479_0.7416_0.7655_0.7315_0.7518_0.7500_0.7573_0.7546_0.7590_0.7202_0.7403_0.7499_0.7401_0.7455_0.7414_0.7443_0.6956_0.6694_0.6590_0.6571_0.6642_0.6388_0.6322_0.6317_0.6339_0.6345_curva_anual_108.93_78.79_83.80_105.94_122.73_91.94_107.05_138.08_131.36_122.10_125.60_168.93_carga_agregada Bus1=59701525827496195BT.1.2.3.0 Phases=3
+~ Conn=wye Model=1 Kv=0.22 Kw=1 pf=0.92
+New Load.nome_34651815_curva_diaria_RES-Tipo1_0.7349_0.7227_0.6900_0.6804_0.6830_0.6822_0.6731_0.6574_0.6485_0.6483_0.6356_0.6273_0.6329_0.6256_0.6216_0.6175_0.6011_0.5924_0.5843_0.5801_0.5776_0.5864_0.5801_0.5832_0.5747_0.5586_0.5468_0.5449_0.5399_0.5123_0.5130_0.5124_0.4848_0.4978_0.5077_0.5191_0.5141_0.5473_0.5248_0.5541_0.5258_0.5304_0.5374_0.5396_0.5488_0.5804_0.5983_0.6184_0.6309_0.6460_0.6403_0.6274_0.6399_0.6328_0.6348_0.6250_0.6091_0.6167_0.6271_0.6301_0.6196_0.6269_0.6392_0.6375_0.6357_0.6287_0.6152_0.6189_0.6326_0.6658_0.6973_0.7289_0.7847_0.8043_0.8267_0.8934_0.8771_0.8928_0.8826_0.8720_0.8458_0.8595_0.8531_0.8436_0.8555_0.8318_0.8151_0.8053_0.8067_0.7833_0.7845_0.7743_0.7624_0.7483_0.7284_0.7266_curva_anual_42.37_43.28_60.48_48.93_44.92_42.32_19.90_38.57_67.66_63.16_93.33_88.67_carga_agregada Bus1=59727671827508682BT.1.2.3.0 Phases=3
+~ Conn=wye Model=1 Kv=0.22 Kw=1 pf=0.92
+New Load.nome_34596085_curva_diaria_COM-Tipo1_0.5265_0.5224_0.5134_0.5088_0.4997_0.4927_0.4897_0.4870_0.4840_0.4844_0.4727_0.4711_0.4758_0.4701_0.4645_0.4664_0.4577_0.4520_0.4527_0.4487_0.4457_0.4516_0.4491_0.4586_0.4626_0.4550_0.4489_0.4573_0.4725_0.4782_0.5051_0.5386_0.5618_0.5802_0.6130_0.6456_0.6446_0.6906_0.7130_0.7448_0.7484_0.7505_0.7512_0.7686_0.7632_0.7655_0.7444_0.7358_0.7263_0.7116_0.7082_0.7170_0.7437_0.7630_0.7763_0.7913_0.7961_0.7959_0.8013_0.7912_0.7863_0.7944_0.7994_0.8116_0.8079_0.7855_0.7847_0.7772_0.7758_0.7712_0.7807_0.7774_0.7809_0.7572_0.7530_0.7639_0.7408_0.7345_0.7145_0.6927_0.6825_0.6802_0.6690_0.6560_0.6568_0.6481_0.6265_0.6039_0.5845_0.5690_0.5682_0.5543_0.5418_0.5426_0.5349_0.5264_curva_anual_53.16_51.17_63.15_57.39_53.81_44.18_55.01_79.28_94.81_116.90_102.22_93.88_carga_agregada Bus1=59731414827487687BT.1.2.3.0 Phases=3
+~ Conn=wye Model=1 Kv=0.22 Kw=1 pf=0.92
+New Load.nome_34724002_curva_diaria_RES-Tipo8_0.7948_0.7787_0.7462_0.7426_0.7407_0.7370_0.7240_0.7223_0.7241_0.7257_0.6976_0.6931_0.7025_0.6999_0.6941_0.6973_0.6667_0.6709_0.6697_0.6708_0.6523_0.6640_0.6482_0.6444_0.6028_0.5679_0.5581_0.5603_0.5268_0.5046_0.5100_0.5042_0.4743_0.4936_0.4893_0.5024_0.5151_0.5256_0.5132_0.5437_0.5113_0.5065_0.5200_0.5296_0.5249_0.5472_0.5451_0.5917_0.6044_0.6242_0.6041_0.6147_0.6365_0.6437_0.6411_0.6232_0.6045_0.6127_0.6307_0.6104_0.6078_0.5990_0.6154_0.5986_0.5936_0.5757_0.5727_0.5777_0.5928_0.6055_0.6324_0.6385_0.6961_0.7152_0.7497_0.7813_0.8018_0.8320_0.8242_0.8192_0.8303_0.8606_0.8480_0.8510_0.8400_0.8374_0.8275_0.8285_0.8235_0.8354_0.8271_0.8197_0.8048_0.8118_0.8091_0.8120_curva_anual_9.28_7.59_9.96_9.20_8.46_6.43_7.77_14.22_15.97_20.47_16.43_13.16_carga_agregada Bus1=59806819827530123BT.1.2.3.0 Phases=3
+~ Conn=wye Model=1 Kv=0.22 Kw=1 pf=0.92
+New Load.nome_34776848_curva_diaria_RES-Tipo7_0.7121_0.7006_0.6703_0.6629_0.6662_0.6672_0.6556_0.6418_0.6372_0.6404_0.6246_0.6181_0.6246_0.6192_0.6139_0.6109_0.5958_0.5894_0.5815_0.5767_0.5711_0.5813_0.5754_0.5795_0.5666_0.5450_0.5358_0.5371_0.5366_0.5217_0.5303_0.5387_0.5153_0.5393_0.5486_0.5635_0.5644_0.5877_0.5776_0.6065_0.5811_0.5848_0.5920_0.6002_0.6090_0.6342_0.6422_0.6612_0.6728_0.6950_0.6882_0.6793_0.6894_0.6836_0.6846_0.6718_0.6603_0.6691_0.6859_0.6816_0.6760_0.6817_0.6968_0.6915_0.6939_0.6787_0.6613_0.6641_0.6689_0.6979_0.7204_0.7347_0.7682_0.7792_0.7936_0.8564_0.8487_0.8552_0.8545_0.8370_0.8132_0.8297_0.8178_0.8099_0.8166_0.8019_0.7826_0.7746_0.7684_0.7543_0.7522_0.7511_0.7346_0.7266_0.7077_0.7038_curva_anual_23.67_19.58_23.50_24.72_22.57_22.15_24.36_32.99_34.88_39.75_34.73_34.20_carga_agregada Bus1=59730126827533316BT.1.2.3.0 Phases=3
+~ Conn=wye Model=1 Kv=0.22 Kw=1 pf=0.92
+New Load.nome_34682101_curva_diaria_COM-Tipo4_0.7099_0.6954_0.6769_0.6732_0.6696_0.6636_0.6509_0.6375_0.6292_0.6196_0.6099_0.6065_0.6087_0.5966_0.5882_0.5767_0.5732_0.5611_0.5555_0.5477_0.5452_0.5521_0.5432_0.5498_0.5533_0.5491_0.5275_0.5290_0.5374_0.5139_0.5150_0.5292_0.5215_0.5436_0.5636_0.5828_0.5624_0.5779_0.5739_0.6296_0.5929_0.6001_0.5962_0.6034_0.6188_0.6393_0.6440_0.6373_0.6433_0.6560_0.6633_0.6454_0.6496_0.6498_0.6581_0.6552_0.6513_0.6589_0.6747_0.6666_0.6560_0.6654_0.6795_0.6891_0.6810_0.6672_0.6667_0.6578_0.6523_0.6829_0.7021_0.7239_0.7504_0.7557_0.7691_0.8430_0.8497_0.8422_0.8289_0.8098_0.7771_0.8043_0.7737_0.7615_0.7794_0.7614_0.7390_0.7272_0.7279_0.7138_0.7154_0.7126_0.7067_0.6950_0.6771_0.6848_curva_anual_84.57_86.61_108.36_78.40_81.61_74.04_42.83_77.31_126.17_115.28_149.41_137.89_carga_agregada Bus1=59752994827511974BT.1.2.3.0 Phases=3
+~ Conn=wye Model=1 Kv=0.22 Kw=1 pf=0.92
+New Load.nome_34676976_curva_diaria_RES-Tipo2_0.6644_0.6460_0.6260_0.6153_0.6132_0.6054_0.6015_0.5906_0.5862_0.5822_0.5673_0.5624_0.5684_0.5619_0.5556_0.5534_0.5356_0.5301_0.5330_0.5275_0.5259_0.5279_0.5214_0.5177_0.5104_0.4956_0.5046_0.5034_0.5009_0.4809_0.4975_0.4968_0.4830_0.4928_0.5059_0.5146_0.5126_0.5415_0.5342_0.5665_0.5386_0.5475_0.5485_0.5495_0.5551_0.5821_0.5911_0.6066_0.6076_0.6159_0.6005_0.5955_0.6181_0.6200_0.6188_0.6126_0.6129_0.6226_0.6282_0.6352_0.6264_0.6330_0.6403_0.6417_0.6337_0.6284_0.6210_0.6186_0.6355_0.6409_0.6502_0.6768_0.7318_0.7413_0.7648_0.7868_0.7838_0.7974_0.7865_0.7779_0.7807_0.7995_0.7913_0.7898_0.7945_0.7745_0.7577_0.7390_0.7401_0.7137_0.7184_0.6983_0.6941_0.6865_0.6656_0.6640_curva_anual_53.70_38.89_47.48_43.07_48.60_42.78_48.08_63.35_91.97_101.48_90.33_82.37_carga_agregada Bus1=59801259827528013BT.1.2.3.0 Phases=3
+~ Conn=wye Model=1 Kv=0.22 Kw=1 pf=0.92
+New Load.nome_34781158_curva_diaria_COM-Tipo1_0.6324_0.6294_0.6318_0.6297_0.6254_0.6210_0.6172_0.6175_0.6159_0.6211_0.6080_0.6104_0.6073_0.6061_0.5941_0.6020_0.5903_0.5855_0.5839_0.5925_0.5810_0.5833_0.5824_0.5921_0.5948_0.6018_0.5946_0.6061_0.6124_0.6297_0.6461_0.6963_0.7407_0.7804_0.8129_0.8403_0.8294_0.8457_0.8547_0.8768_0.9004_0.9004_0.9048_0.9138_0.9286_0.9340_0.9052_0.8880_0.8695_0.8584_0.8437_0.8344_0.8534_0.8581_0.8525_0.8525_0.8652_0.8857_0.9019_0.8969_0.8905_0.8945_0.8850_0.8987_0.8976_0.8841_0.8862_0.8786_0.8646_0.8624_0.8557_0.8448_0.8202_0.7788_0.7642_0.7629_0.7474_0.7369_0.7273_0.7032_0.7026_0.6905_0.6770_0.6736_0.6759_0.6736_0.6605_0.6476_0.6411_0.6410_0.6317_0.6335_0.6266_0.6310_0.6267_0.6172_curva_anual_57.30_47.95_56.04_50.44_57.36_39.24_41.05_52.84_62.26_75.61_43.95_16.85_carga_agregada Bus1=59736512827514805BT.1.2.3.0 Phases=3
+~ Conn=wye Model=1 Kv=0.22 Kw=1 pf=0.92
+New Load.nome_34705891_curva_diaria_COM-Tipo5_0.5990_0.5943_0.5794_0.5668_0.5637_0.5611_0.5561_0.5455_0.5486_0.5546_0.5387_0.5359_0.5438_0.5365_0.5331_0.5297_0.5190_0.5153_0.5196_0.5164_0.5104_0.5190_0.5145_0.5173_0.5206_0.5135_0.5230_0.5234_0.5452_0.5593_0.5745_0.5931_0.5902_0.6116_0.6302_0.6500_0.6523_0.6681_0.6754_0.7054_0.7063_0.7087_0.7054_0.7147_0.7358_0.7484_0.7477_0.7544_0.7514_0.7527_0.7394_0.7291_0.7359_0.7447_0.7378_0.7415_0.7338_0.7380_0.7481_0.7459_0.7426_0.7391_0.7510_0.7503_0.7512_0.7471_0.7349_0.7313_0.7311_0.7427_0.7608_0.7657_0.7927_0.7859_0.7908_0.8093_0.7863_0.7870_0.7599_0.7436_0.7325_0.7222_0.7106_0.7031_0.7066_0.6789_0.6587_0.6413_0.6404_0.6260_0.6289_0.6166_0.6099_0.6022_0.5983_0.5951_curva_anual_36.06_36.69_47.88_43.80_43.87_36.99_34.03_51.74_67.19_67.28_67.76_70.26_carga_agregada Bus1=59745790827504839BT.1.2.3.0 Phases=3
+~ Conn=wye Model=1 Kv=0.22 Kw=1 pf=0.92
+New Load.nome_34741744_curva_diaria_COM-Tipo4_0.5435_0.5294_0.5240_0.5257_0.5186_0.5071_0.4983_0.4916_0.4903_0.4795_0.4653_0.4682_0.4669_0.4590_0.4471_0.4431_0.4362_0.4326_0.4372_0.4333_0.4283_0.4334_0.4203_0.4265_0.4291_0.4272_0.4266_0.4308_0.4228_0.4076_0.4238_0.4492_0.4675_0.4826_0.5335_0.5543_0.5492_0.5590_0.5865_0.6510_0.6392_0.6437_0.6265_0.6396_0.6607_0.6678_0.6492_0.6239_0.6151_0.6143_0.5909_0.5805_0.5946_0.6168_0.6376_0.6549_0.6627_0.6640_0.6726_0.6618_0.6540_0.6529_0.6652_0.6830_0.6596_0.6492_0.6557_0.6390_0.6257_0.6123_0.6111_0.6126_0.6292_0.6084_0.5900_0.6101_0.6137_0.6094_0.5503_0.5430_0.5350_0.5547_0.5286_0.5181_0.5342_0.5181_0.5130_0.5030_0.5135_0.5067_0.5120_0.5143_0.5281_0.5194_0.5121_0.5277_curva_anual_22.31_18.94_24.12_19.92_21.47_18.27_19.34_30.54_37.92_44.64_42.67_41.51_carga_agregada Bus1=59731839827491863BT.1.2.3.0 Phases=3
+~ Conn=wye Model=1 Kv=0.22 Kw=1 pf=0.92
+New Load.nome_34719405_curva_diaria_COM-Tipo1_0.6966_0.6905_0.6870_0.6860_0.6729_0.6611_0.6530_0.6531_0.6448_0.6356_0.6236_0.6275_0.6322_0.6181_0.6091_0.5996_0.6044_0.5928_0.5934_0.5832_0.5765_0.5860_0.5904_0.5883_0.5978_0.6143_0.5835_0.5851_0.6086_0.5975_0.6084_0.6262_0.6363_0.6526_0.6671_0.6946_0.6779_0.6855_0.6916_0.7544_0.7121_0.7261_0.7150_0.7261_0.7393_0.7315_0.7274_0.7372_0.7242_0.7152_0.7453_0.7536_0.7585_0.7649_0.7574_0.7568_0.7576_0.7631_0.7796_0.7538_0.7467_0.7560_0.7657_0.7833_0.7763_0.7594_0.7918_0.7691_0.7747_0.7957_0.8266_0.8227_0.8482_0.8558_0.8719_0.9074_0.9222_0.9118_0.9082_0.8811_0.8650_0.8927_0.8398_0.8343_0.8366_0.8300_0.7985_0.7758_0.7588_0.7485_0.7356_0.7090_0.6866_0.6844_0.6901_0.7086_curva_anual_35.94_17.56_75.44_44.03_45.31_37.14_42.92_58.93_66.85_81.14_72.60_70.06_carga_agregada Bus1=59769620827505253BT.1.2.3.0 Phases=3
+~ Conn=wye Model=1 Kv=0.22 Kw=1 pf=0.92
+New Load.nome_34667192_curva_diaria_COM-Tipo3_0.3127_0.3060_0.2962_0.2910_0.2962_0.2960_0.2964_0.2878_0.2892_0.2956_0.2859_0.2833_0.2888_0.2848_0.2831_0.2821_0.2708_0.2716_0.2847_0.2820_0.2843_0.2877_0.2869_0.2991_0.3118_0.3099_0.3198_0.3256_0.3481_0.3613_0.4044_0.4712_0.4844_0.5093_0.5533_0.5783_0.5978_0.6243_0.6653_0.6900_0.7029_0.7239_0.7071_0.7263_0.7587_0.7302_0.7046_0.7175_0.7033_0.6982_0.6704_0.6629_0.7163_0.7196_0.7519_0.7643_0.7656_0.7674_0.7715_0.7780_0.7785_0.7771_0.7990_0.8107_0.8017_0.7819_0.7548_0.7431_0.7414_0.6810_0.6510_0.6156_0.6357_0.6133_0.5652_0.5492_0.4990_0.4856_0.4864_0.4616_0.4359_0.4158_0.4161_0.4112_0.4007_0.3846_0.3768_0.3632_0.3736_0.3445_0.3377_0.3405_0.3294_0.3264_0.3082_0.3004_curva_anual_11.11_11.10_14.58_11.62_11.45_10.02_7.42_11.92_15.98_13.33_18.36_13.84_carga_agregada Bus1=59756422827496463BT.1.2.3.0 Phases=3
+~ Conn=wye Model=1 Kv=0.22 Kw=1 pf=0.92
+New Load.nome_34751065_curva_diaria_RES-Tipo4_0.5571_0.5426_0.5255_0.5179_0.5148_0.5120_0.5033_0.4871_0.4808_0.4728_0.4708_0.4663_0.4631_0.4598_0.4497_0.4421_0.4316_0.4253_0.4195_0.4102_0.4117_0.4130_0.4412_0.4408_0.4472_0.4478_0.4468_0.4489_0.4514_0.4430_0.4871_0.5002_0.4704_0.4905_0.4990_0.5054_0.4947_0.5055_0.5035_0.5333_0.5117_0.5178_0.5151_0.5257_0.5451_0.5745_0.6023_0.6175_0.6233_0.6386_0.6258_0.6066_0.6290_0.6123_0.6204_0.6145_0.5982_0.6072_0.6160_0.6209_0.6095_0.6133_0.6277_0.6391_0.6386_0.6404_0.6315_0.6370_0.6526_0.6821_0.7084_0.7325_0.7927_0.8234_0.8384_0.8955_0.8824_0.8845_0.8795_0.8606_0.8090_0.8110_0.7980_0.7907_0.8018_0.7726_0.7603_0.7383_0.7408_0.6929_0.6884_0.6648_0.6401_0.6157_0.5628_0.5521_curva_anual_4.62_2.33_2.99_3.67_4.37_3.83_4.78_6.25_5.06_6.25_5.75_5.94_carga_agregada Bus1=59716933827508112BT.1.2.3.0 Phases=3
+~ Conn=wye Model=1 Kv=0.22 Kw=1 pf=0.92
+New Load.nome_34683400_curva_diaria_COM-Tipo1_0.7630_0.7633_0.7670_0.7536_0.7316_0.7211_0.7137_0.7204_0.7151_0.7176_0.7081_0.7090_0.7199_0.7081_0.6991_0.7013_0.6956_0.6834_0.6871_0.6831_0.6730_0.6740_0.6689_0.6873_0.7011_0.6970_0.6789_0.7009_0.7170_0.7261_0.7396_0.7630_0.7864_0.8001_0.8100_0.8386_0.8130_0.8327_0.8349_0.8507_0.8630_0.8734_0.8761_0.8854_0.8927_0.8883_0.8521_0.8616_0.8597_0.8326_0.8526_0.8466_0.8724_0.8717_0.8644_0.8656_0.8597_0.8681_0.8870_0.8611_0.8577_0.8756_0.8754_0.8903_0.8826_0.8656_0.8794_0.8646_0.8537_0.8731_0.9079_0.9167_0.9417_0.9300_0.9576_0.9821_0.9916_0.9820_0.9786_0.9327_0.9371_0.9314_0.9207_0.9084_0.9164_0.9209_0.8834_0.8466_0.8330_0.8310_0.8204_0.7911_0.7757_0.7806_0.7851_0.7804_curva_anual_0.24_0.25_0.28_0.24_0.24_0.20_0.25_0.33_0.35_0.47_0.57_0.83_carga_agregada Bus1=59718306827511522BT.1.2.3.0 Phases=3
+~ Conn=wye Model=1 Kv=0.22 Kw=1 pf=0.92
+New Load.nome_34756002_curva_diaria_RES-Tipo9_0.7455_0.7200_0.6957_0.6912_0.6942_0.6894_0.6884_0.6727_0.6644_0.6525_0.6345_0.6348_0.6477_0.6359_0.6351_0.6101_0.6110_0.6049_0.6090_0.5949_0.5973_0.6023_0.5879_0.5766_0.5823_0.5967_0.5772_0.5536_0.5753_0.5366_0.5274_0.5387_0.5102_0.5190_0.5245_0.5274_0.5275_0.5211_0.5247_0.5800_0.5223_0.5343_0.5237_0.5182_0.5623_0.5509_0.5880_0.6497_0.6178_0.6201_0.6273_0.6213_0.6594_0.6257_0.6118_0.5917_0.5845_0.5943_0.6145_0.6149_0.5996_0.5966_0.6116_0.6269_0.6144_0.6015_0.6193_0.6186_0.6495_0.6698_0.7076_0.7023_0.7834_0.8199_0.8085_0.8443_0.8341_0.8424_0.8644_0.8452_0.8020_0.8276_0.7963_0.8151_0.8093_0.7741_0.7611_0.7538_0.7783_0.7436_0.7245_0.7179_0.6942_0.6941_0.7165_0.7349_curva_anual_14.75_9.54_10.61_9.29_8.76_7.21_8.35_12.19_13.02_16.34_15.53_14.67_carga_agregada Bus1=59902043827569096BT.1.2.3.0 Phases=3
+~ Conn=wye Model=1 Kv=0.22 Kw=1 pf=0.92
+New Load.nome_34621609_curva_diaria_COM-Tipo5_0.2117_0.2056_0.2134_0.2119_0.2071_0.2023_0.2073_0.2070_0.2111_0.2111_0.2071_0.2097_0.2070_0.2093_0.2109_0.2159_0.2001_0.2137_0.2154_0.2080_0.2006_0.1989_0.2083_0.2071_0.2006_0.1987_0.1997_0.2156_0.2056_0.2061_0.2393_0.2670_0.3209_0.3653_0.5346_0.6071_0.6631_0.7206_0.8183_0.8634_0.8956_0.9059_0.9174_0.9563_0.9856_0.9520_0.9104_0.8766_0.8501_0.8233_0.7544_0.7680_0.7687_0.7484_0.7623_0.7971_0.8243_0.7966_0.8131_0.7806_0.7967_0.7784_0.8139_0.8423_0.8031_0.7909_0.7693_0.7723_0.7947_0.7786_0.7959_0.7369_0.7254_0.6466_0.5609_0.5104_0.4419_0.3747_0.3499_0.3137_0.2880_0.2730_0.2541_0.2307_0.2213_0.2261_0.2370_0.2219_0.2221_0.2093_0.2033_0.2034_0.2081_0.2113_0.2107_0.2076_curva_anual_0.94_0.67_0.87_0.79_0.95_0.85_1.04_1.46_1.44_1.56_1.27_1.17_carga_agregada Bus1=59770320827514488BT.1.2.3.0 Phases=3
+~ Conn=wye Model=1 Kv=0.22 Kw=1 pf=0.92
+New Load.nome_34804823_curva_diaria_COM-Tipo4_0.4815_0.4805_0.4741_0.4681_0.4665_0.4691_0.4583_0.4619_0.4565_0.4641_0.4541_0.4542_0.4580_0.4605_0.4587_0.4587_0.4565_0.4545_0.4723_0.4637_0.4776_0.4909_0.4863_0.4955_0.4971_0.4751_0.4785_0.4948_0.4918_0.4791_0.5257_0.5911_0.5928_0.5829_0.5839_0.5710_0.5986_0.6068_0.6249_0.6470_0.6705_0.6826_0.6570_0.6613_0.6743_0.6341_0.5994_0.6231_0.6151_0.6193_0.6260_0.6459_0.7044_0.7526_0.7867_0.8044_0.7991_0.7985_0.7979_0.7877_0.7775_0.8058_0.8229_0.8459_0.8251_0.7931_0.7979_0.7579_0.7262_0.6696_0.6459_0.6316_0.6406_0.6259_0.5976_0.6009_0.5861_0.5957_0.5777_0.5581_0.5473_0.5625_0.5628_0.5516_0.5516_0.5469_0.5409_0.5129_0.5144_0.5069_0.4913_0.4943_0.4720_0.4690_0.5114_0.5223_curva_anual_9.05_11.13_9.51_8.50_10.61_13.28_8.11_11.92_13.88_14.34_16.59_15.44_carga_agregada Bus1=59755995827506829BT.1.2.3.0 Phases=3
+~ Conn=wye Model=1 Kv=0.22 Kw=1 pf=0.92
+New Load.nome_34769157_curva_diaria_COM-Tipo3_0.1647_0.1570_0.1567_0.1689_0.1777_0.1781_0.1676_0.1704_0.1721_0.1761_0.1686_0.1600_0.1526_0.1461_0.1459_0.1430_0.1279_0.1326_0.1259_0.1370_0.1246_0.1327_0.1299_0.1339_0.1350_0.1347_0.1277_0.1293_0.1354_0.1700_0.2174_0.3373_0.4639_0.5681_0.6594_0.7089_0.6961_0.7156_0.7510_0.8050_0.8564_0.8449_0.8566_0.8731_0.9119_0.9336_0.8891_0.8296_0.7777_0.7741_0.7074_0.6800_0.7186_0.7363_0.7201_0.7320_0.7713_0.8319_0.8536_0.8591_0.8571_0.8354_0.8247_0.8399_0.8507_0.8204_0.8094_0.8069_0.7767_0.7430_0.6961_0.6487_0.5497_0.4116_0.3429_0.3117_0.2577_0.2364_0.2159_0.1829_0.1807_0.1529_0.1211_0.1211_0.1271_0.1141_0.1130_0.1119_0.1084_0.1130_0.1023_0.1323_0.1299_0.1386_0.1256_0.1144_curva_anual_0.00_0.00_0.00_0.00_0.00_0.00_0.00_0.04_0.18_0.24_0.21_0.20_carga_agregada Bus1=59748002827520966BT.1.2.3.0 Phases=3
+~ Conn=wye Model=1 Kv=0.22 Kw=1 pf=0.92
+New Load.nome_34704132_curva_diaria_COM-Tipo1_0.7630_0.7633_0.7670_0.7536_0.7316_0.7211_0.7137_0.7204_0.7151_0.7176_0.7081_0.7090_0.7199_0.7081_0.6991_0.7013_0.6956_0.6834_0.6871_0.6831_0.6730_0.6740_0.6689_0.6873_0.7011_0.6970_0.6789_0.7009_0.7170_0.7261_0.7396_0.7630_0.7864_0.8001_0.8100_0.8386_0.8130_0.8327_0.8349_0.8507_0.8630_0.8734_0.8761_0.8854_0.8927_0.8883_0.8521_0.8616_0.8597_0.8326_0.8526_0.8466_0.8724_0.8717_0.8644_0.8656_0.8597_0.8681_0.8870_0.8611_0.8577_0.8756_0.8754_0.8903_0.8826_0.8656_0.8794_0.8646_0.8537_0.8731_0.9079_0.9167_0.9417_0.9300_0.9576_0.9821_0.9916_0.9820_0.9786_0.9327_0.9371_0.9314_0.9207_0.9084_0.9164_0.9209_0.8834_0.8466_0.8330_0.8310_0.8204_0.7911_0.7757_0.7806_0.7851_0.7804_curva_anual_58.22_49.08_62.14_57.56_62.02_55.39_56.90_69.54_73.49_84.10_75.45_65.65_carga_agregada Bus1=59749580827519706BT.1.2.3.0 Phases=3
+~ Conn=wye Model=1 Kv=0.22 Kw=1 pf=0.92
+New Load.nome_34589241_curva_diaria_COM-Tipo1_0.7630_0.7633_0.7670_0.7536_0.7316_0.7211_0.7137_0.7204_0.7151_0.7176_0.7081_0.7090_0.7199_0.7081_0.6991_0.7013_0.6956_0.6834_0.6871_0.6831_0.6730_0.6740_0.6689_0.6873_0.7011_0.6970_0.6789_0.7009_0.7170_0.7261_0.7396_0.7630_0.7864_0.8001_0.8100_0.8386_0.8130_0.8327_0.8349_0.8507_0.8630_0.8734_0.8761_0.8854_0.8927_0.8883_0.8521_0.8616_0.8597_0.8326_0.8526_0.8466_0.8724_0.8717_0.8644_0.8656_0.8597_0.8681_0.8870_0.8611_0.8577_0.8756_0.8754_0.8903_0.8826_0.8656_0.8794_0.8646_0.8537_0.8731_0.9079_0.9167_0.9417_0.9300_0.9576_0.9821_0.9916_0.9820_0.9786_0.9327_0.9371_0.9314_0.9207_0.9084_0.9164_0.9209_0.8834_0.8466_0.8330_0.8310_0.8204_0.7911_0.7757_0.7806_0.7851_0.7804_curva_anual_30.36_28.10_34.52_27.69_31.56_22.08_31.17_47.36_51.65_63.12_51.21_43.35_carga_agregada Bus1=59762013827497493BT.1.2.3.0 Phases=3
+~ Conn=wye Model=1 Kv=0.22 Kw=1 pf=0.92
+New Load.nome_34674947_curva_diaria_RES-Tipo6_0.4270_0.4314_0.4083_0.4131_0.3681_0.3497_0.3341_0.3129_0.3220_0.3057_0.2970_0.3040_0.2984_0.2994_0.2767_0.2780_0.2671_0.2674_0.2633_0.2541_0.2600_0.2681_0.2506_0.2820_0.2993_0.2670_0.3221_0.3123_0.2563_0.2450_0.2939_0.2460_0.2441_0.2110_0.2550_0.2463_0.2110_0.2366_0.2920_0.3263_0.4414_0.3683_0.3217_0.3363_0.3630_0.4913_0.5161_0.4293_0.4359_0.3949_0.2904_0.2540_0.2583_0.3329_0.3540_0.4529_0.4020_0.3939_0.3834_0.3923_0.3521_0.3383_0.3321_0.3951_0.3454_0.3761_0.3983_0.4369_0.3741_0.4199_0.5739_0.6687_0.7564_0.7666_0.7553_0.8694_0.8407_0.9434_0.5911_0.6116_0.5831_0.4944_0.5594_0.5190_0.6083_0.5016_0.5234_0.4899_0.4900_0.4533_0.4893_0.4673_0.5150_0.4693_0.4576_0.4489_curva_anual_0.00_0.00_0.00_0.01_0.00_0.00_0.00_0.00_0.00_0.00_0.00_0.09_carga_agregada Bus1=59734761827537734BT.1.2.3.0 Phases=3
+~ Conn=wye Model=1 Kv=0.22 Kw=1 pf=0.92
+New Load.nome_34629110_curva_diaria_COM-Tipo6_0.3476_0.3407_0.3344_0.3301_0.3123_0.2989_0.2950_0.3031_0.3137_0.3016_0.2703_0.2636_0.2679_0.2689_0.2531_0.2614_0.2590_0.2569_0.2440_0.2369_0.2286_0.2323_0.2237_0.2360_0.2594_0.2359_0.2293_0.2487_0.2744_0.3503_0.3926_0.5160_0.5841_0.5513_0.5580_0.5870_0.5627_0.6680_0.6780_0.7583_0.7764_0.7061_0.7491_0.8040_0.6960_0.6571_0.6234_0.5957_0.5450_0.5140_0.5307_0.5673_0.6913_0.7779_0.8623_0.8837_0.8937_0.8464_0.7977_0.7733_0.7659_0.7471_0.6947_0.6637_0.7184_0.6877_0.6927_0.6809_0.7087_0.7266_0.6733_0.6711_0.6126_0.5037_0.4934_0.3883_0.3293_0.3176_0.2919_0.3223_0.2799_0.2980_0.2921_0.2720_0.2700_0.2789_0.2706_0.2674_0.2660_0.2590_0.2811_0.3129_0.2973_0.3000_0.3143_0.2946_curva_anual_11.68_9.66_11.99_10.77_11.41_9.85_11.13_14.49_16.58_18.32_15.23_14.63_carga_agregada Bus1=59729717827494818BT.1.2.3.0 Phases=3
+~ Conn=wye Model=1 Kv=0.22 Kw=1 pf=0.92
+New pvsystem.pv_00a1f2cf64df27b4da2e762b7fe87f42a1f4d7ade34da89d5494f66293c1f4fb phases = 3 conn = wye bus1 = 59731663827491823MT.1.2.3
+~ kv = 13.8 kva = 96.0 pmpp = 96.0
+~ pf = 1 %cutin = 0.00005 %cutout = 0.00005 varfollowinverter = Yes effcurve = myeff_00a1f2cf64df27b4da2e762b7fe87f42a1f4d7ade34da89d5494f66293c1f4fb
+~ p-tcurve = mypvst_00a1f2cf64df27b4da2e762b7fe87f42a1f4d7ade34da89d5494f66293c1f4fb daily = myirrad_00a1f2cf64df27b4da2e762b7fe87f42a1f4d7ade34da89d5494f66293c1f4fb tdaily = mytemp_00a1f2cf64df27b4da2e762b7fe87f42a1f4d7ade34da89d5494f66293c1f4fb
+New xycurve.mypvst_6fd37abc9d4242171cfc59ecbb520d28edc99e2944dbe210ab8c10ebba7bb0e5 npts=4 xarray=[0 25 75 100] yarray=[1.2 1.0 0.8 0.6]
+New xycurve.myeff_6fd37abc9d4242171cfc59ecbb520d28edc99e2944dbe210ab8c10ebba7bb0e5 npts=4 xarray=[.1 .2 .4 1.0] yarray=[.86 .9 .93 .97]
+New loadshape.myirrad_6fd37abc9d4242171cfc59ecbb520d28edc99e2944dbe210ab8c10ebba7bb0e5 npts=1 interval=1 mult=[1]
+New tshape.mytemp_6fd37abc9d4242171cfc59ecbb520d28edc99e2944dbe210ab8c10ebba7bb0e5 npts=1 interval=1 temp=[25]
+
+New PVSystem.pv_6fd37abc9d4242171cfc59ecbb520d28edc99e2944dbe210ab8c10ebba7bb0e5 phases=3 conn=wye bus1=59719311827500172BT.1.2.3.0
+~ kv=0.22 kva=70.00 pmpp=70.00
+~ pf=0.92 %cutin=0.00005 %cutout=0.00005 varfollowinverter=Yes effcurve=myeff_6fd37abc9d4242171cfc59ecbb520d28edc99e2944dbe210ab8c10ebba7bb0e5
+~ p-tcurve=mypvst_6fd37abc9d4242171cfc59ecbb520d28edc99e2944dbe210ab8c10ebba7bb0e5 daily=myirrad_6fd37abc9d4242171cfc59ecbb520d28edc99e2944dbe210ab8c10ebba7bb0e5 tdaily=mytemp_6fd37abc9d4242171cfc59ecbb520d28edc99e2944dbe210ab8c10ebba7bb0e5
+
+New xycurve.mypvst_cb87ffb00c96bd6374680f0e39f90c8744f4fda8e19f5feb64a66d0fb1acf028 npts=4 xarray=[0 25 75 100] yarray=[1.2 1.0 0.8 0.6]
+New xycurve.myeff_cb87ffb00c96bd6374680f0e39f90c8744f4fda8e19f5feb64a66d0fb1acf028 npts=4 xarray=[.1 .2 .4 1.0] yarray=[.86 .9 .93 .97]
+New loadshape.myirrad_cb87ffb00c96bd6374680f0e39f90c8744f4fda8e19f5feb64a66d0fb1acf028 npts=1 interval=1 mult=[1]
+New tshape.mytemp_cb87ffb00c96bd6374680f0e39f90c8744f4fda8e19f5feb64a66d0fb1acf028 npts=1 interval=1 temp=[25]
+
+New PVSystem.pv_cb87ffb00c96bd6374680f0e39f90c8744f4fda8e19f5feb64a66d0fb1acf028 phases=3 conn=wye bus1=59854585827548770BT.1.2.3.0
+~ kv=0.22 kva=23.00 pmpp=23.00
+~ pf=0.92 %cutin=0.00005 %cutout=0.00005 varfollowinverter=Yes effcurve=myeff_cb87ffb00c96bd6374680f0e39f90c8744f4fda8e19f5feb64a66d0fb1acf028
+~ p-tcurve=mypvst_cb87ffb00c96bd6374680f0e39f90c8744f4fda8e19f5feb64a66d0fb1acf028 daily=myirrad_cb87ffb00c96bd6374680f0e39f90c8744f4fda8e19f5feb64a66d0fb1acf028 tdaily=mytemp_cb87ffb00c96bd6374680f0e39f90c8744f4fda8e19f5feb64a66d0fb1acf028
+
+New xycurve.mypvst_46077dff0a9534e7a9c44d957965a9e386353cac2bba49843d988dccb3ca994f npts=4 xarray=[0 25 75 100] yarray=[1.2 1.0 0.8 0.6]
+New xycurve.myeff_46077dff0a9534e7a9c44d957965a9e386353cac2bba49843d988dccb3ca994f npts=4 xarray=[.1 .2 .4 1.0] yarray=[.86 .9 .93 .97]
+New loadshape.myirrad_46077dff0a9534e7a9c44d957965a9e386353cac2bba49843d988dccb3ca994f npts=1 interval=1 mult=[1]
+New tshape.mytemp_46077dff0a9534e7a9c44d957965a9e386353cac2bba49843d988dccb3ca994f npts=1 interval=1 temp=[25]
+
+New PVSystem.pv_46077dff0a9534e7a9c44d957965a9e386353cac2bba49843d988dccb3ca994f phases=3 conn=wye bus1=59884156827574350BT.1.2.3.0
+~ kv=0.22 kva=16.20 pmpp=16.20
+~ pf=0.92 %cutin=0.00005 %cutout=0.00005 varfollowinverter=Yes effcurve=myeff_46077dff0a9534e7a9c44d957965a9e386353cac2bba49843d988dccb3ca994f
+~ p-tcurve=mypvst_46077dff0a9534e7a9c44d957965a9e386353cac2bba49843d988dccb3ca994f daily=myirrad_46077dff0a9534e7a9c44d957965a9e386353cac2bba49843d988dccb3ca994f tdaily=mytemp_46077dff0a9534e7a9c44d957965a9e386353cac2bba49843d988dccb3ca994f
+
+New xycurve.mypvst_ffb9ae4010ca59a3b1ad479674d3aaac09fa237a07d824f04bca95eb039d1c63 npts=4 xarray=[0 25 75 100] yarray=[1.2 1.0 0.8 0.6]
+New xycurve.myeff_ffb9ae4010ca59a3b1ad479674d3aaac09fa237a07d824f04bca95eb039d1c63 npts=4 xarray=[.1 .2 .4 1.0] yarray=[.86 .9 .93 .97]
+New loadshape.myirrad_ffb9ae4010ca59a3b1ad479674d3aaac09fa237a07d824f04bca95eb039d1c63 npts=1 interval=1 mult=[1]
+New tshape.mytemp_ffb9ae4010ca59a3b1ad479674d3aaac09fa237a07d824f04bca95eb039d1c63 npts=1 interval=1 temp=[25]
+
+New PVSystem.pv_ffb9ae4010ca59a3b1ad479674d3aaac09fa237a07d824f04bca95eb039d1c63 phases=3 conn=wye bus1=59741986827515095BT.1.2.3.0
+~ kv=0.22 kva=6.00 pmpp=6.00
+~ pf=0.92 %cutin=0.00005 %cutout=0.00005 varfollowinverter=Yes effcurve=myeff_ffb9ae4010ca59a3b1ad479674d3aaac09fa237a07d824f04bca95eb039d1c63
+~ p-tcurve=mypvst_ffb9ae4010ca59a3b1ad479674d3aaac09fa237a07d824f04bca95eb039d1c63 daily=myirrad_ffb9ae4010ca59a3b1ad479674d3aaac09fa237a07d824f04bca95eb039d1c63 tdaily=mytemp_ffb9ae4010ca59a3b1ad479674d3aaac09fa237a07d824f04bca95eb039d1c63
+
+New xycurve.mypvst_7b3842bddf315edfeb4947cdc364d863a4ea0ac95e993ecb3aed20d3f5087df0 npts=4 xarray=[0 25 75 100] yarray=[1.2 1.0 0.8 0.6]
+New xycurve.myeff_7b3842bddf315edfeb4947cdc364d863a4ea0ac95e993ecb3aed20d3f5087df0 npts=4 xarray=[.1 .2 .4 1.0] yarray=[.86 .9 .93 .97]
+New loadshape.myirrad_7b3842bddf315edfeb4947cdc364d863a4ea0ac95e993ecb3aed20d3f5087df0 npts=1 interval=1 mult=[1]
+New tshape.mytemp_7b3842bddf315edfeb4947cdc364d863a4ea0ac95e993ecb3aed20d3f5087df0 npts=1 interval=1 temp=[25]
+
+New PVSystem.pv_7b3842bddf315edfeb4947cdc364d863a4ea0ac95e993ecb3aed20d3f5087df0 phases=3 conn=wye bus1=59727671827508682BT.1.2.3.0
+~ kv=0.22 kva=200.00 pmpp=200.00
+~ pf=0.92 %cutin=0.00005 %cutout=0.00005 varfollowinverter=Yes effcurve=myeff_7b3842bddf315edfeb4947cdc364d863a4ea0ac95e993ecb3aed20d3f5087df0
+~ p-tcurve=mypvst_7b3842bddf315edfeb4947cdc364d863a4ea0ac95e993ecb3aed20d3f5087df0 daily=myirrad_7b3842bddf315edfeb4947cdc364d863a4ea0ac95e993ecb3aed20d3f5087df0 tdaily=mytemp_7b3842bddf315edfeb4947cdc364d863a4ea0ac95e993ecb3aed20d3f5087df0
+
+New xycurve.mypvst_3795db55b50642785bbcefa53f01b7711092532866baa6175b4d4c3b96896d97 npts=4 xarray=[0 25 75 100] yarray=[1.2 1.0 0.8 0.6]
+New xycurve.myeff_3795db55b50642785bbcefa53f01b7711092532866baa6175b4d4c3b96896d97 npts=4 xarray=[.1 .2 .4 1.0] yarray=[.86 .9 .93 .97]
+New loadshape.myirrad_3795db55b50642785bbcefa53f01b7711092532866baa6175b4d4c3b96896d97 npts=1 interval=1 mult=[1]
+New tshape.mytemp_3795db55b50642785bbcefa53f01b7711092532866baa6175b4d4c3b96896d97 npts=1 interval=1 temp=[25]
+
+New PVSystem.pv_3795db55b50642785bbcefa53f01b7711092532866baa6175b4d4c3b96896d97 phases=3 conn=wye bus1=59752994827511974BT.1.2.3.0
+~ kv=0.22 kva=70.00 pmpp=70.00
+~ pf=0.92 %cutin=0.00005 %cutout=0.00005 varfollowinverter=Yes effcurve=myeff_3795db55b50642785bbcefa53f01b7711092532866baa6175b4d4c3b96896d97
+~ p-tcurve=mypvst_3795db55b50642785bbcefa53f01b7711092532866baa6175b4d4c3b96896d97 daily=myirrad_3795db55b50642785bbcefa53f01b7711092532866baa6175b4d4c3b96896d97 tdaily=mytemp_3795db55b50642785bbcefa53f01b7711092532866baa6175b4d4c3b96896d97
+
+New xycurve.mypvst_8648b5d60a147314a86abf2be35b24a81b01bd52c31465faf02d164b6a030eb4 npts=4 xarray=[0 25 75 100] yarray=[1.2 1.0 0.8 0.6]
+New xycurve.myeff_8648b5d60a147314a86abf2be35b24a81b01bd52c31465faf02d164b6a030eb4 npts=4 xarray=[.1 .2 .4 1.0] yarray=[.86 .9 .93 .97]
+New loadshape.myirrad_8648b5d60a147314a86abf2be35b24a81b01bd52c31465faf02d164b6a030eb4 npts=1 interval=1 mult=[1]
+New tshape.mytemp_8648b5d60a147314a86abf2be35b24a81b01bd52c31465faf02d164b6a030eb4 npts=1 interval=1 temp=[25]
+
+New PVSystem.pv_8648b5d60a147314a86abf2be35b24a81b01bd52c31465faf02d164b6a030eb4 phases=3 conn=wye bus1=59801259827528013BT.1.2.3.0
+~ kv=0.22 kva=59.50 pmpp=53.16
+~ pf=0.92 %cutin=0.00005 %cutout=0.00005 varfollowinverter=Yes effcurve=myeff_8648b5d60a147314a86abf2be35b24a81b01bd52c31465faf02d164b6a030eb4
+~ p-tcurve=mypvst_8648b5d60a147314a86abf2be35b24a81b01bd52c31465faf02d164b6a030eb4 daily=myirrad_8648b5d60a147314a86abf2be35b24a81b01bd52c31465faf02d164b6a030eb4 tdaily=mytemp_8648b5d60a147314a86abf2be35b24a81b01bd52c31465faf02d164b6a030eb4
+
+New xycurve.mypvst_11c2ad497edb7a40256248d6a7cd07533ea939887de334f159f2e3905f7a0073 npts=4 xarray=[0 25 75 100] yarray=[1.2 1.0 0.8 0.6]
+New xycurve.myeff_11c2ad497edb7a40256248d6a7cd07533ea939887de334f159f2e3905f7a0073 npts=4 xarray=[.1 .2 .4 1.0] yarray=[.86 .9 .93 .97]
+New loadshape.myirrad_11c2ad497edb7a40256248d6a7cd07533ea939887de334f159f2e3905f7a0073 npts=1 interval=1 mult=[1]
+New tshape.mytemp_11c2ad497edb7a40256248d6a7cd07533ea939887de334f159f2e3905f7a0073 npts=1 interval=1 temp=[25]
+
+New PVSystem.pv_11c2ad497edb7a40256248d6a7cd07533ea939887de334f159f2e3905f7a0073 phases=3 conn=wye bus1=59745790827504839BT.1.2.3.0
+~ kv=0.22 kva=18.00 pmpp=18.00
+~ pf=0.92 %cutin=0.00005 %cutout=0.00005 varfollowinverter=Yes effcurve=myeff_11c2ad497edb7a40256248d6a7cd07533ea939887de334f159f2e3905f7a0073
+~ p-tcurve=mypvst_11c2ad497edb7a40256248d6a7cd07533ea939887de334f159f2e3905f7a0073 daily=myirrad_11c2ad497edb7a40256248d6a7cd07533ea939887de334f159f2e3905f7a0073 tdaily=mytemp_11c2ad497edb7a40256248d6a7cd07533ea939887de334f159f2e3905f7a0073
+
+New xycurve.mypvst_d31b7a9a6ab21b57a4181975c7857102b4b49144dc31c72d364df141ba721089 npts=4 xarray=[0 25 75 100] yarray=[1.2 1.0 0.8 0.6]
+New xycurve.myeff_d31b7a9a6ab21b57a4181975c7857102b4b49144dc31c72d364df141ba721089 npts=4 xarray=[.1 .2 .4 1.0] yarray=[.86 .9 .93 .97]
+New loadshape.myirrad_d31b7a9a6ab21b57a4181975c7857102b4b49144dc31c72d364df141ba721089 npts=1 interval=1 mult=[1]
+New tshape.mytemp_d31b7a9a6ab21b57a4181975c7857102b4b49144dc31c72d364df141ba721089 npts=1 interval=1 temp=[25]
+
+New PVSystem.pv_d31b7a9a6ab21b57a4181975c7857102b4b49144dc31c72d364df141ba721089 phases=3 conn=wye bus1=59769620827505253BT.1.2.3.0
+~ kv=0.22 kva=12.00 pmpp=12.00
+~ pf=0.92 %cutin=0.00005 %cutout=0.00005 varfollowinverter=Yes effcurve=myeff_d31b7a9a6ab21b57a4181975c7857102b4b49144dc31c72d364df141ba721089
+~ p-tcurve=mypvst_d31b7a9a6ab21b57a4181975c7857102b4b49144dc31c72d364df141ba721089 daily=myirrad_d31b7a9a6ab21b57a4181975c7857102b4b49144dc31c72d364df141ba721089 tdaily=mytemp_d31b7a9a6ab21b57a4181975c7857102b4b49144dc31c72d364df141ba721089
+
+New xycurve.mypvst_c7a1925ec122165f7c8c100bf250cd11ad8efbc0e04da26035cb473281f3406c npts=4 xarray=[0 25 75 100] yarray=[1.2 1.0 0.8 0.6]
+New xycurve.myeff_c7a1925ec122165f7c8c100bf250cd11ad8efbc0e04da26035cb473281f3406c npts=4 xarray=[.1 .2 .4 1.0] yarray=[.86 .9 .93 .97]
+New loadshape.myirrad_c7a1925ec122165f7c8c100bf250cd11ad8efbc0e04da26035cb473281f3406c npts=1 interval=1 mult=[1]
+New tshape.mytemp_c7a1925ec122165f7c8c100bf250cd11ad8efbc0e04da26035cb473281f3406c npts=1 interval=1 temp=[25]
+
+New PVSystem.pv_c7a1925ec122165f7c8c100bf250cd11ad8efbc0e04da26035cb473281f3406c phases=3 conn=wye bus1=59749580827519706BT.1.2.3.0
+~ kv=0.22 kva=24.00 pmpp=24.00
+~ pf=0.92 %cutin=0.00005 %cutout=0.00005 varfollowinverter=Yes effcurve=myeff_c7a1925ec122165f7c8c100bf250cd11ad8efbc0e04da26035cb473281f3406c
+~ p-tcurve=mypvst_c7a1925ec122165f7c8c100bf250cd11ad8efbc0e04da26035cb473281f3406c daily=myirrad_c7a1925ec122165f7c8c100bf250cd11ad8efbc0e04da26035cb473281f3406c tdaily=mytemp_c7a1925ec122165f7c8c100bf250cd11ad8efbc0e04da26035cb473281f3406c
+
+
+Set VoltageBases = "0.220, 0.380, 13.800"
+CalcVoltageBases

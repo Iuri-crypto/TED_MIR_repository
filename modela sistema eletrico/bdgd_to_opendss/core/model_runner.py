@@ -1,6 +1,8 @@
 from bdgd_to_opendss.db.data_loader import load_bdgd
 from bdgd_to_opendss.db.db_extract_data_bank import load_db_config
 from bdgd_to_opendss.db.db_conector import get_connection
+from bdgd_to_opendss.utils.grafo_versao_1 import GrafoDSS
+from bdgd_to_opendss.validation.config_loader import load_validation_config
 
 from bdgd_to_opendss.validation.data_corretion import (
     
@@ -213,13 +215,17 @@ class ModelRunner:
             # Agregação das cargas nos trafos de média tensão
             df_cargas_Agregadas = load_bdgd.Consulta_Cargas_Agregadas(conn_mt)
             df_GD_FV_Agregadas = load_bdgd.Consulta_GD_FV_BT_Agregados(conn_mt)
-            sub_cenarios = Agrega_Carga_Trafos(caminho, df_cargas_Agregadas, df_GD_FV_Agregadas)
-            sub_cenarios.run()
-
 
             # Agregação dos GD_FV's nos transformadores de média tensão
             sub_cenarios = Agrega_Carga_Trafos(caminho, df_cargas_Agregadas, df_GD_FV_Agregadas)
             sub_cenarios.run()
+
+
+            # Atribuindo as tensões bases 
+            config = load_validation_config("tensoes_de_linha")
+            tabela_tensoes = config.get("tensoes_de_linha", {})
+            grafo = GrafoDSS(caminho, tabela_tensoes)
+            grafo.encontrar_tensoes_base()
 
 
             print("teste")

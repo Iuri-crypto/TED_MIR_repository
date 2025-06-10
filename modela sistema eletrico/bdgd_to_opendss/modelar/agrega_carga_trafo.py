@@ -28,30 +28,49 @@ class Agrega_Carga_Trafos:
 
 
 
-
     def soma_cargas_e_gd_nos_trafos(self, dicionario_cargas_por_nome, dicionario_gd_por_nome):
         """
-        Processa as cargas e a geração distribuída vinculadas a cada transformador.
-        Remove blocos de GD dos arquivos run.dss e agrupa dados por trafo.
+        Processa as cargas e as unidades de geração distribuída (GD) associadas a cada transformador.
+
+        Objetivos:
+        - Associar cargas e GDs aos transformadores com base no código de identificação (cod_id).
+        - Ignorar as curvas de GD (xycurve, loadshape, etc.).
+        - Extrair informações elétricas dos transformadores (tensão e barramento secundário).
+        - Retornar uma estrutura organizada por transformador.
+
+        Parâmetros:
+        - dicionario_cargas_por_nome: dict com DataFrames contendo as cargas por nome de pasta.
+        - dicionario_gd_por_nome: dict com DataFrames contendo GDs por nome de pasta.
+
+        Retorna:
+        - trafos_cargas: dict estruturado por pasta e por transformador, contendo:
+            - cargas associadas
+            - GDs associadas
+            - informações do trafo (tensão secundária e barramento secundário)
         """
         trafos_cargas = {}
+
+        # Padrões regex para encontrar elementos no run.dss
         padrao_carga = re.compile(r"(?i)new\s+load\.nome_([^_\s]+).*?(carga_pip|carga_baixa)\b")
         padroes_gd = ("New pvsystem", "New xycurve", "New loadshape", "New tshape")
         padrao_trafo = re.compile(r"(?i)new\s+transformer\.(\S+)")
         padrao_kv2 = re.compile(r"(?i)~\s*wdg\s*=\s*2.*?kv\s*=\s*([\d.]+)")
         padrao_bus2 = re.compile(r"(?i)~\s*wdg\s*=\s*2.*?bus\s*=\s*(\S+)")
 
+        # Percorre os diretórios que contêm os arquivos run.dss
         for root, dirs, files in os.walk(self.caminho):
             if 'run.dss' not in files:
-                continue
+                continue  # pula pastas que não contêm o arquivo principal
 
             nome_pasta = os.path.basename(root)
             if nome_pasta not in dicionario_cargas_por_nome:
-                continue
+                continue  # ignora pastas sem carga mapeada
 
+            # Cria mapeamento cod_id -> trafo a partir do DataFrame de cargas
             df_cargas = dicionario_cargas_por_nome[nome_pasta]
             cod_id_para_trafo = dict(zip(df_cargas["cod_id"].astype(str), df_cargas["uni_tr_mt"]))
 
+            # Faz o mesmo para GD, se houver
             df_gd = dicionario_gd_por_nome.get(nome_pasta)
             cod_id_para_trafo_gd = {}
             if df_gd is not None:
@@ -61,30 +80,77 @@ class Agrega_Carga_Trafos:
             with open(caminho_arquivo, 'r', encoding='utf-8') as f:
                 linhas = f.readlines()
 
-            linhas_sem_gd = []
-            cargas_encontradas = []
-            gd_encontradas = []
-            trafos_info = {}
+            # Inicializa listas de resultados temporários
+            linhas_sem_gd = []         # armazenará linhas do run.dss sem as curvas de GD
+            cargas_encontradas = []    # armazenará tuplas (trafo, linha) para cargas
+            gd_encontradas = []        # armazenará tuplas (trafo, linha) para GDs
+            trafos_info = {}           # armazenará info extraída dos trafos
 
+            # Armazena blocos de curvas auxiliares temporariamente por cod_id (fora do loop!)
+            curvas_aux_por_cod_id = {}
+
+            # Leitura linha a linha
             i = 0
             while i < len(linhas):
                 linha = linhas[i]
 
-                if linha.startswith(padroes_gd):
-                    # Tenta capturar a GD removida para armazenar por trafo
-                    for cod_id, trafo in cod_id_para_trafo_gd.items():
-                        if cod_id in linha:
-                            gd_encontradas.append((trafo, linha.strip()))
-                            break
-                    i += 1
-                    continue
 
+                linha_strip = linha.strip().lower()
+
+                # Detecta curvas auxiliares e armazena temporariamente
+                if linha_strip.startswith("new xycurve.") or \
+                linha_strip.startswith("new loadshape.") or \
+                linha_strip.startswith("new tshape."):
+
+                    curva_linhas = [linha.strip()]
+                    i += 1
+
+                    # Coleta linhas de continuação
+                    while i < len(linhas) and linhas[i].strip().startswith("~"):
+                        curva_linhas.append(linhas[i].strip())
+                        i += 1
+
+                    curva_bloco = "\n".join(curva_linhas)
+
+                    # Tenta identificar cod_id
+                    for cod_id in cod_id_para_trafo_gd:
+                        if cod_id in curva_bloco:
+                            curvas_aux_por_cod_id.setdefault(cod_id, []).append(curva_bloco)
+                            break
+
+                    continue  # pula para a próxima linha
+
+                # Detecta um novo PVSystem
+                if linha_strip.startswith("new pvsystem."):
+                    bloco_gd = [linha.strip()]
+                    i += 1
+
+                    # Coleta linhas ~ de continuação
+                    while i < len(linhas) and linhas[i].strip().startswith("~"):
+                        bloco_gd.append(linhas[i].strip())
+                        i += 1
+
+                    bloco_texto = " ".join(bloco_gd)
+
+                    for cod_id, trafo in cod_id_para_trafo_gd.items():
+                        if cod_id in bloco_texto:
+                            # Inclui curvas auxiliares associadas antes do pvsystem
+                            curvas_aux = curvas_aux_por_cod_id.get(cod_id, [])
+                            bloco_completo = curvas_aux + bloco_gd  # mantém ordem correta
+                            gd_encontradas.append((trafo, "\n".join(bloco_completo)))
+                            break
+
+                    continue  # já avançou 'i', então próxima linha
+
+
+                # Caso seja um transformador
                 match_trafo = padrao_trafo.search(linha)
                 if match_trafo:
                     nome_trafo = match_trafo.group(1)
                     tensao_secundario = None
                     bus2 = None
 
+                    # Lê as próximas linhas (~) para extrair kv e bus2 do enrolamento secundário
                     j = i + 1
                     while j < len(linhas) and linhas[j].strip().startswith("~"):
                         linha_sub = linhas[j]
@@ -97,17 +163,20 @@ class Agrega_Carga_Trafos:
                                 bus2 = match_bus2.group(1)
                         j += 1
 
+                    # Armazena as infos do trafo se encontradas
                     if tensao_secundario is not None and bus2 is not None:
                         trafos_info[nome_trafo] = {
                             "tensao_secundario_kv": tensao_secundario,
                             "bus2": bus2
                         }
 
+                    # Mantém as linhas do trafo no processamento interno
                     linhas_sem_gd.append(linha)
                     linhas_sem_gd.extend(linhas[i + 1:j])
                     i = j
                     continue
 
+                # Caso seja uma carga válida
                 match_carga = padrao_carga.search(linha)
                 if match_carga:
                     cod_id_sujo = match_carga.group(1)
@@ -116,31 +185,36 @@ class Agrega_Carga_Trafos:
                     if trafo:
                         cargas_encontradas.append((trafo, linha.strip()))
 
+                # Mantém a linha (não é GD)
                 linhas_sem_gd.append(linha)
                 i += 1
 
-            novo_arquivo = os.path.join(root, 'run_clean.dss')
-            with open(novo_arquivo, 'w', encoding='utf-8') as f:
-                f.writelines(linhas_sem_gd)
+            # → Não salva mais o run_clean.dss (removido conforme solicitado)
 
+            # Inicializa estrutura para a pasta, se necessário
             if nome_pasta not in trafos_cargas:
                 trafos_cargas[nome_pasta] = {}
 
+            # Agrupa as cargas por transformador
             for trafo, linha_carga in cargas_encontradas:
                 trafos_cargas[nome_pasta].setdefault(trafo, {"cargas": [], "gd": []})
                 trafos_cargas[nome_pasta][trafo]["cargas"].append(linha_carga)
 
+            # Agrupa as GDs por transformador
             for trafo, linha_gd in gd_encontradas:
                 trafos_cargas[nome_pasta].setdefault(trafo, {"cargas": [], "gd": []})
                 trafos_cargas[nome_pasta][trafo]["gd"].append(linha_gd)
 
+            # Adiciona informações dos transformadores (tensão e bus2)
             for trafo, info in trafos_info.items():
                 if trafo not in trafos_cargas[nome_pasta]:
                     trafos_cargas[nome_pasta][trafo] = {"cargas": [], "gd": []}
                 trafos_cargas[nome_pasta][trafo].update(info)
 
+        # Se nada for encontrado, notifica
         if not trafos_cargas:
             print("Nenhuma carga ou GD vinculada a trafos foi encontrada.")
+
         return trafos_cargas
 
 
@@ -161,6 +235,7 @@ class Agrega_Carga_Trafos:
         return curvas
 
             
+
 
     def criar_run_cargas_agregadas(self, trafos_cargas):
         caminho_curvas = os.path.join(self.caminho, 'curvas_de_carga.txt')
@@ -356,163 +431,89 @@ class Agrega_Carga_Trafos:
 
 
 
-
-
-    def criar_run_cargas_e_gd_agregadas(self, caminho, trafos_cargas, df_GD_FV_Agregadas):
+    def criar_run_cargas_e_gd_agregadas(self, caminho, trafos_cargas):
         def gerar_hash(texto):
             return hashlib.sha256(texto.encode()).hexdigest()
 
         for root, dirs, files in os.walk(caminho):
-            if 'run.dss' not in files:
+            if 'run_cargas_agregadas.dss' not in files:
                 continue
 
             nome_pasta = os.path.basename(root)
             if nome_pasta not in trafos_cargas:
                 continue
 
-            caminho_arquivo = os.path.join(root, 'run.dss')
-            novo_arquivo = os.path.join(root, 'run_completo_agregado.dss')
+            caminho_arquivo = os.path.join(root, 'run_cargas_agregadas.dss')
 
             with open(caminho_arquivo, 'r', encoding='utf-8') as f:
-                linhas = f.readlines()
+                linhas_existentes = f.readlines()
 
-            # 1. Filtra o conteúdo mantendo MT e removendo BT (cargas e PVs)
-            linhas_filtradas = []
-            i = 0
-            while i < len(linhas):
-                linha = linhas[i].strip()
+            linhas_pvsystems = []
 
-                if re.search(r"(?i)new\s+pvsystem\.", linha) and "_bt" in linha:
-                    i += 1
-                    while i < len(linhas) and linhas[i].strip().startswith("~"):
-                        i += 1
-                    continue
-
-                if re.search(r"(?i)new\s+load\.[^\s]+.*?(carga_baixa|iluminacao)\b", linha):
-                    i += 1
-                    while i < len(linhas) and linhas[i].strip().startswith("~"):
-                        i += 1
-                    continue
-
-                if linha:
-                    linhas_filtradas.append(linhas[i].rstrip() + '\n')
-                i += 1
-
-            # 2. Agrega cargas BT e iluminação pública
-            caminho_curvas = os.path.join(caminho, 'curvas_de_carga.txt')
-            curvas = self.carregar_curvas_carga(caminho_curvas)
-
-            linhas_agg_carga = []
             for trafo, dados in trafos_cargas[nome_pasta].items():
-                if not isinstance(dados, dict) or "cargas" not in dados:
+                if "gd" not in dados:
                     continue
 
-                cargas = dados["cargas"]
-                tensao_trafo = dados.get("tensao_secundario_kv")
-                bus2 = dados.get("bus2")
-                if not cargas or tensao_trafo is None:
-                    continue
-
-                curva_diaria_total = None
-                curva_anual_total = [0.0] * 12
-                tip_cc = None
-                n_cargas_validas = 0
-
-                for linha_carga in cargas:
-                    if not re.search(r"(carga_baixa|iluminacao)", linha_carga, re.IGNORECASE):
-                        continue
-
-                    nome_part = re.search(r"New Load\.nome_([^\s]+)", linha_carga)
-                    if not nome_part:
-                        continue
-
-                    nome_completo = nome_part.group(1)
-                    tip_cc_match = re.search(r"curva_diaria_([^_]+)", nome_completo)
-                    tip_cc = tip_cc_match.group(1) if tip_cc_match else None
-                    if tip_cc is None or tip_cc not in curvas:
-                        continue
-
-                    curva_do = curvas[tip_cc].get("DO", [])
-                    curva_du = curvas[tip_cc].get("DU", [])
-                    curva_sa = curvas[tip_cc].get("SA", [])
-                    if not (curva_do and curva_du and curva_sa):
-                        continue
-
-                    curva_diaria = [(d + 5 * u + s) / 7 for d, u, s in zip(curva_do, curva_du, curva_sa)]
-
-                    if curva_diaria_total is None:
-                        curva_diaria_total = curva_diaria
-                    else:
-                        curva_diaria_total = [x + y for x, y in zip(curva_diaria_total, curva_diaria)]
-
-                    curva_anual_match = re.search(r"curva_anual_((?:\d+(?:\.\d+)?_?){11}\d+(?:\.\d+)?)", nome_completo)
-                    if not curva_anual_match:
-                        continue
-
-                    curva_anual = list(map(float, curva_anual_match.group(1).split('_')))
-                    curva_anual_total = [x + y for x, y in zip(curva_anual_total, curva_anual)]
-                    n_cargas_validas += 1
-
-                if curva_diaria_total and n_cargas_validas:
-                    curva_diaria_media = [x / n_cargas_validas for x in curva_diaria_total]
-                    curva_diaria_str = "_".join(f"{x:.4f}" for x in curva_diaria_media)
-                    curva_anual_str = "_".join(f"{x:.2f}" for x in curva_anual_total)
-
-                    linha_agg = (
-                        f"New Load.nome_{trafo}_curva_diaria_{tip_cc}_{curva_diaria_str}_curva_anual_{curva_anual_str}_carga_agregada "
-                        f"Bus1={bus2} Phases=3\n"
-                        f"~ Conn=wye Model=1 Kv={tensao_trafo} Kw=1 pf=0.92\n\n"
-                    )
-                    linhas_agg_carga.append(linha_agg)
-
-            # 3. Agrega painéis FV da BT (com curvas associadas)
-            df_bt = df_GD_FV_Agregadas[df_GD_FV_Agregadas['tensao'] == 'BT']
-            agrupar = df_bt[df_bt['pasta'] == nome_pasta].groupby('trafo').agg({
-                'kva': 'sum',
-                'pmpp': 'sum',
-                'bus': 'first',
-                'kv': 'first',
-                'phases': 'first'
-            }).reset_index()
-
-            linhas_gd = []
-            for _, row in agrupar.iterrows():
-                trafo = row['trafo']
-                kva = row['kva']
-                pmpp = row['pmpp']
-                bus = row['bus']
-                kv = row['kv']
-                phases = row['phases']
-
+                lista_gd = dados["gd"]
+                kva_total = 0.0
+                pmpp_total = 0.0
+                bus = dados.get("bus2")
+                tensao = dados.get("tensao_secundario_kv", 0.22)
+                phases = 3
                 hash_id = gerar_hash(trafo)
 
-                nome_pv = f"pv_{hash_id}"
-                nome_ptcurve = f"mypvst_{hash_id}"
-                nome_effcurve = f"myeff_{hash_id}"
-                nome_irrad = f"myirrad_{hash_id}"
-                nome_temp = f"mytemp_{hash_id}"
+                for bloco in lista_gd:
+                    if not isinstance(bloco, str):
+                        continue
 
-                bloco_curvas = (
-                    f"New xycurve.{nome_ptcurve} npts = 4 xarray=[0 25 75 100] yarray=[1.2 1.0 0.8 0.6]\n"
-                    f"New xycurve.{nome_effcurve} npts = 4 xarray=[.1 .2 .4 1.0] yarray=[.86 .9 .93 .97]\n"
-                    f"New loadshape.{nome_irrad} npts = 1 interval = 1 mult = [1]\n"
-                    f"New tshape.{nome_temp} npts = 1 interval = 1 temp = [25]\n\n"
-                )
+                    match_kv = re.search(r"~\s*kv\s*=\s*([\d\.]+)", bloco)
+                    if not match_kv or float(match_kv.group(1)) >= 1.0:
+                        continue
 
-                bloco_pv = (
-                    f"New PVSystem.{nome_pv} phases = {phases} conn = wye bus1 = {bus}\n"
-                    f"~ kv = {kv} kva = {kva:.2f} pmpp = {pmpp:.2f}\n"
-                    f"~ pf = 0.92 %cutin = 0.00005 %cutout = 0.00005 varfollowinverter = Yes effcurve = {nome_effcurve}\n"
-                    f"~ p-tcurve = {nome_ptcurve} daily = {nome_irrad} tdaily = {nome_temp}\n\n"
-                )
+                    match_kva = re.search(r"\bkva\s*=\s*([\d\.]+)", bloco, re.IGNORECASE)
+                    match_pmpp = re.search(r"\bpmpp\s*=\s*([\d\.]+)", bloco, re.IGNORECASE)
 
-                linhas_gd.append(bloco_curvas + bloco_pv)
+                    if match_kva:
+                        kva_total += float(match_kva.group(1))
+                    if match_pmpp:
+                        pmpp_total += float(match_pmpp.group(1))
 
-            # 4. Escreve novo arquivo final
-            with open(novo_arquivo, 'w', encoding='utf-8') as f:
-                f.writelines(linhas_filtradas)
-                f.writelines(linhas_agg_carga)
-                f.writelines(linhas_gd)
+                # Só adiciona se tiver potência
+                if kva_total > 0 and pmpp_total > 0:
+                    # Limita a 200 se qualquer um ultrapassar
+                    if kva_total > 200 or pmpp_total > 200:
+                        print(f"[{nome_pasta}] GD com potência alta (kVA: {kva_total:.1f}, Pmpp: {pmpp_total:.1f}) → limitando para 200.")
+                        kva_total = min(kva_total, 200)
+                        pmpp_total = min(pmpp_total, 200)
+
+                    nome_pv = f"pv_{hash_id}"
+                    nome_ptcurve = f"mypvst_{hash_id}"
+                    nome_effcurve = f"myeff_{hash_id}"
+                    nome_irrad = f"myirrad_{hash_id}"
+                    nome_temp = f"mytemp_{hash_id}"
+
+                    bloco_curvas = (
+                        f"New xycurve.{nome_ptcurve} npts=4 xarray=[0 25 75 100] yarray=[1.2 1.0 0.8 0.6]\n"
+                        f"New xycurve.{nome_effcurve} npts=4 xarray=[.1 .2 .4 1.0] yarray=[.86 .9 .93 .97]\n"
+                        f"New loadshape.{nome_irrad} npts=1 interval=1 mult=[1]\n"
+                        f"New tshape.{nome_temp} npts=1 interval=1 temp=[25]\n\n"
+                    )
+
+                    bloco_pv = (
+                        f"New PVSystem.{nome_pv} phases={phases} conn=wye bus1={bus}\n"
+                        f"~ kv={tensao} kva={kva_total:.2f} pmpp={pmpp_total:.2f}\n"
+                        f"~ pf=0.92 %cutin=0.00005 %cutout=0.00005 varfollowinverter=Yes effcurve={nome_effcurve}\n"
+                        f"~ p-tcurve={nome_ptcurve} daily={nome_irrad} tdaily={nome_temp}\n\n"
+                    )
+
+                    linhas_pvsystems.append(bloco_curvas + bloco_pv)
+
+            # Escreve de volta no arquivo, adicionando os novos blocos ao final com espaçamento
+            with open(caminho_arquivo, 'w', encoding='utf-8') as f:
+                f.writelines(linhas_existentes)
+                if linhas_pvsystems:
+                    f.write('\n')  # Garantir espaço entre o conteúdo original e os novos blocos
+                    f.writelines(linhas_pvsystems)
 
 
 
@@ -522,7 +523,9 @@ class Agrega_Carga_Trafos:
         dicionario_cargas_por_nome = self.agrupar_por_nome(self.df_cargas_Agregadas)
         dicionario_gd_por_nome = self.agrupar_por_nome(self.df_GD_FV_Agregadas)
         trafos_cargas_e_gd = self.soma_cargas_e_gd_nos_trafos(dicionario_cargas_por_nome, dicionario_gd_por_nome)
+
         self.criar_run_cargas_agregadas(trafos_cargas_e_gd)
-        self.criar_run_cargas_e_gd_agregadas(trafos_cargas_e_gd)
- 
+        self.criar_run_cargas_e_gd_agregadas(self.caminho, trafos_cargas_e_gd)
+
         return 0
+
