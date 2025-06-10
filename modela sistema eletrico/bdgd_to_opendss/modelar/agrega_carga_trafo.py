@@ -500,7 +500,7 @@ class Agrega_Carga_Trafos:
                     )
 
                     bloco_pv = (
-                        f"New PVSystem.{nome_pv} phases={phases} conn=wye bus1={bus}\n"
+                        f"New PVSystem.{nome_pv}_gd_baixa_tensao phases={phases} conn=wye bus1={bus}\n"
                         f"~ kv={tensao} kva={kva_total:.2f} pmpp={pmpp_total:.2f}\n"
                         f"~ pf=0.92 %cutin=0.00005 %cutout=0.00005 varfollowinverter=Yes effcurve={nome_effcurve}\n"
                         f"~ p-tcurve={nome_ptcurve} daily={nome_irrad} tdaily={nome_temp}\n\n"

@@ -1,6 +1,9 @@
+
+import re
+from collections import defaultdict
+
 import py_dss_interface
 dss = py_dss_interface.DSS()
-import re
 
 """ Esta classe possui os métodos que configuram cenarios de simulação """
 
@@ -12,18 +15,44 @@ class class_Fluxo_de_Potencia:
         modo_snapshot: bool, modo_daily: bool, modo_yearly: bool, mes_index: int, modelo_carga: str,
         usar_cargas_bt: bool, usar_cargas_mt: bool, usar_gd_bt: bool, usar_gd_mt: bool,
         usar_geracao_hidraulica: bool, exibir_tensao: bool, exibir_corrente: bool,
-        exibir_DEC: bool, exibir_FEC: bool, monitorar_subestacao: bool, gerar_grafico_circuito: bool):
+        exibir_DEC: bool, exibir_FEC: bool, monitorar_subestacao: bool, gerar_grafico_circuito: bool,
+        caminho: str):
         """ Recebe parâmetros de configuração dos cenários de simulação """
 
 
-
+        class_Fluxo_de_Potencia.compilar(caminho)
         class_Fluxo_de_Potencia.config_cargas(usar_cargas_bt, usar_cargas_mt)
         class_Fluxo_de_Potencia.modelo_carga(modelo_carga)
         class_Fluxo_de_Potencia.config_gd(usar_gd_bt, usar_gd_mt)
-        class_Fluxo_de_Potencia.config_cargas(usar_cargas_bt, usar_cargas_mt)
+        class_Fluxo_de_Potencia.config_geradores(usar_geracao_hidraulica)
         class_Fluxo_de_Potencia.config_cargas(usar_cargas_bt, usar_cargas_mt)
 
 
+
+    @staticmethod
+    def config_geradores(usar_geracao_hidraulica):
+        """ Este método configura se os geradores vão ser considerados na simulação """
+
+        if usar_geracao_hidraulica == False:
+            dss.solution.solve()
+            dss.generators.first()
+            for nome in dss.generators.names:
+                dss.text(f"disable generator.{nome}")
+                dss.generators.next()
+        else:
+            return 0
+        return 0
+        
+        
+
+    @staticmethod
+    def compilar(caminho):
+        """ Este método compila o arquivo de modelagem do OpenDSS """
+        dss.text("Clear")
+        dss.text("Set DefaultBaseFrequency=60")
+        dss.text(f"Compile {caminho}")
+
+    
     @staticmethod
     def config_cargas(usar_cargas_bt, usar_cargas_mt):
         """ Este método configura as cargas quanto a quais vão ser simuladas """
@@ -133,7 +162,14 @@ class class_Fluxo_de_Potencia:
 
     
     @staticmethod
-    def run():
-        class_Fluxo_de_Potencia.gd_ufs_atualiza()
-
+    def tensoes():
+        """ Este método coleta as tensões dos barramentos e retorna um dicionário com os nomes e tensões """
+        barras_e_tensoes = defaultdict(float)
+        list_barras_nodes = dss.circuit.nodes_names
+        list_barras_vmag_pu = dss.circuit.buses_vmag_pu
+        barra_tensao = list(zip(list_barras_nodes, list_barras_vmag_pu))
+        for nome, vpu in barra_tensao:
+            if nome.endswith((".1", ".2", ".3")) and vpu > 0:
+                barras_e_tensoes[nome] = vpu
+        return barras_e_tensoes
 

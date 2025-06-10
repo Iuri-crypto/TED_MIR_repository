@@ -2,6 +2,7 @@ import pandas as pd
 from bdgd_to_opendss.validation.config_loader import load_validation_config
 import numpy as np
 import warnings
+import ast
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
 class ValidatorBarraSlack:
@@ -585,6 +586,8 @@ class ValidadorCargasBaixaTensao:
 
 
 
+
+
 class ValidadorCargasMediaTensao:
     def __init__(self):
         config = load_validation_config("cargas_media_tensao")
@@ -593,11 +596,42 @@ class ValidadorCargasMediaTensao:
         self.dados_mapa_fases = config.get("tabela_mapa_de_fases", {})
         self.dados_tabela_tensoes = config.get("tabela_tensoes", {})
 
+        curvas_path = r"C:\TED_MIR\repositorios\TED_MIR_repository\modela sistema eletrico\bdgd_to_opendss\validation\curvas_de_carga.txt"
+        self.curvas_normalizadas = self._carregar_e_normalizar_curvas(curvas_path)
+
+    def _carregar_e_normalizar_curvas(self, caminho):
+        curvas_normalizadas = {}
+        with open(caminho, "r") as f:
+            for linha in f:
+                if "=" in linha:
+                    chave, valores_str = linha.strip().split("=", 1)
+                    chave = chave.strip()
+                    try:
+                        valores = ast.literal_eval(valores_str.strip())
+                        if isinstance(valores, list) and len(valores) == 96:
+                            max_val = max(valores)
+                            if max_val > 0:
+                                normalizada = [round(v / max_val, 4) for v in valores]
+                                curvas_normalizadas[chave] = "\t" + "\t".join(map(str, normalizada))
+                    except Exception as e:
+                        print(f"Erro ao processar {chave}: {e}")
+        return curvas_normalizadas
+
     def validate_dataframe(self, df: pd.DataFrame) -> pd.DataFrame:
         df = df.copy()
 
         # Remove linhas onde 'nome' é vazio/nulo
         df = df[df["nome"].notna() & (df["nome"].astype(str).str.strip() != "")]
+
+
+
+        def atribuir_curva(tip_cc):
+            curva = self.curvas_normalizadas.get(tip_cc)
+            if curva:
+                return curva
+            return ""  # ou "_1.0\t..." se quiser default
+
+        df["tip_cc"] = df["tip_cc"].apply(atribuir_curva)
 
    
         

@@ -36,8 +36,10 @@ gerar_grafico_circuito = True
 # Execução da Simulação
 # ============================
 
+# caminho da modelagem
+caminho = r"C:\TED_MIR\repositorios\TED_MIR_repository\fluxo_de_potencia\001001\run_cargas_agregadas.dss"
 
 # Executa o fluxo de potência
 class_Fluxo_de_Potencia.config_run(modo_snapshot, modo_daily, modo_yearly, mes_index, modelo_carga, usar_cargas_bt, 
                                usar_cargas_mt, usar_gd_bt, usar_geracao_hidraulica, exibir_tensao, exibir_corrente, 
-                               exibir_DEC, exibir_FEC, monitorar_subestacao, gerar_grafico_circuito)
+                               exibir_DEC, exibir_FEC, monitorar_subestacao, gerar_grafico_circuito, caminho)

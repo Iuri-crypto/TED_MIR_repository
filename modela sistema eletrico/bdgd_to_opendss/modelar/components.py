@@ -867,7 +867,7 @@ class GD_FV_BT:
                 rec = '.' + '.'.join(fases)
 
                 linha = (
-                    f"New xycurve.mypvst_{cod_id} npts = 4 xarray=[0 25 75 100] yarray=[1.2 1.0 0.8 0.6]\n"
+                    f"New xycurve.mypvst_{cod_id}_gd_baixa_tensao npts = 4 xarray=[0 25 75 100] yarray=[1.2 1.0 0.8 0.6]\n"
                     f"New xycurve.myeff_{cod_id} npts = 4 xarray=[.1 .2 .4 1.0] yarray=[.86 .9 .93 .97]\n"
                     f"New loadshape.myirrad_{cod_id} npts = 1 interval = 1 mult = [1]\n"
                     f"New tshape.mytemp_{cod_id} npts = 1 interval = 1 temp = [25]\n\n"
@@ -929,7 +929,7 @@ class GD_FV_MT:
                 rec = '.' + '.'.join(fases)
 
                 linha =  (
-                    f"New xycurve.mypvst_{cod_id} npts = 4 xarray=[0 25 75 100] yarray=[1.2 1.0 0.8 0.6]\n"
+                    f"New xycurve.mypvst_{cod_id}_gd_media_tensao npts = 4 xarray=[0 25 75 100] yarray=[1.2 1.0 0.8 0.6]\n"
                     f"New xycurve.myeff_{cod_id} npts = 4 xarray=[.1 .2 .4 1.0] yarray=[.86 .9 .93 .97]\n"
                     f"New loadshape.myirrad_{cod_id} npts = 1 interval = 1 mult = [1]\n"
                     f"New tshape.mytemp_{cod_id} npts = 1 interval = 1 temp = [25]\n\n"
