@@ -348,7 +348,9 @@ class Agrega_Carga_Trafos:
                 if not cargas or tensao_trafo is None:
                     continue
 
-                curva_diaria_total = np.zeros(96)
+                curva_diaria_do = np.zeros(96)
+                curva_diaria_du = np.zeros(96)
+                curva_diaria_sa = np.zeros(96)
                 curva_anual_total = np.zeros(12)
                 tip_cc = None
                 n_validas = 0
@@ -374,8 +376,9 @@ class Agrega_Carga_Trafos:
                     if not (curva_do and curva_du and curva_sa):
                         continue
 
-                    curva_diaria = (np.array(curva_do) + 5 * np.array(curva_du) + np.array(curva_sa)) / 7
-                    curva_diaria_total += curva_diaria
+                    curva_diaria_do += curva_do
+                    curva_diaria_du += curva_du
+                    curva_diaria_sa += curva_sa
 
                     curva_anual_match = re_curva_anual.search(nome_completo)
                     if not curva_anual_match:
@@ -387,12 +390,17 @@ class Agrega_Carga_Trafos:
                     n_validas += 1
 
                 if n_validas:
-                    curva_diaria_media = curva_diaria_total / n_validas
-                    curva_diaria_str = "_".join(f"{x:.4f}" for x in curva_diaria_media)
+                    curva_diaria_media_do = curva_diaria_do / n_validas
+                    curva_diaria_media_du = curva_diaria_du / n_validas
+                    curva_diaria_media_sa = curva_diaria_sa / n_validas
+                    curva_diaria_str_do = "_".join(f"{x:.1f}" for x in curva_diaria_media_do)
+                    curva_diaria_str_du = "_".join(f"{x:.1f}" for x in curva_diaria_media_du)
+                    curva_diaria_str_sa = "_".join(f"{x:.1f}" for x in curva_diaria_media_sa)
+
                     curva_anual_str = "_".join(f"{x:.2f}" for x in curva_anual_total)
 
                     linhas_agg.append(
-                        f"New Load.nome_{trafo}_curva_diaria_{tip_cc}_{curva_diaria_str}_curva_anual_{curva_anual_str}_carga_agregada "
+                        f"New Load.nome_{trafo}_curva_diaria_{tip_cc}_du_{curva_diaria_str_du}_sa_{curva_diaria_str_sa}_do_{curva_diaria_str_do}_curva_anual_{curva_anual_str}_carga_agregada "
                         f"Bus1={bus2} Phases=3\n"
                         f"~ Conn=wye Model=1 Kv={tensao_trafo} Kw=1 pf=0.92"
                     )
@@ -429,7 +437,7 @@ class Agrega_Carga_Trafos:
 
             with open(novo_arquivo, 'w', encoding='utf-8') as f:
                 f.write("\n".join(resultado_final))
-
+                os.remove(caminho_arquivo)
 
 
 
@@ -540,16 +548,9 @@ class Agrega_Carga_Trafos:
     def adicionar_curvas_normalizadas_medias(self, caminho, trafos_cargas):
         # Lê o arquivo de curvas de carga uma vez
         curvas_de_carga = {}
-        caminho_curvas = os.path.join(caminho, 'curvas_de_carga.txt')
-        if os.path.exists(caminho_curvas):
-            with open(caminho_curvas, 'r', encoding='utf-8') as f:
-                for linha in f:
-                    match = re.match(r"(\w+(?:-\w+)*):\w+\s*=\s*\[(.*?)\]", linha)
-                    if match:
-                        nome, valores = match.groups()
-                        lista = [float(v.strip()) for v in valores.split(',') if v.strip()]
-                        curvas_de_carga[nome.strip()] = lista
-
+        caminho_curvas = os.path.join(self.caminho, 'curvas_de_carga.txt')
+        curvas_de_carga = self.carregar_curvas_carga(caminho_curvas)
+    
         r = 0
         for root, dirs, files in os.walk(caminho):
             r +=1
@@ -577,23 +578,29 @@ class Agrega_Carga_Trafos:
                     novas_linhas.append(linha)
                     continue
 
+
                 nome_curva = match_nome_curva.group(1)
                 if nome_curva not in curvas_de_carga:
                     print(f"⚠️ Curva '{nome_curva}' não encontrada para a linha: {linha.strip()}")
                     novas_linhas.append(linha)
                     continue
 
-                curva = curvas_de_carga[nome_curva]
-                max_val = max(curva)
-                curva_norm = [round(v / max_val, 4) if max_val > 0 else 0.0 for v in curva]
-                curva_str = "_".join(f"{v:.4f}" for v in curva_norm)
+                curva_do = curvas_de_carga[nome_curva].get("DO")
+                curva_du = curvas_de_carga[nome_curva].get("DU")
+                curva_sa = curvas_de_carga[nome_curva].get("SA")
+                #curva = curvas_de_carga[nome_curva]
+                #max_val = max(curva)
+                #curva_norm = [round(v / max_val, 4) if max_val > 0 else 0.0 for v in curva]
+                curva_str_do = "_".join(f"{v:.1f}" for v in curva_do)
+                curva_str_du = "_".join(f"{v:.1f}" for v in curva_du)
+                curva_str_sa = "_".join(f"{v:.1f}" for v in curva_sa)
 
                 match_insercao = re.search(
                     r"(curva_diaria_" + re.escape(nome_curva) + r")(_curva_anual_)", linha
                 )
                 if match_insercao:
                     ponto_insercao = match_insercao.end(1)
-                    nova_linha = linha[:ponto_insercao] + f"_{curva_str}" + linha[ponto_insercao:]
+                    nova_linha = linha[:ponto_insercao] + f"_du_{curva_str_do}_sa_{curva_str_sa}_do_{curva_str_du}" + linha[ponto_insercao:]
                     novas_linhas.append(nova_linha)
                 else:
                     novas_linhas.append(linha)
