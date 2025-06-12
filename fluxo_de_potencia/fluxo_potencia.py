@@ -6,7 +6,10 @@ dss = py_dss_interface.DSS()
 import os
 import matplotlib.pyplot as plt
 import py_dss_interface
-
+import matplotlib.pyplot as plt
+import seaborn as sns
+import heapq
+from datetime import timedelta
 
 """ Esta classe possui os métodos que configuram cenarios de simulação """
 
@@ -26,12 +29,12 @@ class class_Fluxo_de_Potencia:
                 if nome_arquivo.lower() == "run_cargas_agregadas.dss":
                     arquivos_dss.append(os.path.join(root, nome_arquivo))
 
+
         for caminho in arquivos_dss:
             # Obtenção do nome do alimentador
             nome_alimentador = os.path.basename(os.path.dirname(caminho))
 
-            dss.solution.max_iterations = 100
-            dss.solution.max_control_iterations = 100
+
 
             class_Fluxo_de_Potencia.compilar(caminho)
             class_Fluxo_de_Potencia.config_cargas(usar_cargas_bt, usar_cargas_mt)
@@ -42,236 +45,334 @@ class class_Fluxo_de_Potencia:
 
             # Inicializa dicionários para armazenar potências e tensões
             potencias = defaultdict(lambda: defaultdict(float))
+            tensoes = defaultdict(lambda: defaultdict(float))
 
-            for i in range(96):  # Iteração para 96 pontos do dia
-                class_Fluxo_de_Potencia.cargas_atualiza(i, mes_index)
+
+            for i in range(288):  # Iteração para 96 pontos do dia
+                dss.solution.max_iterations = 40
+                dss.solution.max_control_iterations = 40
+                carga_dict = class_Fluxo_de_Potencia.carrega_curvas()
+                class_Fluxo_de_Potencia.cargas_atualiza(i, mes_index, carga_dict)
+                
                 class_Fluxo_de_Potencia.gd_ufs_atualiza(i)
                 
                 dss.solution.solve()
                 
-                # Coleta a potência ativa (kw) e reativa (kvar) para o horário
-                potencias[i]['kw'] = round(dss.circuit.total_power[0], 4)  # Potência ativa
-                potencias[i]['kvar'] = round(dss.circuit.total_power[1], 4)  # Potência reativa
-                
-                # Pode adicionar um print aqui para debugar, se necessário
-                #print(f"Hora {i}: {potencias[i]['kw']} kW | {potencias[i]['kvar']} kVAr")
-                #print("Iterações necessárias: {}".format(dss.solution.iterations))
+                potencias[i]['kw'] = round(dss.circuit.total_power[0], 2)  # Potência ativa
+                potencias[i]['kvar'] = round(dss.circuit.total_power[1], 2)  # Potência reativa
+
+                barra_tensao = list(zip(dss.circuit.nodes_names, dss.circuit.buses_vmag_pu))
+
+                # Filtra barramentos com sufixos de fase e tensão > 0
+                barra_tensao_filtrada = [(nome, vpu) for nome, vpu in barra_tensao
+                                        if nome.endswith((".1", ".2", ".3")) and vpu > 0]
+
+                if barra_tensao_filtrada:
+                    n_pontos = max(1, len(barra_tensao_filtrada) // 100)  # Garante pelo menos 1 valor
+
+                    # 1% mais baixos
+                    menores_tensoes = heapq.nsmallest(n_pontos, barra_tensao_filtrada, key=lambda x: x[1])
+                    menores_valores_tensao = [vpu for nome, vpu in menores_tensoes]
+
+                    # 1% mais altos
+                    maiores_tensoes = heapq.nlargest(n_pontos, barra_tensao_filtrada, key=lambda x: x[1])
+                    maiores_valores_tensao = [vpu for nome, vpu in maiores_tensoes]
+
+                    # Juntando os dois conjuntos em uma lista só
+                    tensoes[i] = menores_valores_tensao + maiores_valores_tensao
+                print("Iterações necessárias: {}".format(dss.solution.iterations))
+
+                if i % 5 == 0:
+                    nome_alimentador = os.path.basename(os.path.dirname(caminho))
+
+
+                    class_Fluxo_de_Potencia.compilar(caminho)
+                    class_Fluxo_de_Potencia.config_cargas(usar_cargas_bt, usar_cargas_mt)
+                    class_Fluxo_de_Potencia.modelo_carga(modelo_carga)
+                    class_Fluxo_de_Potencia.config_gd(usar_gd_bt, usar_gd_mt)
+                    class_Fluxo_de_Potencia.config_geradores(usar_geracao_hidraulica)
+                    class_Fluxo_de_Potencia.config_cargas(usar_cargas_bt, usar_cargas_mt)
+                    #class_Fluxo_de_Potencia.limites_carga()
 
                 # Plotagem das potências ativas
-            class_Fluxo_de_Potencia.plot_potencias(nome_alimentador, potencias)
+            #class_Fluxo_de_Potencia.plot_potencias(nome_alimentador, potencias)
 
             # plotagem final
             # Se for necessário, plotar as tensões também
             # if exibir_tensao:
-            #    class_Fluxo_de_Potencia.plot_tensao(nome_alimentador)
+            #class_Fluxo_de_Potencia.plot_tensao(nome_alimentador, tensoes)
+
+            class_Fluxo_de_Potencia.plot_potencia_e_tensao(nome_alimentador, potencias, tensoes)
+            print("here")
+
+
+
 
 
 
     @staticmethod
     def plot_potencias(nome_alimentador, potencias):
-        """Plota as potências ativas na saída da subestação"""
-        
-        # Horários do dia (00:00 até 23:59), divididos em 96 pontos (a cada 15 minutos)
-        horas = list(range(96))
-        horarios = [f"{h//4:02d}:{(h%4)*15:02d}" for h in horas]  # Formata as horas no formato HH:MM
+        sns.set_style("whitegrid")
+        plt.rcParams.update({
+            'axes.facecolor': '#f9f9f9',
+            'grid.color': '#e5e5e5',
+            'axes.edgecolor': '#cccccc',
+            'font.size': 10,
+            'axes.titlesize': 16,
+            'axes.labelsize': 12,
+            'xtick.labelsize': 9,
+            'ytick.labelsize': 9
+        })
 
-        # Extrair apenas as potências ativas (kw) para o gráfico
-        potencias_ativas = [-potencias[i]['kw'] for i in horas]
+        pontos_por_dia = 96  # 24h * 4 (15 minutos)
+        total_pontos = pontos_por_dia * 3  # 3 dias
 
-        # Plotando o gráfico
-        plt.figure(figsize=(10, 6))
-        plt.plot(horarios, potencias_ativas, label='Potência Ativa (kW)', color='b')
+        # Extrair potências ativas para todos os pontos
+        potencias_ativas = [-potencias[i]['kw'] for i in range(total_pontos)]
 
-        # Definindo título e rótulos
-        plt.title(f"Potência Ativa no Alimentador: {nome_alimentador}", fontsize=14)
-        plt.xlabel("Hora do Dia", fontsize=12)
-        plt.ylabel("Potência Ativa (kW)", fontsize=12)
+        plt.figure(figsize=(15, 6))
+        plt.plot(range(total_pontos), potencias_ativas, label='Potência Ativa (kW)', color='#1f77b4', linewidth=2)
+        plt.fill_between(range(total_pontos), potencias_ativas, color='#1f77b4', alpha=0.1)
 
-        # Ajustando a exibição dos horários para que mostrem de forma clara
-        plt.xticks(rotation=45, ha='right')  # Gira os rótulos para não sobrepor
+        # Marcar ticks a cada 45 minutos (45 min = 3 intervalos de 15 min)
+        tick_interval = 3
+        xticks_pos = list(range(0, total_pontos, tick_interval))
 
-        # Ajustar os limites do eixo Y para evitar distorções (se necessário)
-        max_potencia = max(potencias_ativas)
-        min_potencia = min(potencias_ativas)
-        
-        # Ajustar os limites do eixo Y com uma margem para melhor visualização
-        margem = (max_potencia - min_potencia) * 0.1  # Ajuste de 10% para cima e para baixo
-        plt.ylim(min_potencia - margem, max_potencia + margem)
+        dias = ['Dia Útil', 'Sábado', 'Domingo']
+        xticks_labels = []
 
-        plt.grid(True)
-        plt.legend()
+        for pos in xticks_pos:
+            dia = pos // pontos_por_dia
+            ponto_dia = pos % pontos_por_dia
+            hora = ponto_dia // 4  # 4 intervalos de 15 min = 1 hora
+            minuto = (ponto_dia % 4) * 15
+            label = f"{hora:02d}:{minuto:02d}"
+            if ponto_dia == 0:
+                label = dias[dia] + "\n" + label
+            xticks_labels.append(label)
+
+        plt.xticks(xticks_pos, xticks_labels, rotation=45, ha='right')
+
+        ax = plt.gca()
+        for label in ax.get_xticklabels():
+            text = label.get_text()
+            for dia in dias:
+                if text.startswith(dia):
+                    label.set_color('blue')
+                    label.set_fontsize(12)
+                    label.set_fontweight('bold')
+
+
+
+        # Linhas verticais para separar os dias
+        for separador in [pontos_por_dia, 2 * pontos_por_dia]:
+            plt.axvline(x=separador, color='gray', linestyle='--', linewidth=1)
+
+        plt.title(f"Potência Ativa no Alimentador: {nome_alimentador}", fontsize=16, weight='bold')
+        plt.xlabel("Hora do Dia")
+        plt.ylabel("Potência Ativa (kW)")
+
+        max_pot = max(potencias_ativas)
+        min_pot = min(potencias_ativas)
+        margem = (max_pot - min_pot) * 0.1
+        plt.ylim(min_pot - margem, max_pot + margem)
+
+        sns.despine()
+        plt.legend(loc='upper right', frameon=True, framealpha=0.9)
         plt.tight_layout()
+        plt.show()
 
-        # Exibindo o gráfico
+
+    @staticmethod
+    def plot_tensao(nome_alimentador, tensoes_dict):
+        if not tensoes_dict:
+            print("Nenhuma tensão válida para exibir.")
+            return
+
+        # Configurações iguais ao gráfico de potências
+        sns.set_style("whitegrid")
+        plt.rcParams.update({
+            'axes.facecolor': '#f9f9f9',
+            'grid.color': '#e5e5e5',
+            'axes.edgecolor': '#cccccc',
+            'font.size': 10,
+            'axes.titlesize': 16,
+            'axes.labelsize': 12,
+            'xtick.labelsize': 9,
+            'ytick.labelsize': 9
+        })
+
+        pontos_por_dia = 96  # 24h * 4 (15 minutos)
+        total_pontos = pontos_por_dia * 3  # 3 dias
+
+        indices_tempo = sorted(tensoes_dict.keys())
+        tensoes_plot = [min(tensoes_dict[i]) for i in indices_tempo]
+
+        # Criar labels dos horários
+        dias = ['Dia Útil', 'Sábado', 'Domingo']
+        tick_interval = 3  # a cada 45 minutos (3 intervalos de 15 min)
+
+        xticks_pos = list(range(0, total_pontos, tick_interval))
+        xticks_labels = []
+
+        for pos in xticks_pos:
+            dia = pos // pontos_por_dia
+            ponto_dia = pos % pontos_por_dia
+            hora = ponto_dia // 4
+            minuto = (ponto_dia % 4) * 15
+            label = f"{hora:02d}:{minuto:02d}"
+            if ponto_dia == 0:
+                label = dias[dia] + "\n" + label
+            xticks_labels.append(label)
+
+        plt.figure(figsize=(15, 6))
+
+        plt.plot(indices_tempo, tensoes_plot, marker='o', linestyle='-', linewidth=2, markersize=5,
+                color='#1f77b4', alpha=0.8)
+        plt.fill_between(indices_tempo, tensoes_plot, color='#1f77b4', alpha=0.1)
+
+        # Linhas de limite
+        plt.axhline(1.0, color='green', linestyle='--', linewidth=1, label='1.0 pu')
+        plt.axhline(0.93, color='orange', linestyle='--', linewidth=1, label='Limite Inferior (0.93 pu)')
+        plt.axhline(1.05, color='red', linestyle='--', linewidth=1, label='Limite Superior (1.05 pu)')
+
+        plt.xticks(ticks=xticks_pos, labels=xticks_labels, rotation=45, ha='right')
+
+        # Destacar nomes dos dias em azul e maior
+        ax = plt.gca()
+        for label in ax.get_xticklabels():
+            text = label.get_text()
+            for dia in dias:
+                if text.startswith(dia):
+                    label.set_color('blue')
+                    label.set_fontsize(12)
+                    label.set_fontweight('bold')
+
+        # Linhas verticais para separar os dias
+        for separador in [pontos_por_dia, 2 * pontos_por_dia]:
+            plt.axvline(x=separador, color='gray', linestyle='--', linewidth=1)
+
+        plt.title(f"Tensão Mínima (1%) por Tempo - {nome_alimentador}", fontsize=16, weight='bold')
+        plt.xlabel("Hora do Dia", fontsize=12)
+        plt.ylabel("Tensão (pu)", fontsize=12)
+
+        plt.ylim(0.85, max(tensoes_plot) + 0.05)
+
+        sns.despine()
+        plt.legend(loc='upper right', frameon=True, framealpha=0.9)
+        plt.tight_layout()
         plt.show()
 
 
 
     @staticmethod
-    def plot_tensao(nome_alimentador):
-        """Este método gera os gráficos de tensão com o nome do alimentador"""
+    def plot_potencia_e_tensao(nome_alimentador, potencias, tensoes_dict):
+        if not tensoes_dict:
+            print("Nenhuma tensão válida para exibir.")
+            return
 
-        # Simulando a interface com o DSS
-        dss = py_dss_interface.DSS()
-        barra_tensao = list(zip(dss.circuit.nodes_names, dss.circuit.buses_vmag_pu))
+        sns.set_style("whitegrid")
+        plt.rcParams.update({
+            'axes.facecolor': '#f9f9f9',
+            'grid.color': '#e5e5e5',
+            'axes.edgecolor': '#cccccc',
+            'font.size': 10,
+            'axes.titlesize': 16,
+            'axes.labelsize': 12,
+            'xtick.labelsize': 9,
+            'ytick.labelsize': 9
+        })
 
-        # Filtra os dados das tensões (barramentos que terminam com .1, .2 ou .3 e com vpu >= 0)
-        barra_tensao_filtrada = [(nome, vpu) for nome, vpu in barra_tensao if nome.endswith((".1", ".2", ".3")) and vpu >= 0]
+        pontos_por_dia = 96  # 24h * 4 (15 minutos)
+        total_pontos = pontos_por_dia * 3  # 3 dias
 
-        # Filtra barramentos que estão com tensão entre 0.1 e 0.5 pu
-        barras_problema = [(nome, vpu) for nome, vpu in barra_tensao_filtrada if 0.1 <= vpu <= 0.5]
+        # Dados potência ativa (negativo conforme seu código)
+        potencias_ativas = [-potencias[i]['kw'] for i in range(total_pontos)]
 
-        # Lista de barramentos fornecida (buses)
-        buses = [
-        "59869270827309837bt",
-        "59816721827373865bt",
-        "59834347827350861bt",
-        "59837187827364308bt",
-        "59831307827357505bt",
-        "59806771827412586bt",
-        "59852960827365697bt",
-        "59894351827510767bt",
-        "59849828827355127bt",
-        "59829801827442955bt",
-        "59892900827472156bt",
-        "59864935827329823bt",
-        "59879147827453626bt",
-        "59863030827305908bt",
-        "59897765827483304bt",
-        "59863503827449003bt",
-        "59886905827467189bt",
-        "59871378827286390bt",
-        "59891150827519205bt",
-        "59835084827403507bt",
-        "59859278827356268bt",
-        "59857002827454179bt",
-        "59847272827346484bt",
-        "59847128827346409bt",
-        "59851888827351241bt",
-        "59852042827351245bt",
-        "59866408827452735bt",
-        "59866518827452616bt",
-        "59859678827445111bt",
-        "59859793827444976bt",
-        "59865762827294149bt",
-        "59865696827294287bt",
-        "59836440827378773bt",
-        "59836338827378901bt",
-        "59834644827438399bt",
-        "59834788827438540bt",
-        "59835001827435637bt",
-        "59834913827435519bt",
-        "59889297827308163bt",
-        "59889376827308368bt",
-        "59832979827378654bt",
-        "59832852827378737bt",
-        "59847124827471117bt",
-        "59847240827471015bt",
-        "59881167827319813bt",
-        "59880993827319736bt",
-        "59829842827468227bt",
-        "59883618827539576bt",
-        "59882557827320141bt",
-        "59886335827312811bt",
-        "59842040827382203bt",
-        "59816974827370723bt",
-        "59856006827461915bt",
-        "59884330827467831bt",
-        "59888130827478215bt",
-        "59812381827401884bt",
-        "59855131827330866bt",
-        "59850686827447026bt",
-        "59860148827457728bt",
-        "59879102827488027bt",
-        "59890469827473419bt",
-        "59821049827435402bt",
-        "59827259827364050bt",
-        "59843686827455679bt",
-        "59884315827476323bt",
-        "59828366827448277bt",
-        "59832564827443623bt",
-        "59852738827449377bt",
-        "59827949827436205bt",
-        "59817224827402829bt",
-        "59886696827510160bt",
-        "59853914827451036bt",
-        "59820302827410218bt",
-        "59835898827462697bt",
-        "59820011827387516bt",
-        "59853237827322426bt",
-        "59821557827449968bt",
-        "59848363827460724bt",
-        "59860096827471134bt",
-        "59825065827360534bt",
-        "59838692827340314bt",
-        "59881635827473398bt",
-        "59831166827426293bt",
-        "59839583827447620bt",
-        "59862373827322763bt",
-        "59890470827472268bt",
-        "59831310827441167bt",
-        "59882121827478908bt",
-        "59871127827454925bt",
-        "59849794827378412bt",
-        "59827231827444990bt",
-        "59817803827436948bt",
-        "59874794827305937bt",
-        "59887198827307512bt",
-        "59824774827446532bt",
-        "59866875827286905bt",
-        "59833896827374958bt",
-        "59845780827359187bt",
-        "59838221827388447bt",
-        "59875129827318542bt",
-        "59866063827476194bt",
-        "59861166827488570bt",
-        "59860889827446191bt",
-        "59823275827452258bt",
-        "59885518827477097bt",
-        "59818131827434338bt",
-        "59867218827296719bt",
-        "59869768827457895bt",
-        "59824539827375792bt",
-        "59810848827376698bt",
-        "59829040827389910bt",
-        "59836067827457294bt"
+        # Tensões mínimas (menor valor para cada instante)
+        indices_tempo = sorted(tensoes_dict.keys())
+        tensoes_plot = [min(tensoes_dict[i]) for i in indices_tempo]
 
+        # Criar labels do eixo x
+        dias = ['Dia Útil', 'Sábado', 'Domingo']
+        tick_interval = 3  # a cada 45 minutos (3 intervalos de 15 min)
 
-    ]
+        xticks_pos = list(range(0, total_pontos, tick_interval))
+        xticks_labels = []
+        for pos in xticks_pos:
+            dia = pos // pontos_por_dia
+            ponto_dia = pos % pontos_por_dia
+            hora = ponto_dia // 4
+            minuto = (ponto_dia % 4) * 15
+            label = f"{hora:02d}:{minuto:02d}"
+            if ponto_dia == 0:
+                label = dias[dia] + "\n" + label
+            xticks_labels.append(label)
 
+        # Criar figura e eixo principal (potência)
+        fig, ax1 = plt.subplots(figsize=(15, 6))
 
+        # Plot potência no eixo y da esquerda
+        ax1.plot(range(total_pontos), potencias_ativas, label='Potência Ativa (kW)', color='#1f77b4', linewidth=2)
+        ax1.fill_between(range(total_pontos), potencias_ativas, color='#1f77b4', alpha=0.1)
+        ax1.set_xlabel("Hora do Dia")
+        ax1.set_ylabel("Potência Ativa (kW)", color='#1f77b4')
+        ax1.tick_params(axis='y', labelcolor='#1f77b4')
 
-        # Criar lista de barramentos e suas tensões filtradas
-        tensoes_barramentos_selecionados = [
-            (nome.split('.')[0], vpu) for nome, vpu in barra_tensao_filtrada if nome.split('.')[0] in buses
-        ]
+        max_pot = max(potencias_ativas)
+        min_pot = min(potencias_ativas)
+        margem = (max_pot - min_pot) * 0.1
+        ax1.set_ylim(min_pot - margem, max_pot + margem)
 
-        # Imprime barramentos com problemas
-        if barras_problema:
-            print(f"\nBarramentos com tensão entre 0.1 e 0.5 pu em {nome_alimentador}:")
-            for nome, vpu in barras_problema:
-                print(f"  - {nome}: {vpu:.3f} pu")
+        # Configurar ticks do eixo x com labels
+        ax1.set_xticks(xticks_pos)
+        ax1.set_xticklabels(xticks_labels, rotation=45, ha='right')
 
-        # Geração do gráfico de dispersão
-        if tensoes_barramentos_selecionados:
-            nomes_nos, tensoes = zip(*tensoes_barramentos_selecionados)
-            indices = list(range(len(tensoes)))
+        # Destacar nomes dos dias em azul e maior fonte no eixo x
+        for label in ax1.get_xticklabels():
+            text = label.get_text()
+            for dia in dias:
+                if text.startswith(dia):
+                    label.set_color('blue')
+                    label.set_fontsize(12)
+                    label.set_fontweight('bold')
 
-            # Gráfico de dispersão
-            plt.figure(figsize=(14, 7))
-            plt.scatter(indices, tensoes, color='royalblue', label='Tensão por nó', s=25)
-            plt.axhline(y=1.05, color='green', linestyle='--', linewidth=1, label='Limite Superior (1.05 pu)')
-            plt.axhline(y=0.95, color='red', linestyle='--', linewidth=1, label='Limite Inferior (0.95 pu)')
-            plt.title(f"Tensões em pu - {nome_alimentador}", fontsize=16)
-            plt.xlabel("Índice do nó", fontsize=12)
-            plt.ylabel("Tensão (pu)", fontsize=12)
-            plt.legend()
-            plt.grid(True, linestyle=':', linewidth=0.8)
-            plt.tight_layout()
-            plt.show()
+        # Linhas verticais para separar os dias
+        for separador in [pontos_por_dia, 2 * pontos_por_dia]:
+            ax1.axvline(x=separador, color='gray', linestyle='--', linewidth=1)
 
-        print(f"Simulação finalizada para {nome_alimentador}")
+        # Criar eixo y secundário para a tensão
+        ax2 = ax1.twinx()
+        ax2.plot(indices_tempo, tensoes_plot, marker='o', linestyle='-', linewidth=2, markersize=5,
+                color='orange', alpha=0.8, label='Tensão Mínima (pu)')
+        ax2.fill_between(indices_tempo, tensoes_plot, color='orange', alpha=0.1)
 
+        # Linhas de limite na tensão
+        ax2.axhline(1.0, color='green', linestyle='--', linewidth=1, label='1.0 pu')
+        ax2.axhline(0.93, color='red', linestyle='--', linewidth=1, label='Limite Inferior (0.93 pu)')
+        ax2.axhline(1.05, color='red', linestyle='--', linewidth=1, label='Limite Superior (1.05 pu)')
+
+        ax2.set_ylabel("Tensão (pu)", color='orange')
+        ax2.tick_params(axis='y', labelcolor='orange')
+
+        ax2.set_ylim(0.85, max(tensoes_plot) + 0.05)
+
+        # Título geral
+        plt.title(f"Potência e Tensão no Alimentador: {nome_alimentador}", fontsize=16, weight='bold')
+
+        # Ajustes finais
+        sns.despine(ax=ax1)
+        sns.despine(ax=ax2, right=False)
+
+        # Combinar legendas dos dois eixos
+        lines_1, labels_1 = ax1.get_legend_handles_labels()
+        lines_2, labels_2 = ax2.get_legend_handles_labels()
+        ax1.legend(lines_1 + lines_2, labels_1 + labels_2, loc='upper right', frameon=True, framealpha=0.9)
+
+        plt.tight_layout()
+        plt.show()
+        
+        
 
     @staticmethod
     def config_geradores(usar_geracao_hidraulica):
@@ -383,6 +484,26 @@ class class_Fluxo_de_Potencia:
         0.653, 0.601, 0.547, 0.490, 0.432, 0.372, 0.311, 0.250, 0.190, 0.133,
         0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001,
         0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001,
+        0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001,
+        0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001,
+        0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001,
+        0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.168, 0.227, 0.288, 0.349,
+        0.409, 0.468, 0.525, 0.581, 0.633, 0.684, 0.731, 0.775, 0.816, 0.852,
+        0.886, 0.915, 0.940, 0.961, 0.977, 0.989, 0.997, 1.000, 0.999, 0.993,
+        0.982, 0.968, 0.948, 0.925, 0.897, 0.866, 0.830, 0.791, 0.748, 0.702,
+        0.653, 0.601, 0.547, 0.490, 0.432, 0.372, 0.311, 0.250, 0.190, 0.133,
+        0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001,
+        0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001,
+        0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001,
+        0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001,
+        0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001,
+        0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.168, 0.227, 0.288, 0.349,
+        0.409, 0.468, 0.525, 0.581, 0.633, 0.684, 0.731, 0.775, 0.816, 0.852,
+        0.886, 0.915, 0.940, 0.961, 0.977, 0.989, 0.997, 1.000, 0.999, 0.993,
+        0.982, 0.968, 0.948, 0.925, 0.897, 0.866, 0.830, 0.791, 0.748, 0.702,
+        0.653, 0.601, 0.547, 0.490, 0.432, 0.372, 0.311, 0.250, 0.190, 0.133,
+        0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001,
+        0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001,
         0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001]
 
 
@@ -390,63 +511,179 @@ class class_Fluxo_de_Potencia:
         for _ in range(dss.pvsystems.count):
             dss.pvsystems.irradiance = irradiance_96[ponto_simulacao]
             dss.pvsystems.next()
+        return
+
+    @staticmethod
+    def carrega_curvas():
+        """ Carrega as curvas de carga """
+
+        carga_dict = defaultdict(lambda: defaultdict(lambda: defaultdict(dict)))
+        dss.loads.first()
+
+        for nome in dss.loads.names:
+            partes = nome.split('_')
+
+            extrair_du = False
+            extrair_sa = False
+            extrair_do = False
+
+            dados_du = []
+            dados_sa = []
+            dados_do = []
+            dados_curva_anual = []
+
+            i = 0
+            while i < len(partes):
+                item = partes[i]
+
+                if item == 'du':
+                    extrair_du = True
+                    extrair_sa = extrair_do = False
+                    i += 1
+                    continue
+                elif item == 'sa':
+                    extrair_sa = True
+                    extrair_du = extrair_do = False
+                    i += 1
+                    continue
+                elif item == 'do':
+                    extrair_do = True
+                    extrair_du = extrair_sa = False
+                    i += 1
+                    continue
+                elif item == 'curva':
+                    # Previne erro ao tentar converter 'curva' para float
+                    extrair_du = extrair_sa = extrair_do = False
+                    i += 1
+                    continue
+                elif item == 'anual':
+                    # Previne erro ao tentar converter 'anual' para float
+                    extrair_du = extrair_sa = extrair_do = False
+                    # Extração dos 12 valores após 'curva_anual'
+                    dados_curva_anual = [float(partes[j]) for j in range(i+1, i+13)]
+                    i += 13  # pula 'anual' + 12 valores
+                    continue
+
+                # Armazena os dados nas listas corretas
+                if extrair_du:
+                    try:
+                        dados_du.append(float(item))
+                    except ValueError:
+                        extrair_du = False
+                elif extrair_sa:
+                    try:
+                        dados_sa.append(float(item))
+                    except ValueError:
+                        extrair_sa = False
+                elif extrair_do:
+                    try:
+                        dados_do.append(float(item))
+                    except ValueError:
+                        extrair_do = False
+
+                i += 1
+
+            carga_dict[nome]['semana'] = dados_du + dados_sa + dados_do
+            carga_dict[nome]['curva_anual'] = dados_curva_anual
+
+            dss.loads.next()
+        return carga_dict
+
+
+
+    from collections import defaultdict
+
+    # @staticmethod
+    # def carrega_curvas():
+    #     """ Carrega as curvas de carga """
+
+    #     carga_dict = defaultdict(lambda: defaultdict(lambda: defaultdict(dict)))
+    #     dss.loads.first()
+
+    #     for nome in dss.loads.names:
+    #         partes = nome.split('_')
+
+    #         extrair_du = False
+    #         extrair_sa = False
+    #         extrair_do = False
+
+    #         dados_du = []
+    #         dados_sa = []
+    #         dados_do = []
+    #         dados_curva_anual = []
+
+    #         i = 0
+    #         while i < len(partes):
+    #             item = partes[i]
+
+    #             if item == 'du':
+    #                 extrair_du = True
+    #                 extrair_sa = extrair_do = False
+    #                 i += 1
+    #                 continue
+    #             elif item == 'sa':
+    #                 extrair_sa = True
+    #                 extrair_du = extrair_do = False
+    #                 i += 1
+    #                 continue
+    #             elif item == 'do':
+    #                 extrair_do = True
+    #                 extrair_du = extrair_sa = False
+    #                 i += 1
+    #                 continue
+    #             elif item == 'curva':
+    #                 # Previne erro ao tentar converter 'curva' para float
+    #                 extrair_du = extrair_sa = extrair_do = False
+    #                 i += 1
+    #                 continue
+    #             elif item == 'anual':
+    #                 # Previne erro ao tentar converter 'anual' para float
+    #                 extrair_du = extrair_sa = extrair_do = False
+    #                 # Extração dos 12 valores após 'curva_anual'
+    #                 dados_curva_anual = [float(partes[j]) for j in range(i+1, i+13)]
+    #                 i += 13  # pula 'anual' + 12 valores
+    #                 continue
+
+    #             # Armazena os dados nas listas corretas
+    #             if extrair_du:
+    #                 try:
+    #                     dados_du.append(float(item))
+    #                 except ValueError:
+    #                     extrair_du = False
+    #             elif extrair_sa:
+    #                 try:
+    #                     dados_sa.append(float(item))
+    #                 except ValueError:
+    #                     extrair_sa = False
+    #             elif extrair_do:
+    #                 try:
+    #                     dados_do.append(float(item))
+    #                 except ValueError:
+    #                     extrair_do = False
+
+    #             i += 1
+
+    #         carga_dict[nome]['semana'] = dados_du + dados_sa + dados_do
+    #         carga_dict[nome]['curva_anual'] = dados_curva_anual
+
+    #         dss.loads.next()
+    #     return carga_dict
+
 
 
     @staticmethod
-    def cargas_atualiza(ponto_simulacao, mes):
+    def cargas_atualiza(ponto_simulacao, mes, carga_dict):
         """ Atualiza a carga consumida com base no perfil semanal e na curva anual. """
-        nomes_cargas = dss.loads.names
 
-        for nome in nomes_cargas:
-            # Expressão regular para capturar o perfil semanal
-            match = re.search(r'curva_diaria_[^_]+_([\d._-]+)_curva_anual', nome)
-            if match:
-                perfil_semanal = [float(v) for v in match.group(1).split('_')]
-            else:
-                print(f"Expressão regular não encontrou correspondência para: {nome}")
-                perfil_semanal = [0.0] * 96  # Valor padrão em caso de erro
-
-            # Expressão regular para capturar a curva anual
-            match_curva_anual = re.search(r'curva_anual_([\d._]+)', nome)
-            if match_curva_anual:
-                curva_anual_str = match_curva_anual.group(1)
-                if curva_anual_str:
-                    try:
-                        curva_anual = [float(v) for v in curva_anual_str.split('_') if v.strip() != '']
-                        if len(curva_anual) != 12:
-                            print(f"Erro: A curva anual em '{nome}' não tem 12 valores. Usando padrão.")
-                            curva_anual = [1.0] * 12  # Atribuir um valor padrão caso a curva anual tenha erro
-                    except ValueError as e:
-                        print(f"Erro ao converter curva anual para números em '{nome}': {e}")
-                        curva_anual = [1.0] * 12  # Atribuir valor padrão em caso de erro
-                else:
-                    print(f"Encontrado valor vazio para 'curva_anual' em '{nome}', atribuindo valor padrão.")
-                    curva_anual = [1.0] * 12  # Atribuir valor padrão
-            else:
-                print(f"Expressão regular não encontrou correspondência para 'curva_anual' em: {nome}")
-                curva_anual = [1.0] * 12  # Atribuir valor padrão
-
-            # Verifique se o ponto de simulação está dentro do intervalo de perfil semanal
-            if ponto_simulacao < len(perfil_semanal):
-                valor_perfil_semanal = perfil_semanal[ponto_simulacao]
-            else:
-                print(f"Erro: Ponto de simulação {ponto_simulacao} fora do intervalo para 'perfil_semanal'. Usando valor padrão.")
-                valor_perfil_semanal = 0.0
-
-            # Verifique se o mês está dentro do intervalo de curva anual
-            if mes < len(curva_anual):
-                valor_curva_anual = curva_anual[mes]
-            else:
-                print(f"Erro: Mês {mes} fora do intervalo para 'curva_anual'. Usando valor padrão.")
-                valor_curva_anual = 1.0  # Usando valor padrão
-
-            # Aplique o valor de potência para a carga específica
-            dss.loads.name = nome  # Selecione a carga pela identificação
-            carga_kw = valor_curva_anual * valor_perfil_semanal
-            dss.loads.kw = carga_kw  # Atualize a potência ativa para a carga
-
-            # Avance para a próxima carga
+        nomes = dss.loads.names
+        dss.loads.first()
+        for nome in nomes:
+            min_15 = carga_dict[nome]['semana'][ponto_simulacao]
+            mes_kw = carga_dict[nome]['curva_anual'][mes]
+            dss.loads.kw = min_15 * mes_kw
             dss.loads.next()
+
+        return
 
 
 

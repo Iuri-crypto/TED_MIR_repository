@@ -252,12 +252,9 @@ class Agrega_Carga_Trafos:
         re_carga_agregada_existente = re.compile(r"(?i)new\s+load\.nome_.*?_carga_pip\b")
 
         lista_pastas = list(os.walk(self.caminho))
-        r=0
         for root, _, files in tqdm(lista_pastas, desc="Pastas processadas"):
-            r=r+1
-            if r == 10:
-                break
-            ...
+
+            
             if 'run.dss' not in files:
                 continue
 
@@ -393,9 +390,9 @@ class Agrega_Carga_Trafos:
                     curva_diaria_media_do = curva_diaria_do / n_validas
                     curva_diaria_media_du = curva_diaria_du / n_validas
                     curva_diaria_media_sa = curva_diaria_sa / n_validas
-                    curva_diaria_str_do = "_".join(f"{x:.1f}" for x in curva_diaria_media_do)
-                    curva_diaria_str_du = "_".join(f"{x:.1f}" for x in curva_diaria_media_du)
-                    curva_diaria_str_sa = "_".join(f"{x:.1f}" for x in curva_diaria_media_sa)
+                    curva_diaria_str_do = "_".join(f"{x:.4f}" for x in curva_diaria_media_do)
+                    curva_diaria_str_du = "_".join(f"{x:.4f}" for x in curva_diaria_media_du)
+                    curva_diaria_str_sa = "_".join(f"{x:.4f}" for x in curva_diaria_media_sa)
 
                     curva_anual_str = "_".join(f"{x:.2f}" for x in curva_anual_total)
 
@@ -459,11 +456,8 @@ class Agrega_Carga_Trafos:
                         lista = [float(v.strip()) for v in valores.split(',') if v.strip()]
                         curvas_de_carga[nome.strip()] = lista
 
-        r = 0
         for root, dirs, files in os.walk(caminho):
-            r+=1
-            if r == 10:
-                break
+    
             if 'run_cargas_agregadas.dss' not in files:
                 continue
 
@@ -551,11 +545,8 @@ class Agrega_Carga_Trafos:
         caminho_curvas = os.path.join(self.caminho, 'curvas_de_carga.txt')
         curvas_de_carga = self.carregar_curvas_carga(caminho_curvas)
     
-        r = 0
         for root, dirs, files in os.walk(caminho):
-            r +=1
-            if r == 10:
-                break
+ 
             if 'run_cargas_agregadas.dss' not in files:
                 continue
 
@@ -591,9 +582,9 @@ class Agrega_Carga_Trafos:
                 #curva = curvas_de_carga[nome_curva]
                 #max_val = max(curva)
                 #curva_norm = [round(v / max_val, 4) if max_val > 0 else 0.0 for v in curva]
-                curva_str_do = "_".join(f"{v:.1f}" for v in curva_do)
-                curva_str_du = "_".join(f"{v:.1f}" for v in curva_du)
-                curva_str_sa = "_".join(f"{v:.1f}" for v in curva_sa)
+                curva_str_do = "_".join(f"{v:.4f}" for v in curva_do)
+                curva_str_du = "_".join(f"{v:.4f}" for v in curva_du)
+                curva_str_sa = "_".join(f"{v:.4f}" for v in curva_sa)
 
                 match_insercao = re.search(
                     r"(curva_diaria_" + re.escape(nome_curva) + r")(_curva_anual_)", linha
