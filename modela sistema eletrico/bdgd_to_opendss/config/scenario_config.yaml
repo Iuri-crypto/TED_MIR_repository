@@ -1,9 +1,0 @@
-cenarios:
-  cenario_1:
-    descricao: "Simula por alimentador, SEM agregar cargas BT nos trafos MT"
-
-  cenario_2:
-    descricao: "Simula por alimentador, COM agregação de cargas BT nos trafos MT"
-
-  cenario_3:
-    descricao: "Simulação por região (ex: centro, norte etc.)"

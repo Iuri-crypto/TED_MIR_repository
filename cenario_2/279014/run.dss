@@ -1,0 +1,609 @@
+New Object = Circuit.279014_Barra_Slack
+~ basekv = 34.5 pu = 1.029 angle = 0
+New line.279014279014 phases = 3 bus1 = SourceBus bus2 = 64039795860867633MT.1.2.3 switch = y
+
+New linecode.16512329H-3_linecode_media nphases=3 BaseFreq=60
+~ r1=0.000975
+~ x1=0.000347
+~ c1=0
+~ Normamps=175.0
+~ Emergamps=245.0
+
+New linecode.16512329H-3P_linecode_media nphases=3 BaseFreq=60
+~ r1=0.000975
+~ x1=0.000347
+~ c1=0
+~ Normamps=175.0
+~ Emergamps=245.0
+
+New linecode.16512384H-3_linecode_media nphases=3 BaseFreq=60
+~ r1=0.000306
+~ x1=0.000289
+~ c1=0
+~ Normamps=350.0
+~ Emergamps=490.0
+
+New linecode.16512384H-3P_linecode_media nphases=3 BaseFreq=60
+~ r1=0.000306
+~ x1=0.000289
+~ c1=0
+~ Normamps=350.0
+~ Emergamps=490.0
+
+New line.116556_Chave_seccionadora_media_tensao phases = 3 bus1 = 279116373.1.2.3 bus2 = 279116556.1.2.3 switch = F
+
+New line.116373_Chave_seccionadora_media_tensao phases = 3 bus1 = 279116422.1.2.3 bus2 = 279116373.1.2.3 switch = F
+
+New line.116602_Chave_seccionadora_media_tensao phases = 3 bus1 = 279116422.1.2.3 bus2 = 279116602.1.2.3 switch = F
+
+New line.27974340_Chave_seccionadora_media_tensao phases = 3 bus1 = 279116422.1.2.3 bus2 = 27927974340.1.2.3 switch = F
+
+New line.27974359_Chave_seccionadora_media_tensao phases = 3 bus1 = 279116422.1.2.3 bus2 = 27927974359.1.2.3 switch = A
+
+New line.116387_Chave_seccionadora_media_tensao phases = 3 bus1 = 279116556.1.2.3 bus2 = 279116387.1.2.3 switch = F
+
+New line.70318797_Chave_seccionadora_media_tensao phases = 3 bus1 = 27927974340.1.2.3 bus2 = 27970318797.1.2.3 switch = F
+
+New line.27974341_Chave_seccionadora_media_tensao phases = 3 bus1 = 27970318797.1.2.3 bus2 = 64039795860867633MT.1.2.3 switch = F
+
+New line.64652917_Chave_seccionadora_media_tensao phases = 3 bus1 = 64041543860866608MT.1.2.3 bus2 = 64041675860866536MT.1.2.3 switch = F
+
+New line.64653390_Chave_seccionadora_media_tensao phases = 3 bus1 = 64184381860866573MT.1.2.3 bus2 = 64184505860866489MT.1.2.3 switch = F
+
+New line.64653391_Chave_seccionadora_media_tensao phases = 3 bus1 = 64780135860529542MT.1.2.3 bus2 = 64780272860529481MT.1.2.3 switch = F
+
+New line.64653466_Chave_seccionadora_media_tensao phases = 3 bus1 = 65079965860390466MT.1.2.3 bus2 = 65080104860390410MT.1.2.3 switch = F
+
+New line.64653467_Chave_seccionadora_media_tensao phases = 3 bus1 = 65336914860196198MT.1.2.3 bus2 = 65337061860196230MT.1.2.3 switch = F
+
+New line.64653389_Chave_seccionadora_media_tensao phases = 3 bus1 = 66298943860205147MT.1.2.3 bus2 = 66299090860205177MT.1.2.3 switch = F
+
+New line.64653388_Chave_seccionadora_media_tensao phases = 3 bus1 = 66654567860303790MT.1.2.3 bus2 = 66654633860303925MT.1.2.3 switch = F
+
+New line.64653469_Chave_seccionadora_media_tensao phases = 3 bus1 = 66657944860310709MT.1.2.3 bus2 = 66657995860310850MT.1.2.3 switch = F
+
+New line.64653284_Chave_seccionadora_media_tensao phases = 3 bus1 = 66658082860311041MT.1.2.3 bus2 = 66658063860310995MT.1.2.3 switch = A
+
+New line.64653470_Chave_seccionadora_media_tensao phases = 3 bus1 = 66658222860311440MT.1.2.3 bus2 = 66658293860311572MT.1.2.3 switch = F
+
+New line.64653468_Chave_seccionadora_media_tensao phases = 3 bus1 = 66661846860318441MT.1.2.3 bus2 = 66661783860318577MT.1.2.3 switch = F
+
+New line.64653472_Chave_seccionadora_media_tensao phases = 3 bus1 = 66706326860547370MT.1.2.3 bus2 = 66706470860547413MT.1.2.3 switch = F
+
+New line.64651159_Chave_seccionadora_media_tensao phases = 3 bus1 = 66715262860549869MT.1.2.3 bus2 = 66715288860549721MT.1.2.3 switch = F
+
+New line.34756571CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 66715448860548802MT.1.2.3 bus2 = 34756571CTISSO.1.2.3 switch = F
+
+New line.34665214CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 66715448860548802MT.1.2.3 bus2 = 66715448860548802ET.1.2.3 switch = F
+
+New line.34574077CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 66715737860547981MT.1.2.3 bus2 = 34574077CTISSO.1.2.3 switch = F
+
+New line.34651398CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 66715737860547981MT.1.2.3 bus2 = 34651398CTISSO.1.2.3 switch = F
+
+New line.34757958CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 66715737860547981MT.1.2.3 bus2 = 66715737860547981ET.1.2.3 switch = F
+
+New line.64651160_Chave_seccionadora_media_tensao phases = 3 bus1 = 67017578860491677MT.1.2.3 bus2 = 67017627860491535MT.1.2.3 switch = F
+
+New line.34565207CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 67017878860490811MT.1.2.3 bus2 = 34565207CTISSO.1.2.3 switch = F
+
+New line.34760219CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 67017878860490811MT.1.2.3 bus2 = 34760219CTISSO.1.2.3 switch = F
+
+New line.34768326CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 67017878860490811MT.1.2.3 bus2 = 34768326CTISSO.1.2.3 switch = F
+
+New line.34642295CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 67017878860490811MT.1.2.3 bus2 = 67017878860490811ET.1.2.3 switch = F
+
+New line.34605503CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 67018263860489788MT.1.2.3 bus2 = 34605503CTISSO.1.2.3 switch = F
+
+New line.34654956CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 67018263860489788MT.1.2.3 bus2 = 34654956CTISSO.1.2.3 switch = F
+
+New line.34741989CT_Chave_seccionadora_media_tensao phases = 3 bus1 = 67018263860489788MT.1.2.3 bus2 = 67018263860489788ET.1.2.3 switch = F
+
+New Load.nome_d3d3da690f0c7c48c2ee4be51403f30540e63d93cd6abee4a7987f02bcc2b4cd_curva_diaria_MT-Tipo7_curva_anual_0.0_0.0_0.0_0.0_0.0_0.0_0.0_1549.58_1146.48_1258.87_363.55_137.08_carga_media Bus1=67017878860490811MT.1.2.3 Phases=3
+~ Conn=wye Model=1 Kv=34.5 Kw=1 pf=0.92
+
+New linecode.16512329H-3_linecode_media nphases=3 BaseFreq=60
+~ r1=0.000975
+~ x1=0.000347
+~ c1=0
+~ Normamps=175.0
+~ Emergamps=245.0
+
+New linecode.16512329H-3P_linecode_media nphases=3 BaseFreq=60
+~ r1=0.000975
+~ x1=0.000347
+~ c1=0
+~ Normamps=175.0
+~ Emergamps=245.0
+
+New linecode.16512384H-3_linecode_media nphases=3 BaseFreq=60
+~ r1=0.000306
+~ x1=0.000289
+~ c1=0
+~ Normamps=350.0
+~ Emergamps=490.0
+
+New linecode.16512384H-3P_linecode_media nphases=3 BaseFreq=60
+~ r1=0.000306
+~ x1=0.000289
+~ c1=0
+~ Normamps=350.0
+~ Emergamps=490.0
+
+New Line.14902005_linha_media Phases = 3 Bus1 = 64110150860899268MT.1.2.3 Bus2 = 64112004860902241MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 35.037 units = m
+New Line.14861727_linha_media Phases = 3 Bus1 = 66659453860535802MT.1.2.3 Bus2 = 66667222860537790MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.193 units = m
+New Line.14900785_linha_media Phases = 3 Bus1 = 64077879860848238MT.1.2.3 Bus2 = 64079593860851329MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 35.344 units = m
+New Line.14885408_linha_media Phases = 3 Bus1 = 65609228860104343MT.1.2.3 Bus2 = 65619105860104653MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 96.699 units = m
+New Line.14828374_linha_media Phases = 3 Bus1 = 65429508860216914MT.1.2.3 Bus2 = 65437558860218819MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.723 units = m
+New Line.14886726_linha_media Phases = 3 Bus1 = 64531533860649117MT.1.2.3 Bus2 = 64537967860645945MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 71.734 units = m
+New Line.14885411_linha_media Phases = 3 Bus1 = 65644871860118589MT.1.2.3 Bus2 = 65653072860119824MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.935 units = m
+New Line.14863040_linha_media Phases = 3 Bus1 = 64068989860838802MT.1.2.3 Bus2 = 64071217860837630MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 22.35 units = m
+New Line.14828375_linha_media Phases = 3 Bus1 = 65413642860213361MT.1.2.3 Bus2 = 65421465860215073MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.081 units = m
+New Line.14829593_linha_media Phases = 3 Bus1 = 65261673860269883MT.1.2.3 Bus2 = 65266297860264674MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 69.653 units = m
+New Line.14886680_linha_media Phases = 3 Bus1 = 66597196860432466MT.1.2.3 Bus2 = 66593534860439661MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.733 units = m
+New Line.14846167_linha_media Phases = 3 Bus1 = 66623528860270692MT.1.2.3 Bus2 = 66630215860272178MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 68.501 units = m
+New Line.14844982_linha_media Phases = 3 Bus1 = 65151026860357788MT.1.2.3 Bus2 = 65158448860354422MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.496 units = m
+New Line.14847447_linha_media Phases = 3 Bus1 = 65782526860132533MT.1.2.3 Bus2 = 65789173860129043MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 72.911 units = m
+New Line.14830808_linha_media Phases = 3 Bus1 = 65253666860278200MT.1.2.3 Bus2 = 65257992860273638MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 62.87 units = m
+New Line.14884094_linha_media Phases = 3 Bus1 = 64774106860532275MT.1.2.3 Bus2 = 64780135860529542MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 66.195 units = m
+New Line.14847455_linha_media Phases = 3 Bus1 = 65714128860102584MT.1.2.3 Bus2 = 65714575860112379MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 98.052 units = m
+New Line.14864356_linha_media Phases = 3 Bus1 = 66658113860311150MT.1.2.3 Bus2 = 66658222860311440MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 3.886 units = m
+New Line.14828380_linha_media Phases = 3 Bus1 = 65373827860204446MT.1.2.3 Bus2 = 65381690860206173MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.504 units = m
+New Line.14861715_linha_media Phases = 3 Bus1 = 66612231860524034MT.1.2.3 Bus2 = 66620159860526039MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.776 units = m
+New Line.14900786_linha_media Phases = 3 Bus1 = 64079593860851329MT.1.2.3 Bus2 = 64081919860854753MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 41.393 units = m
+New Line.14846178_linha_media Phases = 3 Bus1 = 66212583860186239MT.1.2.3 Bus2 = 66228446860189701MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 162.364 units = m
+New Line.14829577_linha_media Phases = 3 Bus1 = 66987929860536985MT.1.2.3 Bus2 = 66992776860529947MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 85.456 units = m
+New Line.14885456_linha_media Phases = 3 Bus1 = 66576156860261151MT.1.2.3 Bus2 = 66615059860269158MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 397.185 units = m
+New Line.14846224_linha_media Phases = 3 Bus1 = 65059910860399712MT.1.2.3 Bus2 = 65079965860390466MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 220.837 units = m
+New Line.14884099_linha_media Phases = 3 Bus1 = 64753787860541805MT.1.2.3 Bus2 = 64761594860538179MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 86.08 units = m
+New Line.14864311_linha_media Phases = 3 Bus1 = 67015986860495297MT.1.2.3 Bus2 = 67017578860491677MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 36.372 units = m
+New Line.14847452_linha_media Phases = 3 Bus1 = 65637034860117120MT.1.2.3 Bus2 = 65644871860118589MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 77.864 units = m
+New Line.14903160_linha_media Phases = 3 Bus1 = 65718083860125600MT.1.2.3 Bus2 = 65721110860134261MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 91.747 units = m
+New Line.14864416_linha_media Phases = 3 Bus1 = 64313938860783283MT.1.2.3 Bus2 = 64321477860779787MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 83.101 units = m
+New Line.14828382_linha_media Phases = 3 Bus1 = 65360083860201346MT.1.2.3 Bus2 = 65366277860202744MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 61.743 units = m
+New Line.14861729_linha_media Phases = 3 Bus1 = 66667222860537790MT.1.2.3 Bus2 = 66675178860539639MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.68 units = m
+New Line.14885395_linha_media Phases = 3 Bus1 = 65483942860202519MT.1.2.3 Bus2 = 65491620860199107MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 84.02 units = m
+New Line.14885417_linha_media Phases = 3 Bus1 = 64710200860562112MT.1.2.3 Bus2 = 64717611860558717MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 79.264 units = m
+New Line.14865657_linha_media Phases = 3 Bus1 = 64472301860686093MT.1.2.3 Bus2 = 64478716860681827MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 77.04 units = m
+New Line.14885405_linha_media Phases = 3 Bus1 = 65581187860125528MT.1.2.3 Bus2 = 65586250860119403MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 79.467 units = m
+New Line.14847464_linha_media Phases = 3 Bus1 = 65681725860106563MT.1.2.3 Bus2 = 65685891860099345MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.226 units = m
+New Line.14861686_linha_media Phases = 3 Bus1 = 65713414860096317MT.1.2.3 Bus2 = 65714128860102584MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 60.564 units = m
+New Line.14830769_linha_media Phases = 3 Bus1 = 67011774860501816MT.1.2.3 Bus2 = 67015986860495297MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 77.613 units = m
+New Line.14828372_linha_media Phases = 3 Bus1 = 66833158860578701MT.1.2.3 Bus2 = 66841224860580681MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 83.055 units = m
+New Line.14863099_linha_media Phases = 3 Bus1 = 64870746860487239MT.1.2.3 Bus2 = 64877997860483960MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 79.579 units = m
+New Line.14846169_linha_media Phases = 3 Bus1 = 66165583860176199MT.1.2.3 Bus2 = 66196683860183043MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 318.442 units = m
+New Line.14885393_linha_media Phases = 3 Bus1 = 65469040860209667MT.1.2.3 Bus2 = 65476036860206429MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 74.839 units = m
+New Line.14865652_linha_media Phases = 3 Bus1 = 64328772860776233MT.1.2.3 Bus2 = 64343034860769514MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 157.655 units = m
+New Line.14886729_linha_media Phases = 3 Bus1 = 64557109860636765MT.1.2.3 Bus2 = 64563845860633044MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 74.504 units = m
+New Line.14863094_linha_media Phases = 3 Bus1 = 64855953860494056MT.1.2.3 Bus2 = 64863294860490784MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.372 units = m
+New Line.14863097_linha_media Phases = 3 Bus1 = 64863294860490784MT.1.2.3 Bus2 = 64870746860487239MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.522 units = m
+New Line.14884107_linha_media Phases = 3 Bus1 = 64724761860555358MT.1.2.3 Bus2 = 64731952860551995MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 79.385 units = m
+New Line.14830807_linha_media Phases = 3 Bus1 = 65249883860282157MT.1.2.3 Bus2 = 65253666860278200MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 54.744 units = m
+New Line.14886674_linha_media Phases = 3 Bus1 = 66628127860375100MT.1.2.3 Bus2 = 66624014860382059MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.836 units = m
+New Line.14864410_linha_media Phases = 3 Bus1 = 64272960860809919MT.1.2.3 Bus2 = 64279195860805927MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 74.035 units = m
+New Line.14885399_linha_media Phases = 3 Bus1 = 65522658860184187MT.1.2.3 Bus2 = 65529619860180455MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 78.983 units = m
+New Line.14903164_linha_media Phases = 3 Bus1 = 65770349860153213MT.1.2.3 Bus2 = 65774115860145395MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 86.778 units = m
+New Line.14864379_linha_media Phases = 3 Bus1 = 64951891860449961MT.1.2.3 Bus2 = 64958740860446735MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 75.707 units = m
+New Line.14846175_linha_media Phases = 3 Bus1 = 66456874860237461MT.1.2.3 Bus2 = 66480891860242149MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 242.312 units = m
+New Line.14863132_linha_media Phases = 3 Bus1 = 64150843860888212MT.1.2.3 Bus2 = 64157753860883717MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.434 units = m
+New Line.14886681_linha_media Phases = 3 Bus1 = 66593534860439661MT.1.2.3 Bus2 = 66590013860446998MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.381 units = m
+New Line.14885396_linha_media Phases = 3 Bus1 = 65498481860195810MT.1.2.3 Bus2 = 65506794860191656MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 92.931 units = m
+New Line.14861697_linha_media Phases = 3 Bus1 = 65543765860174236MT.1.2.3 Bus2 = 65549748860168281MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.87 units = m
+New Line.14863105_linha_media Phases = 3 Bus1 = 64892355860477228MT.1.2.3 Bus2 = 64899904860473767MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 83.046 units = m
+New Line.14863069_linha_media Phases = 3 Bus1 = 66558608860510790MT.1.2.3 Bus2 = 66565610860513000MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 72.244 units = m
+New Line.14902004_linha_media Phases = 3 Bus1 = 64107942860895858MT.1.2.3 Bus2 = 64110150860899268MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 40.624 units = m
+New Line.14864342_linha_media Phases = 3 Bus1 = 65331471860196206MT.1.2.3 Bus2 = 65336914860196198MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 52.558 units = m
+New Line.14830800_linha_media Phases = 3 Bus1 = 65237402860295254MT.1.2.3 Bus2 = 65241539860290763MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 61.061 units = m
+New Line.14885385_linha_media Phases = 3 Bus1 = 66658452860322094MT.1.2.3 Bus2 = 66655677860326963MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 53.767 units = m
+New Line.14828359_linha_media Phases = 3 Bus1 = 66722311860551356MT.1.2.3 Bus2 = 66730397860553439MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 83.5 units = m
+New Line.14861731_linha_media Phases = 3 Bus1 = 66675178860539639MT.1.2.3 Bus2 = 66683056860541650MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.306 units = m
+New Line.14903158_linha_media Phases = 3 Bus1 = 65685891860099345MT.1.2.3 Bus2 = 65690163860092239MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.913 units = m
+New Line.14884105_linha_media Phases = 3 Bus1 = 64731952860551995MT.1.2.3 Bus2 = 64739342860548743MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.739 units = m
+New Line.14828367_linha_media Phases = 3 Bus1 = 66793647860569115MT.1.2.3 Bus2 = 66801563860570922MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.196 units = m
+New Line.14828362_linha_media Phases = 3 Bus1 = 66746141860557244MT.1.2.3 Bus2 = 66754168860559244MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.724 units = m
+New Line.14863053_linha_media Phases = 3 Bus1 = 64780272860529481MT.1.2.3 Bus2 = 64788353860525907MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 89.86 units = m
+New Line.14861687_linha_media Phases = 3 Bus1 = 65712228860090053MT.1.2.3 Bus2 = 65713414860096317MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 60.826 units = m
+New Line.14861719_linha_media Phases = 3 Bus1 = 66627839860527907MT.1.2.3 Bus2 = 66635652860529990MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.859 units = m
+New Line.14863129_linha_media Phases = 3 Bus1 = 64130385860900918MT.1.2.3 Bus2 = 64137180860896594MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.541 units = m
+New Line.14861696_linha_media Phases = 3 Bus1 = 65491620860199107MT.1.2.3 Bus2 = 65498481860195810MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 76.121 units = m
+New Line.14828364_linha_media Phases = 3 Bus1 = 66762133860561165MT.1.2.3 Bus2 = 66769958860563061MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.514 units = m
+New Line.14830766_linha_media Phases = 3 Bus1 = 66992776860529947MT.1.2.3 Bus2 = 66997611860523229MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.77 units = m
+New Line.14829599_linha_media Phases = 3 Bus1 = 65204652860329841MT.1.2.3 Bus2 = 65208842860325348MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 61.435 units = m
+New Line.14885447_linha_media Phases = 3 Bus1 = 66021196860145851MT.1.2.3 Bus2 = 66051418860152578MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 309.616 units = m
+New Line.14884102_linha_media Phases = 3 Bus1 = 64739342860548743MT.1.2.3 Bus2 = 64746240860545302MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 77.086 units = m
+New Line.14829570_linha_media Phases = 3 Bus1 = 66956305860584228MT.1.2.3 Bus2 = 66960691860577535MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.021 units = m
+New Line.14885448_linha_media Phases = 3 Bus1 = 66070840860156668MT.1.2.3 Bus2 = 66102641860163003MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 321.619 units = m
+New Line.14844985_linha_media Phases = 3 Bus1 = 65158448860354422MT.1.2.3 Bus2 = 65165606860351109MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 78.875 units = m
+New Line.14886711_linha_media Phases = 3 Bus1 = 64614229860607785MT.1.2.3 Bus2 = 64621184860604526MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 76.807 units = m
+New Line.14828379_linha_media Phases = 3 Bus1 = 65381690860206173MT.1.2.3 Bus2 = 65389883860207989MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 83.918 units = m
+New Line.14865673_linha_media Phases = 3 Bus1 = 64814668860517166MT.1.2.3 Bus2 = 64820625860512354MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 76.578 units = m
+New Line.14864406_linha_media Phases = 3 Bus1 = 64246027860827270MT.1.2.3 Bus2 = 64252852860822675MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.277 units = m
+New Line.14847454_linha_media Phases = 3 Bus1 = 65690163860092239MT.1.2.3 Bus2 = 65697284860088649MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 77.699 units = m
+New Line.14846185_linha_media Phases = 3 Bus1 = 66619772860389131MT.1.2.3 Bus2 = 66615914860396086MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 79.534 units = m
+New Line.14847445_linha_media Phases = 3 Bus1 = 65837674860107679MT.1.2.3 Bus2 = 65866699860113520MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 293.347 units = m
+New Line.14846173_linha_media Phases = 3 Bus1 = 66645486860279942MT.1.2.3 Bus2 = 66648128860287863MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.045 units = m
+New Line.14861692_linha_media Phases = 3 Bus1 = 65619105860104653MT.1.2.3 Bus2 = 65626531860110350MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 91.435 units = m
+New Line.14864341_linha_media Phases = 3 Bus1 = 65337061860196230MT.1.2.3 Bus2 = 65344264860197801MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 75.228 units = m
+New Line.14846171_linha_media Phases = 3 Bus1 = 66650998860296753MT.1.2.3 Bus2 = 66654567860303790MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 76.13 units = m
+New Line.77360718_linha_media Phases = 3 Bus1 = 64040890860866967MT.1.2.3 Bus2 = 64041543860866608MT.1.2.3 Linecode = 16512384H-3P_linecode_media Length = 7.452 units = m
+New Line.14829569_linha_media Phases = 3 Bus1 = 66951542860591620MT.1.2.3 Bus2 = 66956305860584228MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 87.936 units = m
+New Line.14900791_linha_media Phases = 3 Bus1 = 64090325860867911MT.1.2.3 Bus2 = 64092290860870778MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 33.517 units = m
+New Line.14844980_linha_media Phases = 3 Bus1 = 65143588860360930MT.1.2.3 Bus2 = 65151026860357788MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.744 units = m
+New Line.14864381_linha_media Phases = 3 Bus1 = 64958740860446735MT.1.2.3 Bus2 = 64965900860443041MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.568 units = m
+New Line.14901998_linha_media Phases = 3 Bus1 = 64095999860877045MT.1.2.3 Bus2 = 64098121860880361MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 39.368 units = m
+New Line.14902006_linha_media Phases = 3 Bus1 = 64112004860902241MT.1.2.3 Bus2 = 64114135860905948MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 40.53 units = m
+New Line.14864391_linha_media Phases = 3 Bus1 = 64994865860430102MT.1.2.3 Bus2 = 65002000860426141MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.607 units = m
+New Line.14847448_linha_media Phases = 3 Bus1 = 65777650860138598MT.1.2.3 Bus2 = 65782526860132533MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 77.82 units = m
+New Line.14847481_linha_media Phases = 3 Bus1 = 66706470860547413MT.1.2.3 Bus2 = 66710731860548685MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 45.971 units = m
+New Line.14865674_linha_media Phases = 3 Bus1 = 64820625860512354MT.1.2.3 Bus2 = 64826956860507522MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 79.643 units = m
+New Line.14885402_linha_media Phases = 3 Bus1 = 65560284860153204MT.1.2.3 Bus2 = 65565222860146590MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.54 units = m
+New Line.14885392_linha_media Phases = 3 Bus1 = 66632170860368022MT.1.2.3 Bus2 = 66628127860375100MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.513 units = m
+New Line.14847456_linha_media Phases = 3 Bus1 = 66051418860152578MT.1.2.3 Bus2 = 66070840860156668MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 198.48 units = m
+New Line.14885401_linha_media Phases = 3 Bus1 = 65554665860161172MT.1.2.3 Bus2 = 65560284860153204MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 97.5 units = m
+New Line.14846165_linha_media Phases = 3 Bus1 = 66637809860275978MT.1.2.3 Bus2 = 66645486860279942MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 86.4 units = m
+New Line.14903170_linha_media Phases = 3 Bus1 = 65818574860114345MT.1.2.3 Bus2 = 65825765860110860MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 79.91 units = m
+New Line.14885451_linha_media Phases = 3 Bus1 = 66228446860189701MT.1.2.3 Bus2 = 66267217860198091MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 394.559 units = m
+New Line.14861708_linha_media Phases = 3 Bus1 = 64051425860850133MT.1.2.3 Bus2 = 64052074860849449MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 7.42 units = m
+New Line.14863110_linha_media Phases = 3 Bus1 = 64914289860467120MT.1.2.3 Bus2 = 64921339860463970MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 77.217 units = m
+New Line.14846174_linha_media Phases = 3 Bus1 = 66480891860242149MT.1.2.3 Bus2 = 66488622860243949MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 79.378 units = m
+New Line.14865634_linha_media Phases = 3 Bus1 = 65023937860416441MT.1.2.3 Bus2 = 65030939860413279MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 76.829 units = m
+New Line.14863057_linha_media Phases = 3 Bus1 = 64808572860521780MT.1.2.3 Bus2 = 64814668860517166MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 74.148 units = m
+New Line.14861711_linha_media Phases = 3 Bus1 = 66596587860520213MT.1.2.3 Bus2 = 66604378860522114MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.196 units = m
+New Line.14903163_linha_media Phases = 3 Bus1 = 65746074860157159MT.1.2.3 Bus2 = 65751756860162173MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 75.779 units = m
+New Line.14830810_linha_media Phases = 3 Bus1 = 65086789860387723MT.1.2.3 Bus2 = 65099846860381425MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 144.966 units = m
+New Line.14846180_linha_media Phases = 3 Bus1 = 66935175860604044MT.1.2.3 Bus2 = 66941925860605839MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 67.265 units = m
+New Line.14885394_linha_media Phases = 3 Bus1 = 65476036860206429MT.1.2.3 Bus2 = 65483942860202519MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 88.2 units = m
+New Line.14846184_linha_media Phases = 3 Bus1 = 66600983860425179MT.1.2.3 Bus2 = 66597196860432466MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.123 units = m
+New Line.14828369_linha_media Phases = 3 Bus1 = 66809534860572900MT.1.2.3 Bus2 = 66817442860574823MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.385 units = m
+New Line.14863049_linha_media Phases = 3 Bus1 = 64513088860658495MT.1.2.3 Bus2 = 64520121860654885MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 76.422 units = m
+New Line.14847441_linha_media Phases = 3 Bus1 = 65421465860215073MT.1.2.3 Bus2 = 65429508860216914MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.51 units = m
+New Line.14830768_linha_media Phases = 3 Bus1 = 67006931860509574MT.1.2.3 Bus2 = 67011774860501816MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 91.456 units = m
+New Line.14863066_linha_media Phases = 3 Bus1 = 66698595860545423MT.1.2.3 Bus2 = 66706326860547370MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 79.724 units = m
+New Line.14829575_linha_media Phases = 3 Bus1 = 66978656860550681MT.1.2.3 Bus2 = 66983322860543767MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 83.412 units = m
+New Line.14900787_linha_media Phases = 3 Bus1 = 64081919860854753MT.1.2.3 Bus2 = 64084237860858084MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 40.582 units = m
+New Line.14828371_linha_media Phases = 3 Bus1 = 66825370860576787MT.1.2.3 Bus2 = 66833158860578701MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.197 units = m
+New Line.14847449_linha_media Phases = 3 Bus1 = 65766404860161225MT.1.2.3 Bus2 = 65770349860153213MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 86.806 units = m
+New Line.14863128_linha_media Phases = 3 Bus1 = 64123820860905392MT.1.2.3 Bus2 = 64130385860900918MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 79.446 units = m
+New Line.14829589_linha_media Phases = 3 Bus1 = 65278782860251491MT.1.2.3 Bus2 = 65282446860247658MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 53.025 units = m
+New Line.14863109_linha_media Phases = 3 Bus1 = 64907097860470501MT.1.2.3 Bus2 = 64914289860467120MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 79.471 units = m
+New Line.14864330_linha_media Phases = 3 Bus1 = 65318634860210169MT.1.2.3 Bus2 = 65323069860205584MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 63.79 units = m
+New Line.14900788_linha_media Phases = 3 Bus1 = 64084237860858084MT.1.2.3 Bus2 = 64086000860861421MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 37.741 units = m
+New Line.14864398_linha_media Phases = 3 Bus1 = 64191248860861952MT.1.2.3 Bus2 = 64198510860857642MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 84.447 units = m
+New Line.14900784_linha_media Phases = 3 Bus1 = 64075902860845030MT.1.2.3 Bus2 = 64077879860848238MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 37.683 units = m
+New Line.14861707_linha_media Phases = 3 Bus1 = 64053660860854138MT.1.2.3 Bus2 = 64051425860850133MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 43.312 units = m
+New Line.14847461_linha_media Phases = 3 Bus1 = 65714872860117470MT.1.2.3 Bus2 = 65718083860125600MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 85.234 units = m
+New Line.14829583_linha_media Phases = 3 Bus1 = 65290999860238744MT.1.2.3 Bus2 = 65295066860234107MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 61.678 units = m
+New Line.14884097_linha_media Phases = 3 Bus1 = 64761594860538179MT.1.2.3 Bus2 = 64767492860535415MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 65.135 units = m
+New Line.14885426_linha_media Phases = 3 Bus1 = 64678610860577080MT.1.2.3 Bus2 = 64689315860572200MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 115.386 units = m
+New Line.14847446_linha_media Phases = 3 Bus1 = 65833137860107673MT.1.2.3 Bus2 = 65837674860107679MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 43.09 units = m
+New Line.14885404_linha_media Phases = 3 Bus1 = 65569863860140104MT.1.2.3 Bus2 = 65575342860133071MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 89.153 units = m
+New Line.14828376_linha_media Phases = 3 Bus1 = 65405692860211505MT.1.2.3 Bus2 = 65413642860213361MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.638 units = m
+New Line.14829591_linha_media Phases = 3 Bus1 = 65257992860273638MT.1.2.3 Bus2 = 65261673860269883MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 52.583 units = m
+New Line.14828388_linha_media Phases = 3 Bus1 = 65323069860205584MT.1.2.3 Bus2 = 65327149860201022MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 61.203 units = m
+New Line.14829557_linha_media Phases = 3 Bus1 = 66872029860588591MT.1.2.3 Bus2 = 66879540860590250MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 76.92 units = m
+New Line.14830767_linha_media Phases = 3 Bus1 = 66997611860523229MT.1.2.3 Bus2 = 67002193860516392MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.304 units = m
+New Line.14829560_linha_media Phases = 3 Bus1 = 66895713860594178MT.1.2.3 Bus2 = 66903663860596059MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.695 units = m
+New Line.14846212_linha_media Phases = 3 Bus1 = 65194203860337051MT.1.2.3 Bus2 = 65200677860334017MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 71.497 units = m
+New Line.14900789_linha_media Phases = 3 Bus1 = 64086000860861421MT.1.2.3 Bus2 = 64088086860864723MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 39.057 units = m
+New Line.14886682_linha_media Phases = 3 Bus1 = 66590013860446998MT.1.2.3 Bus2 = 66586219860454103MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.545 units = m
+New Line.14863131_linha_media Phases = 3 Bus1 = 64144077860892316MT.1.2.3 Bus2 = 64150843860888212MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 79.134 units = m
+New Line.14846182_linha_media Phases = 3 Bus1 = 67002193860516392MT.1.2.3 Bus2 = 67006931860509574MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 83.026 units = m
+New Line.14885424_linha_media Phases = 3 Bus1 = 64689315860572200MT.1.2.3 Bus2 = 64696851860568543MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 83.765 units = m
+New Line.14885391_linha_media Phases = 3 Bus1 = 66636145860360995MT.1.2.3 Bus2 = 66632170860368022MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.734 units = m
+New Line.14902002_linha_media Phases = 3 Bus1 = 64104014860889702MT.1.2.3 Bus2 = 64105975860892925MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 37.727 units = m
+New Line.14828381_linha_media Phases = 3 Bus1 = 65366277860202744MT.1.2.3 Bus2 = 65373827860204446MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 77.395 units = m
+New Line.14828384_linha_media Phases = 3 Bus1 = 65344264860197801MT.1.2.3 Bus2 = 65352025860199582MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 79.627 units = m
+New Line.14903166_linha_media Phases = 3 Bus1 = 65789173860129043MT.1.2.3 Bus2 = 65796623860125629MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.95 units = m
+New Line.14830790_linha_media Phases = 3 Bus1 = 65217163860316608MT.1.2.3 Bus2 = 65220884860312772MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 53.442 units = m
+New Line.14847442_linha_media Phases = 3 Bus1 = 65597502860105249MT.1.2.3 Bus2 = 65609228860104343MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 114.916 units = m
+New Line.14886683_linha_media Phases = 3 Bus1 = 66586219860454103MT.1.2.3 Bus2 = 66582498860461469MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.525 units = m
+New Line.14885407_linha_media Phases = 3 Bus1 = 65591055860112560MT.1.2.3 Bus2 = 65597502860105249MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 95.098 units = m
+New Line.14861695_linha_media Phases = 3 Bus1 = 65537142860177033MT.1.2.3 Bus2 = 65543765860174236MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 71.894 units = m
+New Line.14886687_linha_media Phases = 3 Bus1 = 66563582860497966MT.1.2.3 Bus2 = 66560446860504366MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 71.27 units = m
+New Line.14846166_linha_media Phases = 3 Bus1 = 66630215860272178MT.1.2.3 Bus2 = 66637809860275978MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.591 units = m
+New Line.14885400_linha_media Phases = 3 Bus1 = 65529619860180455MT.1.2.3 Bus2 = 65537142860177033MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.647 units = m
+New Line.14828377_linha_media Phases = 3 Bus1 = 65397678860209671MT.1.2.3 Bus2 = 65405692860211505MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.212 units = m
+New Line.14865654_linha_media Phases = 3 Bus1 = 64356420860762960MT.1.2.3 Bus2 = 64359851860761343MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 37.929 units = m
+New Line.14864409_linha_media Phases = 3 Bus1 = 64266199860814005MT.1.2.3 Bus2 = 64272960860809919MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 78.998 units = m
+New Line.14828373_linha_media Phases = 3 Bus1 = 65825765860110860MT.1.2.3 Bus2 = 65833137860107673MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.314 units = m
+New Line.14829587_linha_media Phases = 3 Bus1 = 65282446860247658MT.1.2.3 Bus2 = 65286698860243043MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 62.752 units = m
+New Line.14864396_linha_media Phases = 3 Bus1 = 64177821860870824MT.1.2.3 Bus2 = 64184381860866573MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 78.169 units = m
+New Line.14828360_linha_media Phases = 3 Bus1 = 66730397860553439MT.1.2.3 Bus2 = 66738331860555404MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.737 units = m
+New Line.14885454_linha_media Phases = 3 Bus1 = 66433146860232552MT.1.2.3 Bus2 = 66456874860237461MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 242.305 units = m
+New Line.14846170_linha_media Phases = 3 Bus1 = 66654633860303925MT.1.2.3 Bus2 = 66657944860310709MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 76.991 units = m
+New Line.14847450_linha_media Phases = 3 Bus1 = 65726024860142040MT.1.2.3 Bus2 = 65732789860146706MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.064 units = m
+New Line.14828378_linha_media Phases = 3 Bus1 = 65389883860207989MT.1.2.3 Bus2 = 65397678860209671MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 79.744 units = m
+New Line.14903165_linha_media Phases = 3 Bus1 = 65774115860145395MT.1.2.3 Bus2 = 65777650860138598MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 76.613 units = m
+New Line.14863060_linha_media Phases = 3 Bus1 = 65030939860413279MT.1.2.3 Bus2 = 65059910860399712MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 318.013 units = m
+New Line.14864399_linha_media Phases = 3 Bus1 = 64198510860857642MT.1.2.3 Bus2 = 64205278860852913MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.565 units = m
+New Line.14900773_linha_media Phases = 3 Bus1 = 64578240860625898MT.1.2.3 Bus2 = 64585348860622345MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 79.465 units = m
+New Line.14861689_linha_media Phases = 3 Bus1 = 66346072860214755MT.1.2.3 Bus2 = 66377657860221351MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 322.664 units = m
+New Line.14829566_linha_media Phases = 3 Bus1 = 66777948860565046MT.1.2.3 Bus2 = 66785596860566793MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 78.45 units = m
+New Line.14864403_linha_media Phases = 3 Bus1 = 64225630860840042MT.1.2.3 Bus2 = 64232607860835619MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.608 units = m
+New Line.14828366_linha_media Phases = 3 Bus1 = 66785596860566793MT.1.2.3 Bus2 = 66793647860569115MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.945 units = m
+New Line.14885389_linha_media Phases = 3 Bus1 = 66644286860346887MT.1.2.3 Bus2 = 66640031860353963MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.568 units = m
+New Line.14884086_linha_media Phases = 3 Bus1 = 65461635860212429MT.1.2.3 Bus2 = 65469040860209667MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 79.033 units = m
+New Line.14865640_linha_media Phases = 3 Bus1 = 64802022860524623MT.1.2.3 Bus2 = 64808572860521780MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 69.356 units = m
+New Line.14863041_linha_media Phases = 3 Bus1 = 64073389860841708MT.1.2.3 Bus2 = 64075902860845030MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 38.535 units = m
+New Line.14846179_linha_media Phases = 3 Bus1 = 66560446860504366MT.1.2.3 Bus2 = 66558608860510790MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 66.818 units = m
+New Line.14886723_linha_media Phases = 3 Bus1 = 64525766860652111MT.1.2.3 Bus2 = 64531533860649117MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 64.979 units = m
+New Line.14864387_linha_media Phases = 3 Bus1 = 64981316860436762MT.1.2.3 Bus2 = 64987945860433412MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 74.274 units = m
+New Line.14864400_linha_media Phases = 3 Bus1 = 64205278860852913MT.1.2.3 Bus2 = 64212073860849052MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 78.153 units = m
+New Line.14829568_linha_media Phases = 3 Bus1 = 66946797860598653MT.1.2.3 Bus2 = 66951542860591620MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.981 units = m
+New Line.14885440_linha_media Phases = 3 Bus1 = 64628355860601044MT.1.2.3 Bus2 = 64635492860597377MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.239 units = m
+New Line.14829564_linha_media Phases = 3 Bus1 = 66927447860602005MT.1.2.3 Bus2 = 66935175860604044MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 79.925 units = m
+New Line.14864371_linha_media Phases = 3 Bus1 = 64921339860463970MT.1.2.3 Bus2 = 64929413860460174MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 89.218 units = m
+New Line.14900790_linha_media Phases = 3 Bus1 = 64088086860864723MT.1.2.3 Bus2 = 64090325860867911MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 38.957 units = m
+New Line.14903168_linha_media Phases = 3 Bus1 = 65803806860121700MT.1.2.3 Bus2 = 65810987860118005MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.759 units = m
+New Line.14864408_linha_media Phases = 3 Bus1 = 64259674860818264MT.1.2.3 Bus2 = 64266199860814005MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 77.92 units = m
+New Line.14861703_linha_media Phases = 3 Bus1 = 64042744860865949MT.1.2.3 Bus2 = 64040612860862400MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 39.079 units = m
+New Line.14884115_linha_media Phases = 3 Bus1 = 65937378860128026MT.1.2.3 Bus2 = 65961209860133131MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 243.717 units = m
+New Line.14828370_linha_media Phases = 3 Bus1 = 66817442860574823MT.1.2.3 Bus2 = 66825370860576787MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.676 units = m
+New Line.15111901_linha_media Phases = 3 Bus1 = 66658293860311572MT.1.2.3 Bus2 = 66658082860311041MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 8.934 units = m
+New Line.14903157_linha_media Phases = 3 Bus1 = 65668707860116041MT.1.2.3 Bus2 = 65675846860112322MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.496 units = m
+New Line.14886727_linha_media Phases = 3 Bus1 = 64537967860645945MT.1.2.3 Bus2 = 64557109860636765MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 212.294 units = m
+New Line.14864414_linha_media Phases = 3 Bus1 = 64298908860791622MT.1.2.3 Bus2 = 64306057860787195MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 84.087 units = m
+New Line.14864394_linha_media Phases = 3 Bus1 = 64164053860879352MT.1.2.3 Bus2 = 64170981860875015MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.735 units = m
+New Line.14863107_linha_media Phases = 3 Bus1 = 64899904860473767MT.1.2.3 Bus2 = 64907097860470501MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 77.346 units = m
+New Line.14828390_linha_media Phases = 3 Bus1 = 65315615860213128MT.1.2.3 Bus2 = 65318634860210169MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 42.273 units = m
+New Line.14847485_linha_media Phases = 3 Bus1 = 66573114860514417MT.1.2.3 Bus2 = 66580644860516353MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 77.749 units = m
+New Line.14863130_linha_media Phases = 3 Bus1 = 64137180860896594MT.1.2.3 Bus2 = 64144077860892316MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.16 units = m
+New Line.14885430_linha_media Phases = 3 Bus1 = 64664278860583438MT.1.2.3 Bus2 = 64671624860580747MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 78.234 units = m
+New Line.14900778_linha_media Phases = 3 Bus1 = 64592536860618721MT.1.2.3 Bus2 = 64599701860615206MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 79.808 units = m
+New Line.14885427_linha_media Phases = 3 Bus1 = 64671624860580747MT.1.2.3 Bus2 = 64678610860577080MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 78.899 units = m
+New Line.14829555_linha_media Phases = 3 Bus1 = 66849241860582547MT.1.2.3 Bus2 = 66857217860584648MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.481 units = m
+New Line.14847444_linha_media Phases = 3 Bus1 = 65751756860162173MT.1.2.3 Bus2 = 65759039860164753MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 75.077 units = m
+New Line.14861705_linha_media Phases = 3 Bus1 = 64041335860861858MT.1.2.3 Bus2 = 64047152860858044MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 67.005 units = m
+New Line.14865655_linha_media Phases = 3 Bus1 = 64359851860761343MT.1.2.3 Bus2 = 64459439860694077MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 1199.0 units = m
+New Line.14885457_linha_media Phases = 3 Bus1 = 66615059860269158MT.1.2.3 Bus2 = 66623528860270692MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 84.352 units = m
+New Line.14900793_linha_media Phases = 3 Bus1 = 64094093860873934MT.1.2.3 Bus2 = 64095999860877045MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 36.484 units = m
+New Line.14829596_linha_media Phases = 3 Bus1 = 65266297860264674MT.1.2.3 Bus2 = 65270474860260139MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 61.655 units = m
+New Line.14847460_linha_media Phases = 3 Bus1 = 65721110860134261MT.1.2.3 Bus2 = 65726024860142040MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 89.278 units = m
+New Line.14864397_linha_media Phases = 3 Bus1 = 64184505860866489MT.1.2.3 Bus2 = 64191248860861952MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.77 units = m
+New Line.14885446_linha_media Phases = 3 Bus1 = 65992630860139692MT.1.2.3 Bus2 = 66007453860142821MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 149.387 units = m
+New Line.14830788_linha_media Phases = 3 Bus1 = 65212916860321118MT.1.2.3 Bus2 = 65217163860316608MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 61.949 units = m
+New Line.14865656_linha_media Phases = 3 Bus1 = 64459439860694077MT.1.2.3 Bus2 = 64472301860686093MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 149.199 units = m
+New Line.14863127_linha_media Phases = 3 Bus1 = 64116788860909710MT.1.2.3 Bus2 = 64123820860905392MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.357 units = m
+New Line.14847480_linha_media Phases = 3 Bus1 = 66710731860548685MT.1.2.3 Bus2 = 66711499860548947MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 8.115 units = m
+New Line.14885403_linha_media Phases = 3 Bus1 = 65565222860146590MT.1.2.3 Bus2 = 65569863860140104MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 79.754 units = m
+New Line.14886675_linha_media Phases = 3 Bus1 = 66624014860382059MT.1.2.3 Bus2 = 66619772860389131MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.467 units = m
+New Line.14884101_linha_media Phases = 3 Bus1 = 64746240860545302MT.1.2.3 Bus2 = 64753787860541805MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 83.178 units = m
+New Line.14829556_linha_media Phases = 3 Bus1 = 66864734860586582MT.1.2.3 Bus2 = 66872029860588591MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 73.527 units = m
+New Line.14861693_linha_media Phases = 3 Bus1 = 65437558860218819MT.1.2.3 Bus2 = 65444234860217565MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 65.67 units = m
+New Line.14847453_linha_media Phases = 3 Bus1 = 65697284860088649MT.1.2.3 Bus2 = 65704874860088198MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 73.509 units = m
+New Line.14846211_linha_media Phases = 3 Bus1 = 65187311860341166MT.1.2.3 Bus2 = 65194203860337051MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.27 units = m
+New Line.14844989_linha_media Phases = 3 Bus1 = 65172529860347940MT.1.2.3 Bus2 = 65179858860344263MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.997 units = m
+New Line.14829558_linha_media Phases = 3 Bus1 = 66879540860590250MT.1.2.3 Bus2 = 66887585860592073MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.49 units = m
+New Line.14864417_linha_media Phases = 3 Bus1 = 64321477860779787MT.1.2.3 Bus2 = 64328772860776233MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.147 units = m
+New Line.14864392_linha_media Phases = 3 Bus1 = 65002000860426141MT.1.2.3 Bus2 = 65009475860423301MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 79.963 units = m
+New Line.14900781_linha_media Phases = 3 Bus1 = 64054268860847817MT.1.2.3 Bus2 = 64061690860843417MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 86.282 units = m
+New Line.14847482_linha_media Phases = 3 Bus1 = 66565610860513000MT.1.2.3 Bus2 = 66573114860514417MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 76.366 units = m
+New Line.14886677_linha_media Phases = 3 Bus1 = 66612196860403375MT.1.2.3 Bus2 = 66608535860410492MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.034 units = m
+New Line.14885409_linha_media Phases = 3 Bus1 = 65626531860110350MT.1.2.3 Bus2 = 65630682860113810MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 54.039 units = m
+New Line.14886686_linha_media Phases = 3 Bus1 = 66571429860483342MT.1.2.3 Bus2 = 66567678860490821MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 83.669 units = m
+New Line.14864390_linha_media Phases = 3 Bus1 = 64987945860433412MT.1.2.3 Bus2 = 64994865860430102MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 76.709 units = m
+New Line.14863061_linha_media Phases = 3 Bus1 = 65080104860390410MT.1.2.3 Bus2 = 65086789860387723MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 73.547 units = m
+New Line.14884112_linha_media Phases = 3 Bus1 = 65866699860113520MT.1.2.3 Bus2 = 65890295860118432MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 241.018 units = m
+New Line.14884108_linha_media Phases = 3 Bus1 = 64717611860558717MT.1.2.3 Bus2 = 64724761860555358MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 78.997 units = m
+New Line.14863092_linha_media Phases = 3 Bus1 = 64848967860497077MT.1.2.3 Bus2 = 64855953860494056MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 76.112 units = m
+New Line.14861713_linha_media Phases = 3 Bus1 = 66604378860522114MT.1.2.3 Bus2 = 66612231860524034MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.843 units = m
+New Line.14829559_linha_media Phases = 3 Bus1 = 66887585860592073MT.1.2.3 Bus2 = 66895713860594178MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 83.962 units = m
+New Line.14828394_linha_media Phases = 3 Bus1 = 65307512860221623MT.1.2.3 Bus2 = 65311745860217131MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 61.722 units = m
+New Line.14846164_linha_media Phases = 3 Bus1 = 66661783860318577MT.1.2.3 Bus2 = 66658452860322094MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 50.029 units = m
+New Line.14885386_linha_media Phases = 3 Bus1 = 66655677860326963MT.1.2.3 Bus2 = 66652433860332920MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 67.83 units = m
+New Line.14830796_linha_media Phases = 3 Bus1 = 65229178860303913MT.1.2.3 Bus2 = 65233479860299328MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 62.866 units = m
+New Line.14886709_linha_media Phases = 3 Bus1 = 64621184860604526MT.1.2.3 Bus2 = 64628355860601044MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 79.717 units = m
+New Line.14829565_linha_media Phases = 3 Bus1 = 66857217860584648MT.1.2.3 Bus2 = 66864734860586582MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 77.618 units = m
+New Line.15113747_linha_media Phases = 3 Bus1 = 64042744860865949MT.1.2.3 Bus2 = 64042738860865725MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 1.916 units = m
+New Line.14847487_linha_media Phases = 3 Bus1 = 66580644860516353MT.1.2.3 Bus2 = 66588718860518297MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 83.047 units = m
+New Line.14861732_linha_media Phases = 3 Bus1 = 66683056860541650MT.1.2.3 Bus2 = 66690589860543366MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 77.26 units = m
+New Line.14865658_linha_media Phases = 3 Bus1 = 64478716860681827MT.1.2.3 Bus2 = 64506408860663050MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 334.578 units = m
+New Line.14863058_linha_media Phases = 3 Bus1 = 64826956860507522MT.1.2.3 Bus2 = 64834306860504045MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 78.925 units = m
+New Line.14903167_linha_media Phases = 3 Bus1 = 65796623860125629MT.1.2.3 Bus2 = 65803806860121700MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.873 units = m
+New Line.14886679_linha_media Phases = 3 Bus1 = 66604891860417952MT.1.2.3 Bus2 = 66600983860425179MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.16 units = m
+New Line.14900792_linha_media Phases = 3 Bus1 = 64092290860870778MT.1.2.3 Bus2 = 64094093860873934MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 36.347 units = m
+New Line.14884113_linha_media Phases = 3 Bus1 = 65890295860118432MT.1.2.3 Bus2 = 65913526860123552MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 237.885 units = m
+New Line.14829576_linha_media Phases = 3 Bus1 = 66983322860543767MT.1.2.3 Bus2 = 66987929860536985MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.988 units = m
+New Line.14829579_linha_media Phases = 3 Bus1 = 65299132860230191MT.1.2.3 Bus2 = 65303388860225707MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 61.822 units = m
+New Line.14863133_linha_media Phases = 3 Bus1 = 64157753860883717MT.1.2.3 Bus2 = 64164053860879352MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 76.644 units = m
+New Line.14902001_linha_media Phases = 3 Bus1 = 64102023860886504MT.1.2.3 Bus2 = 64104014860889702MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 37.671 units = m
+New Line.14886678_linha_media Phases = 3 Bus1 = 66608535860410492MT.1.2.3 Bus2 = 66604891860417952MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 83.024 units = m
+New Line.14861723_linha_media Phases = 3 Bus1 = 66643641860531936MT.1.2.3 Bus2 = 66651548860533868MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.396 units = m
+New Line.14844986_linha_media Phases = 3 Bus1 = 65165606860351109MT.1.2.3 Bus2 = 65172529860347940MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 76.138 units = m
+New Line.14864395_linha_media Phases = 3 Bus1 = 64170981860875015MT.1.2.3 Bus2 = 64177821860870824MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.219 units = m
+New Line.14885434_linha_media Phases = 3 Bus1 = 64650058860590392MT.1.2.3 Bus2 = 64657450860586924MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.651 units = m
+New Line.14903159_linha_media Phases = 3 Bus1 = 65714575860112379MT.1.2.3 Bus2 = 65714872860117470MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 50.997 units = m
+New Line.14864415_linha_media Phases = 3 Bus1 = 64306057860787195MT.1.2.3 Bus2 = 64313938860783283MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 86.015 units = m
+New Line.14885432_linha_media Phases = 3 Bus1 = 64657450860586924MT.1.2.3 Bus2 = 64664278860583438MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 76.664 units = m
+New Line.14828368_linha_media Phases = 3 Bus1 = 66801563860570922MT.1.2.3 Bus2 = 66809534860572900MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.128 units = m
+New Line.14885397_linha_media Phases = 3 Bus1 = 65506794860191656MT.1.2.3 Bus2 = 65515050860187671MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 91.674 units = m
+New Line.14847459_linha_media Phases = 3 Bus1 = 65961209860133131MT.1.2.3 Bus2 = 65976846860136308MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 159.565 units = m
+New Line.14886676_linha_media Phases = 3 Bus1 = 66615914860396086MT.1.2.3 Bus2 = 66612196860403375MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.825 units = m
+New Line.14844970_linha_media Phases = 3 Bus1 = 65106922860378026MT.1.2.3 Bus2 = 65114312860374884MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.302 units = m
+New Line.14863056_linha_media Phases = 3 Bus1 = 64793243860527476MT.1.2.3 Bus2 = 64796053860526706MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 27.125 units = m
+New Line.14863103_linha_media Phases = 3 Bus1 = 64884976860480688MT.1.2.3 Bus2 = 64892355860477228MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.499 units = m
+New Line.14864328_linha_media Phases = 3 Bus1 = 65200677860334017MT.1.2.3 Bus2 = 65204652860329841MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 55.723 units = m
+New Line.14903161_linha_media Phases = 3 Bus1 = 65732789860146706MT.1.2.3 Bus2 = 65739385860151881MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 83.838 units = m
+New Line.14864404_linha_media Phases = 3 Bus1 = 64232607860835619MT.1.2.3 Bus2 = 64239481860831422MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.54 units = m
+New Line.14861694_linha_media Phases = 3 Bus1 = 65453402860216348MT.1.2.3 Bus2 = 65461635860212429MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 88.052 units = m
+New Line.14885388_linha_media Phases = 3 Bus1 = 66648320860339937MT.1.2.3 Bus2 = 66644286860346887MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.359 units = m
+New Line.14864374_linha_media Phases = 3 Bus1 = 64937280860456577MT.1.2.3 Bus2 = 64944685860453441MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.417 units = m
+New Line.14885452_linha_media Phases = 3 Bus1 = 66267217860198091MT.1.2.3 Bus2 = 66298943860205147MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 325.012 units = m
+New Line.14861706_linha_media Phases = 3 Bus1 = 64047152860858044MT.1.2.3 Bus2 = 64053660860854138MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 75.902 units = m
+New Line.14846172_linha_media Phases = 3 Bus1 = 66648128860287863MT.1.2.3 Bus2 = 66650998860296753MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 93.418 units = m
+New Line.14864384_linha_media Phases = 3 Bus1 = 64973656860439846MT.1.2.3 Bus2 = 64981316860436762MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.107 units = m
+New Line.14885438_linha_media Phases = 3 Bus1 = 64635492860597377MT.1.2.3 Bus2 = 64642604860593746MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 79.853 units = m
+New Line.14861609_linha_media Phases = 3 Bus1 = 66715448860548802MT.1.2.3 Bus2 = 66715737860547981MT.1.2.3 Linecode = 16512329H-3P_linecode_media Length = 8.704 units = m
+New Line.14829585_linha_media Phases = 3 Bus1 = 65286698860243043MT.1.2.3 Bus2 = 65290999860238744MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 60.811 units = m
+New Line.14828365_linha_media Phases = 3 Bus1 = 66769958860563061MT.1.2.3 Bus2 = 66777948860565046MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.329 units = m
+New Line.14885406_linha_media Phases = 3 Bus1 = 65586250860119403MT.1.2.3 Bus2 = 65591055860112560MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 83.615 units = m
+New Line.14885455_linha_media Phases = 3 Bus1 = 66536117860253305MT.1.2.3 Bus2 = 66576156860261151MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 405.445 units = m
+New Line.14861717_linha_media Phases = 3 Bus1 = 66620159860526039MT.1.2.3 Bus2 = 66627839860527907MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 79.039 units = m
+New Line.14903169_linha_media Phases = 3 Bus1 = 65810987860118005MT.1.2.3 Bus2 = 65818574860114345MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 84.237 units = m
+New Line.14828392_linha_media Phases = 3 Bus1 = 65311745860217131MT.1.2.3 Bus2 = 65315615860213128MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 55.678 units = m
+New Line.14830804_linha_media Phases = 3 Bus1 = 65245661860286636MT.1.2.3 Bus2 = 65249883860282157MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 61.552 units = m
+New Line.14864393_linha_media Phases = 3 Bus1 = 65009475860423301MT.1.2.3 Bus2 = 65017303860419863MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 85.497 units = m
+New Line.14830798_linha_media Phases = 3 Bus1 = 65233479860299328MT.1.2.3 Bus2 = 65237402860295254MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 56.557 units = m
+New Line.14861685_linha_media Phases = 3 Bus1 = 65675846860112322MT.1.2.3 Bus2 = 65681725860106563MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.297 units = m
+New Line.14903162_linha_media Phases = 3 Bus1 = 65739385860151881MT.1.2.3 Bus2 = 65746074860157159MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 85.206 units = m
+New Line.14885450_linha_media Phases = 3 Bus1 = 66150003860173047MT.1.2.3 Bus2 = 66165583860176199MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 156.56 units = m
+New Line.14863101_linha_media Phases = 3 Bus1 = 64877997860483960MT.1.2.3 Bus2 = 64884976860480688MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 77.079 units = m
+New Line.14829561_linha_media Phases = 3 Bus1 = 66903663860596059MT.1.2.3 Bus2 = 66911588860598057MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.73 units = m
+New Line.14830794_linha_media Phases = 3 Bus1 = 65224991860308197MT.1.2.3 Bus2 = 65229178860303913MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 59.903 units = m
+New Line.14902007_linha_media Phases = 3 Bus1 = 64114135860905948MT.1.2.3 Bus2 = 64116788860909710MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 43.895 units = m
+New Line.14864401_linha_media Phases = 3 Bus1 = 64212073860849052MT.1.2.3 Bus2 = 64218860860844517MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.627 units = m
+New Line.14861704_linha_media Phases = 3 Bus1 = 64040612860862400MT.1.2.3 Bus2 = 64041335860861858MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 6.878 units = m
+New Line.14829572_linha_media Phases = 3 Bus1 = 66965217860570839MT.1.2.3 Bus2 = 66969606860564032MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.993 units = m
+New Line.14902003_linha_media Phases = 3 Bus1 = 64105975860892925MT.1.2.3 Bus2 = 64107942860895858MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 35.315 units = m
+New Line.14861721_linha_media Phases = 3 Bus1 = 66635652860529990MT.1.2.3 Bus2 = 66643641860531936MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.226 units = m
+New Line.14885387_linha_media Phases = 3 Bus1 = 66652433860332920MT.1.2.3 Bus2 = 66648320860339937MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.336 units = m
+New Line.14861690_linha_media Phases = 3 Bus1 = 66567678860490821MT.1.2.3 Bus2 = 66563582860497966MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.358 units = m
+New Line.14847443_linha_media Phases = 3 Bus1 = 65759039860164753MT.1.2.3 Bus2 = 65766404860161225MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 79.202 units = m
+New Line.14885420_linha_media Phases = 3 Bus1 = 64703065860565517MT.1.2.3 Bus2 = 64710200860562112MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 79.058 units = m
+New Line.14829554_linha_media Phases = 3 Bus1 = 66841224860580681MT.1.2.3 Bus2 = 66849241860582547MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.313 units = m
+New Line.14828363_linha_media Phases = 3 Bus1 = 66754168860559244MT.1.2.3 Bus2 = 66762133860561165MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.934 units = m
+New Line.14828386_linha_media Phases = 3 Bus1 = 65327149860201022MT.1.2.3 Bus2 = 65331471860196206MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 64.71 units = m
+New Line.14900775_linha_media Phases = 3 Bus1 = 64585348860622345MT.1.2.3 Bus2 = 64592536860618721MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.499 units = m
+New Line.14846176_linha_media Phases = 3 Bus1 = 66338370860213137MT.1.2.3 Bus2 = 66346072860214755MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 78.701 units = m
+New Line.14886721_linha_media Phases = 3 Bus1 = 64520121860654885MT.1.2.3 Bus2 = 64525766860652111MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 62.898 units = m
+New Line.14846183_linha_media Phases = 3 Bus1 = 66582498860461469MT.1.2.3 Bus2 = 66578818860468867MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.627 units = m
+New Line.14861709_linha_media Phases = 3 Bus1 = 66588718860518297MT.1.2.3 Bus2 = 66596587860520213MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.989 units = m
+New Line.14847463_linha_media Phases = 3 Bus1 = 65653072860119824MT.1.2.3 Bus2 = 65661186860119130MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.436 units = m
+New Line.14844974_linha_media Phases = 3 Bus1 = 65121808860371314MT.1.2.3 Bus2 = 65129395860367948MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 83.002 units = m
+New Line.14844990_linha_media Phases = 3 Bus1 = 65179858860344263MT.1.2.3 Bus2 = 65187311860341166MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.708 units = m
+New Line.15112818_linha_media Phases = 3 Bus1 = 66661783860318577MT.1.2.3 Bus2 = 66661658860318321MT.1.2.3 Linecode = 16512329H-3_linecode_media Length = 8.641 units = m
+New Line.14864413_linha_media Phases = 3 Bus1 = 64291910860796280MT.1.2.3 Bus2 = 64298908860791622MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 84.065 units = m
+New Line.14844973_linha_media Phases = 3 Bus1 = 65114312860374884MT.1.2.3 Bus2 = 65121808860371314MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 83.027 units = m
+New Line.14885449_linha_media Phases = 3 Bus1 = 66102641860163003MT.1.2.3 Bus2 = 66150003860173047MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 484.153 units = m
+New Line.14864405_linha_media Phases = 3 Bus1 = 64239481860831422MT.1.2.3 Bus2 = 64246027860827270MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 77.517 units = m
+New Line.14861688_linha_media Phases = 3 Bus1 = 66196683860183043MT.1.2.3 Bus2 = 66212583860186239MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 162.18 units = m
+New Line.14829601_linha_media Phases = 3 Bus1 = 65208842860325348MT.1.2.3 Bus2 = 65212916860321118MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 58.729 units = m
+New Line.14846177_linha_media Phases = 3 Bus1 = 66299090860205177MT.1.2.3 Bus2 = 66338370860213137MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 402.285 units = m
+New Line.14900771_linha_media Phases = 3 Bus1 = 64570826860629578MT.1.2.3 Bus2 = 64578240860625898MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.771 units = m
+New Line.14861698_linha_media Phases = 3 Bus1 = 65575342860133071MT.1.2.3 Bus2 = 65581187860125528MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 95.426 units = m
+New Line.14885390_linha_media Phases = 3 Bus1 = 66640031860353963MT.1.2.3 Bus2 = 66636145860360995MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.343 units = m
+New Line.14864357_linha_media Phases = 3 Bus1 = 66658293860311572MT.1.2.3 Bus2 = 66661846860318441MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 78.834 units = m
+New Line.14865659_linha_media Phases = 3 Bus1 = 64506408860663050MT.1.2.3 Bus2 = 64513088860658495MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.852 units = m
+New Line.14864329_linha_media Phases = 3 Bus1 = 65274653860256033MT.1.2.3 Bus2 = 65278782860251491MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 61.383 units = m
+New Line.14861699_linha_media Phases = 3 Bus1 = 65549748860168281MT.1.2.3 Bus2 = 65554665860161172MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 84.024 units = m
+New Line.14844977_linha_media Phases = 3 Bus1 = 65129395860367948MT.1.2.3 Bus2 = 65136258860364592MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 76.396 units = m
+New Line.14901999_linha_media Phases = 3 Bus1 = 64098121860880361MT.1.2.3 Bus2 = 64100212860883575MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 38.343 units = m
+New Line.14884096_linha_media Phases = 3 Bus1 = 64767492860535415MT.1.2.3 Bus2 = 64774106860532275MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 73.215 units = m
+New Line.14863091_linha_media Phases = 3 Bus1 = 64841565860500788MT.1.2.3 Bus2 = 64848967860497077MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.802 units = m
+New Line.14847458_linha_media Phases = 3 Bus1 = 65976846860136308MT.1.2.3 Bus2 = 65992630860139692MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 161.427 units = m
+New Line.14864411_linha_media Phases = 3 Bus1 = 64279195860805927MT.1.2.3 Bus2 = 64285507860800863MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 78.818 units = m
+New Line.14865653_linha_media Phases = 3 Bus1 = 64343034860769514MT.1.2.3 Bus2 = 64356420860762960MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 149.044 units = m
+New Line.14900779_linha_media Phases = 3 Bus1 = 64599701860615206MT.1.2.3 Bus2 = 64606878860611656MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.07 units = m
+New Line.14865639_linha_media Phases = 3 Bus1 = 64796053860526706MT.1.2.3 Bus2 = 64802022860524623MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 60.295 units = m
+New Line.14847457_linha_media Phases = 3 Bus1 = 66007453860142821MT.1.2.3 Bus2 = 66021196860145851MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 140.731 units = m
+New Line.14863054_linha_media Phases = 3 Bus1 = 64788353860525907MT.1.2.3 Bus2 = 64793243860527476MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 48.857 units = m
+New Line.14864407_linha_media Phases = 3 Bus1 = 64252852860822675MT.1.2.3 Bus2 = 64259674860818264MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 79.31 units = m
+New Line.14828396_linha_media Phases = 3 Bus1 = 65303388860225707MT.1.2.3 Bus2 = 65307512860221623MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 58.04 units = m
+New Line.14829597_linha_media Phases = 3 Bus1 = 65270474860260139MT.1.2.3 Bus2 = 65274653860256033MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 58.586 units = m
+New Line.14829567_linha_media Phases = 3 Bus1 = 66941925860605839MT.1.2.3 Bus2 = 66946797860598653MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 85.678 units = m
+New Line.14864313_linha_media Phases = 3 Bus1 = 67017878860490811MT.1.2.3 Bus2 = 67018263860489788MT.1.2.3 Linecode = 16512384H-3P_linecode_media Length = 10.93 units = m
+New Line.14847451_linha_media Phases = 3 Bus1 = 65704874860088198MT.1.2.3 Bus2 = 65712228860090053MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 73.54 units = m
+New Line.14844979_linha_media Phases = 3 Bus1 = 65136258860364592MT.1.2.3 Bus2 = 65143588860360930MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.938 units = m
+New Line.14864382_linha_media Phases = 3 Bus1 = 64965900860443041MT.1.2.3 Bus2 = 64973656860439846MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 83.883 units = m
+New Line.14885398_linha_media Phases = 3 Bus1 = 65515050860187671MT.1.2.3 Bus2 = 65522658860184187MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 83.678 units = m
+New Line.14865635_linha_media Phases = 3 Bus1 = 64834306860504045MT.1.2.3 Bus2 = 64841565860500788MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 77.069 units = m
+New Line.14844969_linha_media Phases = 3 Bus1 = 65099846860381425MT.1.2.3 Bus2 = 65106922860378026MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 78.5 units = m
+New Line.14884085_linha_media Phases = 3 Bus1 = 65444234860217565MT.1.2.3 Bus2 = 65453402860216348MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 92.484 units = m
+New Line.14900783_linha_media Phases = 3 Bus1 = 64052074860849449MT.1.2.3 Bus2 = 64054268860847817MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 24.959 units = m
+New Line.14861691_linha_media Phases = 3 Bus1 = 65630682860113810MT.1.2.3 Bus2 = 65637034860117120MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 71.627 units = m
+New Line.14847479_linha_media Phases = 3 Bus1 = 66711499860548947MT.1.2.3 Bus2 = 66715262860549869MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 38.743 units = m
+New Line.14864402_linha_media Phases = 3 Bus1 = 64218860860844517MT.1.2.3 Bus2 = 64225630860840042MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.153 units = m
+New Line.14884114_linha_media Phases = 3 Bus1 = 65913526860123552MT.1.2.3 Bus2 = 65937378860128026MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 239.84 units = m
+New Line.14886684_linha_media Phases = 3 Bus1 = 66578818860468867MT.1.2.3 Bus2 = 66574845860476280MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 84.105 units = m
+New Line.14885453_linha_media Phases = 3 Bus1 = 66377657860221351MT.1.2.3 Bus2 = 66433146860232552MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 563.462 units = m
+New Line.14885422_linha_media Phases = 3 Bus1 = 64696851860568543MT.1.2.3 Bus2 = 64703065860565517MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 69.116 units = m
+New Line.14861725_linha_media Phases = 3 Bus1 = 66651548860533868MT.1.2.3 Bus2 = 66659453860535802MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.381 units = m
+New Line.14902000_linha_media Phases = 3 Bus1 = 64100212860883575MT.1.2.3 Bus2 = 64102023860886504MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 34.437 units = m
+New Line.14861702_linha_media Phases = 3 Bus1 = 64041675860866536MT.1.2.3 Bus2 = 64042744860865949MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 13.699 units = m
+New Line.14829562_linha_media Phases = 3 Bus1 = 66911588860598057MT.1.2.3 Bus2 = 66919554860600072MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.169 units = m
+New Line.14900782_linha_media Phases = 3 Bus1 = 64061690860843417MT.1.2.3 Bus2 = 64068989860838802MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 86.356 units = m
+New Line.14829563_linha_media Phases = 3 Bus1 = 66919554860600072MT.1.2.3 Bus2 = 66927447860602005MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.262 units = m
+New Line.14828383_linha_media Phases = 3 Bus1 = 65352025860199582MT.1.2.3 Bus2 = 65360083860201346MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.488 units = m
+New Line.14846168_linha_media Phases = 3 Bus1 = 66488622860243949MT.1.2.3 Bus2 = 66536117860253305MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 484.077 units = m
+New Line.14886731_linha_media Phases = 3 Bus1 = 64563845860633044MT.1.2.3 Bus2 = 64570826860629578MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 77.941 units = m
+New Line.14864377_linha_media Phases = 3 Bus1 = 64944685860453441MT.1.2.3 Bus2 = 64951891860449961MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.023 units = m
+New Line.14900780_linha_media Phases = 3 Bus1 = 64071217860837630MT.1.2.3 Bus2 = 64073389860841708MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 43.031 units = m
+New Line.14861610_linha_media Phases = 3 Bus1 = 66715288860549721MT.1.2.3 Bus2 = 66715448860548802MT.1.2.3 Linecode = 16512329H-3P_linecode_media Length = 10.831 units = m
+New Line.14864312_linha_media Phases = 3 Bus1 = 67017627860491535MT.1.2.3 Bus2 = 67017878860490811MT.1.2.3 Linecode = 16512384H-3P_linecode_media Length = 9.165 units = m
+New Line.14847462_linha_media Phases = 3 Bus1 = 65661186860119130MT.1.2.3 Bus2 = 65668707860116041MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 78.956 units = m
+New Line.14886712_linha_media Phases = 3 Bus1 = 64606878860611656MT.1.2.3 Bus2 = 64614229860607785MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.701 units = m
+New Line.14828361_linha_media Phases = 3 Bus1 = 66738331860555404MT.1.2.3 Bus2 = 66746141860557244MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.238 units = m
+New Line.14830802_linha_media Phases = 3 Bus1 = 65241539860290763MT.1.2.3 Bus2 = 65245661860286636MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 58.329 units = m
+New Line.14886685_linha_media Phases = 3 Bus1 = 66574845860476280MT.1.2.3 Bus2 = 66571429860483342MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 78.448 units = m
+New Line.14864373_linha_media Phases = 3 Bus1 = 64929413860460174MT.1.2.3 Bus2 = 64937280860456577MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 86.503 units = m
+New Line.14829581_linha_media Phases = 3 Bus1 = 65295066860234107MT.1.2.3 Bus2 = 65299132860230191MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 56.451 units = m
+New Line.77360727_linha_media Phases = 3 Bus1 = 64039795860867633MT.1.2.3 Bus2 = 64040890860866967MT.1.2.3 Linecode = 16512384H-3P_linecode_media Length = 12.816 units = m
+New Line.14829573_linha_media Phases = 3 Bus1 = 66969606860564032MT.1.2.3 Bus2 = 66973928860557326MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 79.781 units = m
+New Line.14863065_linha_media Phases = 3 Bus1 = 66690589860543366MT.1.2.3 Bus2 = 66698595860545423MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 82.66 units = m
+New Line.14846181_linha_media Phases = 3 Bus1 = 66715262860549869MT.1.2.3 Bus2 = 66722311860551356MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 72.041 units = m
+New Line.14830792_linha_media Phases = 3 Bus1 = 65220884860312772MT.1.2.3 Bus2 = 65224991860308197MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 61.48 units = m
+New Line.14829571_linha_media Phases = 3 Bus1 = 66960691860577535MT.1.2.3 Bus2 = 66965217860570839MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 80.821 units = m
+New Line.14885436_linha_media Phases = 3 Bus1 = 64642604860593746MT.1.2.3 Bus2 = 64650058860590392MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.738 units = m
+New Line.14864412_linha_media Phases = 3 Bus1 = 64285507860800863MT.1.2.3 Bus2 = 64291910860796280MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 78.742 units = m
+New Line.14829574_linha_media Phases = 3 Bus1 = 66973928860557326MT.1.2.3 Bus2 = 66978656860550681MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 81.554 units = m
+New Line.14865633_linha_media Phases = 3 Bus1 = 65017303860419863MT.1.2.3 Bus2 = 65023937860416441MT.1.2.3 Linecode = 16512384H-3_linecode_media Length = 74.646 units = m
+New xycurve.mypvst_d3d3da690f0c7c48c2ee4be51403f30540e63d93cd6abee4a7987f02bcc2b4cd_gd_media_tensao npts = 4 xarray=[0 25 75 100] yarray=[1.2 1.0 0.8 0.6]
+New xycurve.myeff_d3d3da690f0c7c48c2ee4be51403f30540e63d93cd6abee4a7987f02bcc2b4cd npts = 4 xarray=[.1 .2 .4 1.0] yarray=[.86 .9 .93 .97]
+New loadshape.myirrad_d3d3da690f0c7c48c2ee4be51403f30540e63d93cd6abee4a7987f02bcc2b4cd npts = 1 interval = 1 mult = [1]
+New tshape.mytemp_d3d3da690f0c7c48c2ee4be51403f30540e63d93cd6abee4a7987f02bcc2b4cd npts = 1 interval = 1 temp = [25]
+
+New pvsystem.pv_d3d3da690f0c7c48c2ee4be51403f30540e63d93cd6abee4a7987f02bcc2b4cd phases = 3 conn = wye bus1 = 67017878860490811MT.1.2.3
+~ kv = 34.5 kva = 1000.0 pmpp = 1000.0
+~ pf = 1 %cutin = 0.00005 %cutout = 0.00005 varfollowinverter = Yes effcurve = myeff_d3d3da690f0c7c48c2ee4be51403f30540e63d93cd6abee4a7987f02bcc2b4cd
+~ p-tcurve = mypvst_d3d3da690f0c7c48c2ee4be51403f30540e63d93cd6abee4a7987f02bcc2b4cd daily = myirrad_d3d3da690f0c7c48c2ee4be51403f30540e63d93cd6abee4a7987f02bcc2b4cd tdaily = mytemp_d3d3da690f0c7c48c2ee4be51403f30540e63d93cd6abee4a7987f02bcc2b4cd
+
+New load.d3d3da690f0c7c48c2ee4be51403f30540e63d93cd6abee4a7987f02bcc2b4cd_carga_no_pv bus1 = 67017878860490811MT.1.2.3 phases = 3
+~ conn = wye model = 1 kv = 34.5 kw = 0.0001
+
+New Transformer.34565207 Phases=3 Windings=2 xhl=3.275 %noloadloss=0.174
+~ wdg=1 bus=67017878860490811ET.1.2.3 conn=delta kv=34.5 kva=150.0 %r=1.233 tap=1
+~ wdg=2 bus=67018034860490708BT.1.2.3.0 conn=wye kv=0.38 kva=150.0 %r=1.233 tap=1
+
+New Transformer.34574077 Phases=3 Windings=2 xhl=3.275 %noloadloss=0.174
+~ wdg=1 bus=66715737860547981ET.1.2.3 conn=delta kv=34.5 kva=150.0 %r=1.233 tap=1
+~ wdg=2 bus=66715643860547940BT.1.2.3.0 conn=wye kv=0.38 kva=150.0 %r=1.233 tap=1
+
+New Transformer.34605503 Phases=3 Windings=2 xhl=4.0 %noloadloss=0.5
+~ wdg=1 bus=67018263860489788ET.1.2.3 conn=delta kv=34.5 kva=50.0 %r=3.0 tap=1
+~ wdg=2 bus=67018370860489822BT.1.2.3.0 conn=wye kv=0.38 kva=50.0 %r=3.0 tap=1
+
+New Transformer.34642295 Phases=3 Windings=2 xhl=1.56 %noloadloss=0.138
+~ wdg=1 bus=67017878860490811ET.1.2.3 conn=delta kv=34.5 kva=112.5 %r=2.44 tap=1
+~ wdg=2 bus=67017721860490914BT.1.2.3.0 conn=wye kv=0.38 kva=112.5 %r=2.44 tap=1
+
+New Transformer.34651398 Phases=3 Windings=2 xhl=3.275 %noloadloss=0.121
+~ wdg=1 bus=66715737860547981ET.1.2.3 conn=delta kv=34.5 kva=750.0 %r=2.033 tap=1
+~ wdg=2 bus=66715805860547847BT.1.2.3.0 conn=wye kv=0.38 kva=750.0 %r=2.033 tap=1
+
+New Transformer.34654956 Phases=3 Windings=2 xhl=4.0 %noloadloss=0.5
+~ wdg=1 bus=67018263860489788ET.1.2.3 conn=delta kv=34.5 kva=50.0 %r=3.0 tap=1
+~ wdg=2 bus=67018157860489754BT.1.2.3.0 conn=wye kv=0.38 kva=50.0 %r=3.0 tap=1
+
+New Transformer.34665214 Phases=3 Windings=2 xhl=3.275 %noloadloss=0.174
+~ wdg=1 bus=66715448860548802ET.1.2.3 conn=delta kv=34.5 kva=150.0 %r=1.233 tap=1
+~ wdg=2 bus=66715336860548754BT.1.2.3.0 conn=wye kv=0.38 kva=150.0 %r=1.233 tap=1
+
+New Transformer.34741989 Phases=3 Windings=2 xhl=4.321 %noloadloss=0.307
+~ wdg=1 bus=67018263860489788ET.1.2.3 conn=delta kv=34.5 kva=1000.0 %r=1.51 tap=1
+~ wdg=2 bus=67018309860489645BT.1.2.3.0 conn=wye kv=0.38 kva=1000.0 %r=1.51 tap=1
+
+New Transformer.34756571 Phases=3 Windings=2 xhl=1.56 %noloadloss=0.138
+~ wdg=1 bus=66715448860548802ET.1.2.3 conn=delta kv=34.5 kva=112.5 %r=2.44 tap=1
+~ wdg=2 bus=66715546860548833BT.1.2.3.0 conn=wye kv=0.38 kva=112.5 %r=2.44 tap=1
+
+New Transformer.34757958 Phases=3 Windings=2 xhl=4.342 %noloadloss=0.221
+~ wdg=1 bus=66715737860547981ET.1.2.3 conn=delta kv=34.5 kva=300.0 %r=1.183 tap=1
+~ wdg=2 bus=66715848860548030BT.1.2.3.0 conn=wye kv=0.38 kva=300.0 %r=1.183 tap=1
+
+New Transformer.34760219 Phases=3 Windings=2 xhl=3.275 %noloadloss=0.174
+~ wdg=1 bus=67017878860490811ET.1.2.3 conn=delta kv=34.5 kva=150.0 %r=1.233 tap=1
+~ wdg=2 bus=67017931860490990BT.1.2.3.0 conn=wye kv=0.38 kva=150.0 %r=1.233 tap=1
+
+New Transformer.34768326 Phases=3 Windings=2 xhl=3.275 %noloadloss=0.174
+~ wdg=1 bus=67017878860490811ET.1.2.3 conn=delta kv=34.5 kva=150.0 %r=1.233 tap=1
+~ wdg=2 bus=67017824860490632BT.1.2.3.0 conn=wye kv=0.38 kva=150.0 %r=1.233 tap=1
+
