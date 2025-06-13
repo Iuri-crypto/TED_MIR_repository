@@ -34,7 +34,7 @@ class ValidatorBarraSlack:
         df["ten_nom_voltage"] = df["ten_nom"].map(tensoes_map).fillna(self.ten_nom_volts_padrao)
 
         # Colunas finais
-        return df[["nome", "ten_ope", "ten_nom", "ten_nom_voltage", "pac_ini"]]
+        return df[["nome", "ten_ope", "ten_nom", "ten_nom_voltage", "pac_ini", "sub"]]
 
 
 
@@ -80,7 +80,7 @@ class ValidatorCompensadorMedia:
         df["pot_nom"] = df["pot_nom"].clip(upper=self.pot_nom_padrao_kva)
 
         # Colunas finais
-        return df[["nome", "fas_con", "pac_1", "ten_nom", "ten_nom_voltage", "cod_id", "pot_nom", "rec_fases", "phases", "tip_unid"]]
+        return df[["nome", "fas_con", "pac_1", "ten_nom", "ten_nom_voltage", "cod_id", "pot_nom", "rec_fases", "phases", "tip_unid", "sub"]]
 
 
 
@@ -126,7 +126,7 @@ class ValidatorCompensadorBaixa:
         df["pot_nom"] = df["pot_nom"].clip(upper=self.pot_nom_padrao_kva)
 
         # Colunas finais
-        return df[["nome", "fas_con", "pac_1", "ten_nom", "ten_nom_voltage", "cod_id", "pot_nom", "rec_fases", "phases", "tip_unid"]]
+        return df[["nome", "fas_con", "pac_1", "ten_nom", "ten_nom_voltage", "cod_id", "pot_nom", "rec_fases", "phases", "tip_unid", "sub"]]
 
 
 
@@ -159,7 +159,7 @@ class ValidatorChaveSeccionadoraBT:
         df["cod_id"] = df.apply(lambda row: row["cod_id"] if row["cod_id"] else f"{row['nome']}_{row.name}", axis=1)
 
         # Colunas finais
-        return df[["nome", "fas_con", "pac_1", "pac_2", "cod_id", "p_n_ope", "phases", "rec_fases"]]
+        return df[["nome", "fas_con", "pac_1", "pac_2", "cod_id", "p_n_ope", "phases", "rec_fases", "sub"]]
 
  
 
@@ -195,7 +195,7 @@ class ValidatorChaveSeccionadoraMT:
         )
 
         # Retornar apenas as colunas relevantes
-        return df[["nome", "fas_con", "pac_1", "pac_2", "cod_id", "p_n_ope", "phases", "rec_fases"]]
+        return df[["nome", "fas_con", "pac_1", "pac_2", "cod_id", "p_n_ope", "phases", "rec_fases", "sub"]]
 
 
 

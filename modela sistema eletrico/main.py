@@ -9,7 +9,7 @@ def main():
     scenario = ScenarioManager().get_scenario(cenario_1 = False, cenario_2 = True, cenario_3 = False)
     
     # Caminho onde será salvo o cenário modelado
-    caminho = r'C:\TED_MIDR\modelagens\cenario_2'
+    caminho = r"C:\TED_MIDR\Output_modelagem_DSS"
 
     # 3. Rodar a modelagem
     model_runner = ModelRunner(scenario)

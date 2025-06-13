@@ -147,17 +147,22 @@ class ModelRunner:
             conn_mt = get_connection(**db_configs["energisa_mt"])
             conn_aneel = get_connection(**db_configs["aneel"])
 
-            df_slack = load_bdgd.barra_slack(conn_mt)
-            df_slack = ValidatorBarraSlack().validate_dataframe(df_slack)
-            modelated_slacks = SlackBus().to_dss(df_slack)
+            #df_slack = load_bdgd.barra_slack(conn_mt)
+            #df_slack = ValidatorBarraSlack().validate_dataframe(df_slack)
+            #modelated_slacks = SlackBus().to_dss(df_slack)
 
-            df_compensadores_reativo_media = load_bdgd.compensadores_reativo_media(conn_mt)
-            df_compensadores_reativo_media = ValidatorCompensadorMedia().validate_dataframe(df_compensadores_reativo_media)
-            modelated_compensadores_reativo_media = ReactiveCompensatorMT().to_dss(df_compensadores_reativo_media)
+            #df_compensadores_reativo_media = load_bdgd.compensadores_reativo_media(conn_mt)
+            #df_compensadores_reativo_media = ValidatorCompensadorMedia().validate_dataframe(df_compensadores_reativo_media)
+            #modelated_compensadores_reativo_media = ReactiveCompensatorMT().to_dss(df_compensadores_reativo_media)
 
-            df_compensadores_reativo_baixa = load_bdgd.compensadores_reativo_baixa(conn_mt)
-            df_compensadores_reativo_baixa = ValidatorCompensadorBaixa().validate_dataframe(df_compensadores_reativo_baixa)
-            modelated_compensadores_reativo_baixa = ReactiveCompensatorBT().to_dss(df_compensadores_reativo_baixa)
+            #df_compensadores_reativo_baixa = load_bdgd.compensadores_reativo_baixa(conn_mt)
+            #df_compensadores_reativo_baixa = ValidatorCompensadorBaixa().validate_dataframe(df_compensadores_reativo_baixa)
+            #modelated_compensadores_reativo_baixa = ReactiveCompensatorBT().to_dss(df_compensadores_reativo_baixa)
+
+
+            #df_chaves_seccionadoras_baixa_tensao = load_bdgd.chaves_seccionadoras_baixa_tensao(conn_mt)
+            #df_chaves_seccionadoras_baixa_tensao = ValidatorChaveSeccionadoraBT().validate_dataframe(df_chaves_seccionadoras_baixa_tensao)
+            #modelated_chaves_seccionadoras_baixa_tensao = SwitchLowVoltage().to_dss(df_chaves_seccionadoras_baixa_tensao)
 
             df_chaves_seccionadoras_media_tensao = load_bdgd.chaves_seccionadoras_media_tensao(conn_mt)
             df_chaves_seccionadoras_media_tensao = ValidatorChaveSeccionadoraMT().validate_dataframe(df_chaves_seccionadoras_media_tensao)

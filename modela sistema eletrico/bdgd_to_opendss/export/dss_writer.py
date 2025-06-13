@@ -55,10 +55,7 @@ class write_cenario_1:
                     if nome in modelated_linecodes_media_tensao:
                         f_dss.writelines(modelated_linecodes_media_tensao[nome])
 
-                    # if nome in modelated_linecodes_ramais:
-                    #     f_dss.writelines(modelated_linecodes_ramais[nome])
-
-                    # 3. Demais elementos
+     
                     for d in demais_dicionarios:
                         if nome in d:
                             f_dss.writelines(d[nome])

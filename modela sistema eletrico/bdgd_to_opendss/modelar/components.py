@@ -17,13 +17,19 @@ class SlackBus:
         def process_chunk(chunk: pd.DataFrame) -> dict:
             chunk_dict = {}
             for _, row in chunk.iterrows():
+                
+                sub = row['sub']
                 nome = row['nome']
+                kv = row['ten_nom_voltage'] / 1000
+                v_pu = row['ten_ope']
+                pac_ini = row['pac_ini']
+
                 linha = (
-                    f"New Object = Circuit.{nome}_Barra_Slack\n"
-                    f"~ basekv = {row['ten_nom_voltage'] / 1000} pu = {row['ten_ope']} angle = 0\n"
-                    f"New line.{nome}{nome} phases = 3 bus1 = SourceBus bus2 = {row['pac_ini']}.1.2.3 switch = y\n\n"
+                        f"New Object = Circuit.{nome}_Barra_Slack\n "
+                        f"~ basekv = {kv} pu = {v_pu} angle = 0\n "
+                        f"New line.{sub}_{nome}_ phases = 3 bus1 = SourceBus bus2 = {pac_ini}.1.2.3 switch = y\n\n "
                 )
-                chunk_dict.setdefault(nome, []).append(linha)
+                chunk_dict.setdefault(sub, {}).setdefault(nome, []).append(linha)
             return chunk_dict
 
 
@@ -68,32 +74,34 @@ class ReactiveCompensatorMT:
             tip_unid = chunk['tip_unid']
             cod_id = chunk['cod_id']
             nome = chunk['nome']
+            sub = chunk['sub']
 
             for i in chunk.index:
                 bus1 = f"{pac_1[i]}{rec_fases[i]}"
                 kv = basekv[i]
                 kvar = pot_nom[i]
                 fases = phases[i]
+                cod_id_rec = cod_id[i]
                 
                 
 
                 if fases < 2:
-                    kv = kv / math.sqrt(3)
-                    rec = '.4'
+                    kv = round(kv / math.sqrt(3), 3
+                    )
+                    rec = '.0'
 
                 if tip_unid[i] == 56:
                     linha = (
-                        f"New Reactor.{cod_id[i]}_Banco_de_Reator Bus1 = {bus1}{rec} "
-                        f"kv = {kv:.3f} kvar = {kvar} phases = {fases} conn = wye\n\n"
+                            f"New Reactor.{sub}_{nome}_{cod_id_rec}_Banco_de_Reator Bus1 = {bus1}{rec} "
+                            f"kv = {kv} kvar = {kvar} phases = {fases} conn = wye\n\n"
                     )
                 else:
                     linha = (
-                        f"New Capacitor.{cod_id[i]}_Banco_de_Capacitor Bus1 = {bus1} "
-                        f"kv = {kv:.3f} kVAR = {kvar} phases = {fases} conn = wye\n\n"
+                            f"New Capacitor.{sub}_{nome}_{cod_id_rec}_Banco_de_Capacitor Bus1 = {bus1} "
+                            f"kv = {kv} kVAR = {kvar} phases = {fases} conn = wye\n\n"
                     )
 
-                dss_key = str(nome[i])
-                chunk_result.setdefault(dss_key, []).append(linha)
+                chunk_result.setdefault(str(sub[i]), {}).setdefault(nome[i], []).append(linha)
 
             return chunk_result
 
@@ -109,8 +117,12 @@ class ReactiveCompensatorMT:
             for start in range(0, len(df), chunk_size):
                 chunk = df.iloc[start:start + chunk_size]
                 chunk_dict = process_chunk(chunk)
-                for nome, linhas in chunk_dict.items():
-                    dss_dict.setdefault(nome, []).extend(linhas)
+                for sub, nomes_dict in chunk_dict.items():
+                    if sub not in dss_dict:
+                        dss_dict[sub] = {}
+                    for nome, linhas in nomes_dict.items():
+                        dss_dict[sub].setdefault(nome, []).extend(linhas)
+
                 progress.update(task, advance=len(chunk))
 
         return dss_dict
@@ -138,29 +150,33 @@ class ReactiveCompensatorBT:
             tip_unid = chunk['tip_unid']
             cod_id = chunk['cod_id']
             nome = chunk['nome']
+            sub = chunk['sub']
+            cod_id_rec = chunk['cod_id']
+            rec = '.0'
 
             for i in chunk.index:
                 bus1 = f"{pac_1[i]}{rec_fases[i]}"
                 kv = basekv[i]
                 kvar = pot_nom[i]
                 fases = phases[i]
+                cod_id_rec = cod_id[i]
 
                 if fases < 2:
-                    kv = kv / math.sqrt(3)
+                    kv = round(kv / math.sqrt(3), 3)
+                    rec = '.0'
 
                 if tip_unid[i] == 56:
                     linha = (
-                        f"New Reactor.{cod_id[i]}_Banco_de_Reator Bus1 = {bus1} "
-                        f"kv = {kv:.3f} kvar = {kvar} phases = {fases} conn = wye\n\n"
+                        f"New Reactor.{sub}_{nome}_{cod_id_rec}_Banco_de_Reator Bus1 = {bus1}{rec} "
+                        f"kv = {kv} kvar = {kvar} phases = {fases} conn = wye\n\n"
                     )
                 else:
                     linha = (
-                        f"New Capacitor.{cod_id[i]}_Banco_de_Capacitor Bus1 = {bus1} "
-                        f"kv = {kv:.3f} kVAR = {kvar} phases = {fases} conn = wye\n\n"
+                        f"New Capacitor.{sub}_{nome}_{cod_id_rec}_Banco_de_Capacitor Bus1 = {bus1}{rec} "
+                        f"kv = {kv} kVAR = {kvar} phases = {fases} conn = wye\n\n"
                     )
 
-                dss_key = str(nome[i])
-                chunk_result.setdefault(dss_key, []).append(linha)
+                chunk_result.setdefault(str(sub[i]), {}).setdefault(nome[i], []).append(linha)
 
             return chunk_result
 
@@ -178,8 +194,11 @@ class ReactiveCompensatorBT:
                 chunk_dict = process_chunk(chunk)
 
                 # Acumula linhas para as mesmas chaves
-                for chave, linhas in chunk_dict.items():
-                    dss_dict[chave].extend(linhas)
+                for sub, nomes_dict in chunk_dict.items():
+                    if sub not in dss_dict:
+                        dss_dict[sub] = {}
+                    for nome, linhas in nomes_dict.items():
+                        dss_dict[sub].setdefault(nome, []).extend(linhas)
 
                 progress.update(task, advance=len(chunk))
 
@@ -198,24 +217,25 @@ class SwitchLowVoltage:
         def process_chunk(chunk: pd.DataFrame) -> dict:
             chunk_result = {}
 
-            cod_id = chunk["cod_id"].astype(str)
+            cod_id = chunk["cod_id"]
             phases = chunk.get("phases", pd.Series(3, index=chunk.index))
-            pac_1 = chunk["pac_1"].astype(str)
-            pac_2 = chunk["pac_2"].astype(str)
-            rec_fases = chunk["rec_fases"].astype(str)
-            pn_ope = chunk["p_n_ope"].astype(str)
-            nome = chunk["nome"].astype(str)
+            pac_1 = chunk["pac_1"]
+            pac_2 = chunk["pac_2"]
+            rec_fases = chunk["rec_fases"]
+            pn_ope = chunk["p_n_ope"]
+            nome = chunk["nome"]
+            sub = chunk['sub']
 
             for i in chunk.index:
-                chave = str(cod_id[i])
+                if pn_ope[i] == 'F':
+                    status = 'y'
+                else:
+                    status = 'n'
                 linha = (
-                    f"New line.{chave}_Chave_seccionadora_baixa_tensao "
-                    f"phases = {phases[i]} "
-                    f"bus1 = {pac_1[i]}{rec_fases[i]} "
-                    f"bus2 = {pac_2[i]}{rec_fases[i]} "
-                    f"switch = {pn_ope[i]}\n\n"
+                    f"New line.{cod_id[i]}_chave_bt phases = {phases[i]} bus1 = {pac_1[i]}{rec_fases[i]} bus2 = {pac_2[i]}{rec_fases[i]} switch = {status}\n\n"
+          
                 )
-                chunk_result.setdefault(nome[i], []).append(linha)
+                chunk_result.setdefault(sub[i], {}).setdefault(nome[i], []).append(linha)
 
             return chunk_result
 
@@ -231,8 +251,11 @@ class SwitchLowVoltage:
             for start in range(0, len(df), chunk_size):
                 chunk = df.iloc[start:start + chunk_size]
                 chunk_dict = process_chunk(chunk)
+                for sub, nomes in chunk_dict.items():
+                    if sub not in dss_dict:
+                        dss_dict[sub] = {}
                 for nome, linhas in chunk_dict.items():
-                    dss_dict.setdefault(nome, []).extend(linhas)
+                    dss_dict[sub].setdefault(nome, []).extend(linhas)
                 progress.update(task, advance=len(chunk))
 
         return dss_dict
@@ -250,24 +273,29 @@ class SwitchMediumVoltage:
         def process_chunk(chunk: pd.DataFrame) -> dict:
             chunk_result = {}
 
-            cod_id = chunk["cod_id"].astype(str)
-            phases = chunk.get("phases", pd.Series(3, index=chunk.index))
-            pac_1 = chunk["pac_1"].astype(str)
-            pac_2 = chunk["pac_2"].astype(str)
-            rec_fases = chunk["rec_fases"].astype(str)
-            pn_ope = chunk["p_n_ope"].astype(str)
-            nome = chunk['nome'].astype(str)
+            cod_id = chunk["cod_id"]
+            #phases = chunk.get("phases", pd.Series(3, index=chunk.index))
+            pac_1 = chunk["pac_1"]
+            pac_2 = chunk["pac_2"]
+            #rec_fases = chunk["rec_fases"]
+            pn_ope = chunk["p_n_ope"]
+            #nome = chunk['nome']
+            sub = chunk['sub']
 
             for i in chunk.index:
+                if pn_ope[i] == 'F':
+                    status = 'y'
+                else:
+                    status = 'n'
                 chave = cod_id[i]
                 linha = (
-                    f"New line.{chave}_Chave_seccionadora_media_tensao "
+                    f"New line.{chave}_Chave_mt "
                     f"phases = 3 "
                     f"bus1 = {pac_1[i]}.1.2.3 "
                     f"bus2 = {pac_2[i]}.1.2.3 "
-                    f"switch = {pn_ope[i]}\n\n"
+                    f"switch = {status}\n\n "
                 )
-                chunk_result.setdefault(nome[i], []).append(linha)  # ✅ use chunk_result aqui
+                chunk_result.setdefault(sub[i], []).append(linha) 
 
             return chunk_result
 

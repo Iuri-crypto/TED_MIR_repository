@@ -10,7 +10,7 @@ class load_bdgd:
     
     @staticmethod
     def barra_slack(conn_mt) -> pd.DataFrame:
-        query = "SELECT DISTINCT nome, ten_ope, ten_nom, pac_ini FROM ctmt ORDER BY nome"
+        query = "SELECT DISTINCT nome, ten_ope, ten_nom, pac_ini, sub FROM ctmt ORDER BY sub"
         try:
             return pd.read_sql(query, conn_mt)
         except Exception as e:
@@ -22,10 +22,10 @@ class load_bdgd:
     def compensadores_reativo_media(conn) -> pd.DataFrame:
         query1 = """
             SELECT DISTINCT ctmt.nome, uncrmt.fas_con, uncrmt.tip_unid, uncrmt.pot_nom,
-                            uncrmt.pac_1, ctmt.ten_nom, uncrmt.cod_id
+                            uncrmt.pac_1, ctmt.ten_nom, uncrmt.cod_id, uncrmt.sub, uncrmt.ctmt
             FROM uncrmt
             JOIN ctmt ON uncrmt.ctmt = ctmt.cod_id
-            ORDER BY ctmt.nome
+            ORDER BY uncrmt.sub
         """
 
         try:
@@ -40,11 +40,11 @@ class load_bdgd:
     @staticmethod
     def compensadores_reativo_baixa(conn) -> pd.DataFrame:
         query1 = """
-            SELECT DISTINCT ctmt.nome, uncrbt.fas_con, uncrbt.tip_unid, uncrbt.pot_nom,
-                            uncrbt.pac_1, ctmt.ten_nom, uncrbt.cod_id
+             SELECT DISTINCT ctmt.nome, uncrbt.fas_con, uncrbt.tip_unid, uncrbt.pot_nom,
+                            uncrbt.pac_1, ctmt.ten_nom, uncrbt.cod_id, uncrbt.sub, uncrbt.ctmt
             FROM uncrbt
             JOIN ctmt ON uncrbt.ctmt = ctmt.cod_id
-            ORDER BY ctmt.nome
+            ORDER BY uncrbt.sub
         """
       
         try:
@@ -59,18 +59,20 @@ class load_bdgd:
     @staticmethod
     def chaves_seccionadoras_baixa_tensao(conn) -> pd.DataFrame:
         query = """
+            
             SELECT DISTINCT 
-                u.pac_1, 
-                u.pac_2, 
-                u.cod_id, 
-                u.ctmt, 
-                u.cor_nom,
-                u.fas_con, 
-                c.nome, 
-                u.p_n_ope
-            FROM unsebt u
-            JOIN ctmt c ON u.ctmt = c.cod_id
-            ORDER BY c.nome;
+                            unsebt.sub,
+                            unsebt.pac_1, 
+                            unsebt.pac_2, 
+                            unsebt.cod_id, 
+                            unsebt.ctmt, 
+                            unsebt.cor_nom,
+                            unsebt.fas_con, 
+                            ctmt.nome, 
+                            unsebt.p_n_ope
+                        FROM unsebt 
+                        JOIN ctmt ON unsebt.ctmt = ctmt.cod_id
+                        ORDER BY unsebt.sub;
         """
         try:
             return pd.read_sql(query, conn)
@@ -83,19 +85,19 @@ class load_bdgd:
     @staticmethod
     def chaves_seccionadoras_media_tensao(conn) -> pd.DataFrame:
         query = """
-            SELECT DISTINCT 
-                u.pac_1, 
-                u.pac_2, 
-                u.cod_id, 
-                u.ctmt, 
-                u.cor_nom,
-                u.fas_con, 
-                c.nome, 
-                u.p_n_ope
-            FROM unsemt u
-            JOIN ctmt c ON u.ctmt = c.cod_id
-            ORDER BY c.nome;
-
+           SELECT DISTINCT 
+                            unsemt.sub,
+                            unsemt.pac_1, 
+                            unsemt.pac_2, 
+                            unsemt.cod_id, 
+                            unsemt.ctmt, 
+                            unsemt.cor_nom,
+                            unsemt.fas_con, 
+                            ctmt.nome, 
+                            unsemt.p_n_ope
+                        FROM unsemt 
+                        JOIN ctmt ON unsemt.ctmt = ctmt.cod_id
+                        ORDER BY unsemt.sub;
         """
         try:
             return pd.read_sql(query, conn)
