@@ -95,9 +95,9 @@ class load_bdgd:
                             unsemt.fas_con, 
                             ctmt.nome, 
                             unsemt.p_n_ope
-                        FROM unsemt 
-                        JOIN ctmt ON unsemt.ctmt = ctmt.cod_id
-                        ORDER BY unsemt.sub;
+            FROM unsemt 
+            JOIN ctmt ON unsemt.ctmt = ctmt.cod_id
+            ORDER BY unsemt.sub;
         """
         try:
             return pd.read_sql(query, conn)
@@ -111,20 +111,21 @@ class load_bdgd:
     def geradores_media_tensao(conn) -> pd.DataFrame:
         query = """
             SELECT 
-                DISTINCT ug.cod_id, 
-                ug.pac, 
-                ug.ctmt, 
-                ug.fas_con,
-                ug.ten_con, 
-                ug.pot_inst, 
-                ug.cep, 
-                ug.ceg_gd, 
-                ct.nome
-            FROM ugmt_tab ug
-            JOIN ctmt ct ON ug.ctmt = ct.cod_id
-            WHERE ug.ceg_gd NOT LIKE 'GD%' 
-            AND ug.ceg_gd NOT LIKE 'UFV%'
-            ORDER BY ct.nome;
+                        DISTINCT ugmt_tab.cod_id, 
+                        ugmt_tab.pac, 
+                        ugmt_tab.ctmt, 
+                        ugmt_tab.fas_con,
+                        ugmt_tab.ten_con, 
+                        ugmt_tab.pot_inst, 
+                        ugmt_tab.cep, 
+                        ugmt_tab.ceg_gd, 
+                        ugmt_tab.sub,
+                        ctmt.nome
+            FROM ugmt_tab 
+            JOIN ctmt ON ugmt_tab.ctmt = ctmt.cod_id
+            WHERE ugmt_tab.ceg_gd NOT LIKE 'GD%' 
+            AND ugmt_tab.ceg_gd NOT LIKE 'UFV%'
+            ORDER BY ugmt_tab.sub;
 
         """
         try:
@@ -137,14 +138,15 @@ class load_bdgd:
     @staticmethod
     def linecodes_baixa_tensao(conn) -> pd.DataFrame:
         query = """
-                         select distinct 
-            ctmt.nome, 
-            ssdbt.tip_cnd, 
-            ssdbt.fas_con, 
-            (select r1 from segcon where segcon.cod_id = ssdbt.tip_cnd limit 1) as r1,
-            (select x1 from segcon where segcon.cod_id = ssdbt.tip_cnd limit 1) as x1,
-            (select cnom from segcon where segcon.cod_id = ssdbt.tip_cnd limit 1) as cnom,
-            (select cmax_renamed from segcon where segcon.cod_id = ssdbt.tip_cnd limit 1) as cmax_renamed
+            select distinct 
+                        ctmt.nome, 
+                        ssdbt.tip_cnd, 
+                        ssdbt.fas_con, 
+						ssdbt.sub,
+                        (select r1 from segcon where segcon.cod_id = ssdbt.tip_cnd limit 1) as r1,
+                        (select x1 from segcon where segcon.cod_id = ssdbt.tip_cnd limit 1) as x1,
+                        (select cnom from segcon where segcon.cod_id = ssdbt.tip_cnd limit 1) as cnom,
+                        (select cmax_renamed from segcon where segcon.cod_id = ssdbt.tip_cnd limit 1) as cmax_renamed
             from ssdbt
             join ctmt on ctmt.cod_id = ssdbt.ctmt;
 
@@ -165,6 +167,7 @@ class load_bdgd:
             ctmt.nome, 
             ssdmt.tip_cnd, 
             ssdmt.fas_con, 
+            ssdmt.sub,
             (select r1 from segcon where segcon.cod_id = ssdmt.tip_cnd limit 1) as r1,
             (select x1 from segcon where segcon.cod_id = ssdmt.tip_cnd limit 1) as x1,
             (select cnom from segcon where segcon.cod_id = ssdmt.tip_cnd limit 1) as cnom,
@@ -190,6 +193,7 @@ class load_bdgd:
             ctmt.nome, 
             ramlig.tip_cnd, 
             ramlig.fas_con, 
+            ramlig.sub,
             (select r1 from segcon where segcon.cod_id = ramlig.tip_cnd limit 1) as r1,
             (select x1 from segcon where segcon.cod_id = ramlig.tip_cnd limit 1) as x1,
             (select cnom from segcon where segcon.cod_id = ramlig.tip_cnd limit 1) as cnom,
@@ -209,7 +213,7 @@ class load_bdgd:
     @staticmethod
     def linhas_baixa_tensao(conn) -> pd.DataFrame:
         query = """
-            SELECT distinct ssdbt.cod_id, pac_1, pac_2, ctmt.nome, fas_con, comp, tip_cnd
+            SELECT distinct ssdbt.cod_id, pac_1, pac_2, ctmt.nome, fas_con, comp, tip_cnd, ssdbt.sub
             FROM ssdbt
             JOIN ctmt ON ctmt.cod_id = ssdbt.ctmt
 
@@ -224,7 +228,7 @@ class load_bdgd:
     @staticmethod
     def linhas_media_tensao(conn) -> pd.DataFrame:
         query = """
-            SELECT DISTINCT ssdmt.cod_id, pac_1, pac_2, ctmt.nome, fas_con, comp, tip_cnd
+            SELECT DISTINCT ssdmt.cod_id, pac_1, pac_2, ctmt.nome, fas_con, comp, tip_cnd, ssdmt.sub
             FROM ssdmt
             JOIN ctmt ON ctmt.cod_id = ssdmt.ctmt
         """
@@ -587,7 +591,7 @@ class load_bdgd:
         """Modelagem dos ramais de ligação de baixa tensão"""
 
         query = (
-            "SELECT DISTINCT ramlig.cod_id, pac_1, pac_2, ctmt.nome, fas_con, comp, tip_cnd "
+            "SELECT DISTINCT ramlig.cod_id, pac_1, pac_2, ctmt.nome, fas_con, comp, tip_cnd, ramlig.sub "
             "FROM ramlig JOIN ctmt ON ctmt.cod_id = ramlig.ctmt ORDER BY ctmt.nome"
         )
 

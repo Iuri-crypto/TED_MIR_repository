@@ -254,8 +254,8 @@ class SwitchLowVoltage:
                 for sub, nomes in chunk_dict.items():
                     if sub not in dss_dict:
                         dss_dict[sub] = {}
-                for nome, linhas in chunk_dict.items():
-                    dss_dict[sub].setdefault(nome, []).extend(linhas)
+                    for nome, linhas in chunk_dict.items():
+                        dss_dict[sub].setdefault(nome, []).extend(linhas)
                 progress.update(task, advance=len(chunk))
 
         return dss_dict
@@ -279,7 +279,7 @@ class SwitchMediumVoltage:
             pac_2 = chunk["pac_2"]
             #rec_fases = chunk["rec_fases"]
             pn_ope = chunk["p_n_ope"]
-            #nome = chunk['nome']
+            nome = chunk['nome']
             sub = chunk['sub']
 
             for i in chunk.index:
@@ -295,7 +295,7 @@ class SwitchMediumVoltage:
                     f"bus2 = {pac_2[i]}.1.2.3 "
                     f"switch = {status}\n\n "
                 )
-                chunk_result.setdefault(sub[i], []).append(linha) 
+                chunk_result.setdefault(sub[i], {}).setdefault(nome[i], []).append(linha)
 
             return chunk_result
 
@@ -311,11 +311,15 @@ class SwitchMediumVoltage:
             for start in range(0, len(df), chunk_size):
                 chunk = df.iloc[start:start + chunk_size]
                 chunk_dict = process_chunk(chunk)
-                for nome, linhas in chunk_dict.items():
-                    dss_dict.setdefault(nome, []).extend(linhas)
+                for sub, nomes in chunk_dict.items():
+                    if sub not in dss_dict:
+                        dss_dict[sub] = {}
+                    for nome, linhas in chunk_dict.items():
+                        dss_dict[sub].setdefault(nome, []).extend(linhas)
                 progress.update(task, advance=len(chunk))
 
         return dss_dict
+
 
 
 class GeneratorMediumVoltage:
@@ -330,23 +334,24 @@ class GeneratorMediumVoltage:
         def process_chunk(chunk: pd.DataFrame) -> dict:
             chunk_result = {}
 
-            rec_fases = chunk["rec_fases"].astype(str)
+            rec_fases = chunk["rec_fases"]
             rec_fases = rec_fases.apply(lambda x: x if '.4' in x else x + '.4')
 
-            cod_id = chunk["cod_id"].astype(str)
-            pot_inst = chunk["pot_inst"].astype(str)
-            pac = chunk["pac"].astype(str)
-            ten_nom_voltage = (chunk["ten_nom_voltage"] / 1000).astype(str)
-            nome = chunk["nome"].astype(str)
+            cod_id = chunk["cod_id"]
+            pot_inst = chunk["pot_inst"]
+            pac = chunk["pac"]
+            ten_nom_voltage = (chunk["ten_nom_voltage"] / 1000)
+            nome = chunk["nome"]
+            sub = chunk["sub"]
 
             for i in chunk.index:
                 chave = cod_id[i]
                 linha = (
-                    f"New Generator.{chave}_Gerador_Media_tensao Bus1={pac[i]}{rec_fases[i]} Model=1 PF=0.92\n"
-                    f"~ kva={pot_inst[i]} KV={ten_nom_voltage[i]} Xdp=0.27 xdpp=0.20 H=2\n"
-                    f"~ Conn=wye\n\n"
+                    f"New Generator.{chave}_Gerador_Media_tensao Bus1={pac[i]}.1.2.3.0 Model=1 PF=0.92\n "
+                    f"~ kva={pot_inst[i]} KV={ten_nom_voltage[i]} Xdp=0.27 xdpp=0.20 H=2\n "
+                    f"~ Conn=wye\n\n "
                 )
-                chunk_result.setdefault(nome[i], []).append(linha)  # ✅ Correção aqui
+                chunk_result.setdefault(sub[i], {}).setdefault(nome[i], []).append(linha) 
 
             return chunk_result
 
@@ -362,13 +367,15 @@ class GeneratorMediumVoltage:
             for start in range(0, len(df), chunk_size):
                 chunk = df.iloc[start:start + chunk_size]
                 chunk_dict = process_chunk(chunk)
-                for nome, linhas in chunk_dict.items():
-                    dss_dict.setdefault(nome, []).extend(linhas)
+                for sub, nomes in chunk_dict.items():
+                    if sub not in dss_dict:
+                        dss_dict[sub] = {}
+                    for nome, linhas in chunk_dict.items():
+                        dss_dict[sub].setdefault(nome, []).extend(linhas)
                 progress.update(task, advance=len(chunk))
 
         return dss_dict
 
-   
    
    
 class LinecodeLowVoltage:
@@ -384,31 +391,30 @@ class LinecodeLowVoltage:
             chunk["x1"] = (chunk["x1"] / 1000).astype(str)
             chunk["cnom"] = chunk["cnom"].astype(str)
             chunk["cmax_renamed"] = chunk["cmax_renamed"].astype(str)
-            chunk["phases"] = chunk["phases"].astype(str)
             chunk["tip_cnd"] = chunk["tip_cnd"].astype(str)
             chunk["nome"] = chunk["nome"].astype(str)
+            chunk["sub"] = chunk["sub"].astype(str)
 
-            # Monta a string DSS vetorialmente
-            # chunk["linha"] = (
-            #     "New linecode." + chunk["tip_cnd"] + "_linecode_baixa nphases=" + chunk["phases"] + " BaseFreq=60\n" +
-            #     "~ r1=" + chunk["r1"] + "\n" +
-            #     "~ x1=" + chunk["x1"] + "\n" +
-            #     "~ c1=0\n" +
-            #     "~ Normamps = " + chunk["cnom"] + "\n" +
-            #     "~ Emergamps = " + chunk["cmax_renamed"] + "\n\n"
-            # )
+            # Geração das linhas DSS
             chunk["linha"] = (
-                "New linecode." + chunk["tip_cnd"] + "_linecode_baixa nphases=" + '3' + " BaseFreq=60\n" +
-                "~ r1=" + chunk["r1"] + "\n" +
-                "~ x1=" + chunk["x1"] + "\n" +
-                "~ c1=0\n" +
-                "~ Normamps = " + chunk["cnom"] + "\n" +
-                "~ Emergamps = " + chunk["cmax_renamed"] + "\n\n"
+                "New linecode." + chunk["tip_cnd"] + "_bt nphases=3 BaseFreq=60\n " +
+                "~ r1=" + chunk["r1"] + "\n " +
+                "~ x1=" + chunk["x1"] + "\n " +
+                "~ c1=0\n " +
+                "~ Normamps=" + chunk["cnom"] + "\n " +
+                "~ Emergamps=" + chunk["cmax_renamed"] + "\n\n "
             )
 
-            return chunk.groupby("nome")["linha"].agg(list).to_dict()
+            chunk_result = {}
+            for i in chunk.index:
+                sub = chunk.at[i, "sub"]
+                nome = chunk.at[i, "nome"]
+                linha = chunk.at[i, "linha"]
+                chunk_result.setdefault(sub, {}).setdefault(nome, []).append(linha)
 
-        dss_dict = defaultdict(list)
+            return chunk_result
+
+        dss_dict = {}
         console = Console()
 
         with Progress(
@@ -424,12 +430,15 @@ class LinecodeLowVoltage:
                 chunk = df.iloc[start:start + chunk_size]
                 chunk_dict = to_dss_vetorizado_chunk(chunk)
 
-                for chave, linhas in chunk_dict.items():
-                    dss_dict[chave].extend(linhas)
+                for sub, nomes in chunk_dict.items():
+                    if sub not in dss_dict:
+                        dss_dict[sub] = {}
+                    for nome, linhas in nomes.items():
+                        dss_dict[sub].setdefault(nome, []).extend(linhas)
 
                 progress.update(task, advance=len(chunk))
 
-        return dict(dss_dict)
+        return dss_dict
 
 
 
@@ -440,37 +449,36 @@ class LinecodeMediumVoltage:
 
         def to_dss_vetorizado_chunk(chunk: pd.DataFrame) -> dict:
             chunk = chunk.copy()
-            # Conversões vetoriais
-            chunk["r1"] = (chunk["r1"] / 1000).astype(str)
-            chunk["x1"] = (chunk["x1"] / 1000).astype(str)
-            chunk["cnom"] = chunk["cnom"].astype(str)
-            chunk["cmax_renamed"] = chunk["cmax_renamed"].astype(str)
-            chunk["phases"] = chunk["phases"].astype(str)
-            chunk["tip_cnd"] = chunk["tip_cnd"].astype(str)
-            chunk["nome"] = chunk["nome"].astype(str)
 
-            # Construção vetorial da string DSS
-            # chunk["linha"] = (
-            #     "New linecode." + chunk["tip_cnd"] + "_linecode_media nphases=" + chunk["phases"] + " BaseFreq=60\n" +
-            #     "~ r1=" + chunk["r1"] + "\n" +
-            #     "~ x1=" + chunk["x1"] + "\n" +
-            #     "~ c1=0\n" +
-            #     "~ Normamps=" + chunk["cnom"] + "\n" +
-            #     "~ Emergamps=" + chunk["cmax_renamed"] + "\n\n"
-            # )
+            # Conversões vetoriais
+            chunk["r1"] = (chunk["r1"] / 1000)
+            chunk["x1"] = (chunk["x1"] / 1000)
+            chunk["cnom"] = chunk["cnom"]
+            chunk["cmax_renamed"] = chunk["cmax_renamed"]
+            chunk["phases"] = chunk["phases"]
+            chunk["tip_cnd"] = chunk["tip_cnd"]
+            chunk["nome"] = chunk["nome"]
+            chunk["sub"] = chunk["sub"]
+
             chunk["linha"] = (
-                "New linecode." + chunk["tip_cnd"] + "_linecode_media nphases=" + '3' + " BaseFreq=60\n" +
-                "~ r1=" + chunk["r1"] + "\n" +
-                "~ x1=" + chunk["x1"] + "\n" +
-                "~ c1=0\n" +
-                "~ Normamps=" + chunk["cnom"] + "\n" +
-                "~ Emergamps=" + chunk["cmax_renamed"] + "\n\n"
+                "New linecode." + chunk["tip_cnd"] + "_mt nphases=3 BaseFreq=60\n " +
+                "~ r1=" + chunk["r1"] + "\n " +
+                "~ x1=" + chunk["x1"] + "\n " +
+                "~ c1=0\n " +
+                "~ Normamps=" + chunk["cnom"] + "\n " +
+                "~ Emergamps=" + chunk["cmax_renamed"] + "\n\n "
             )
 
+            chunk_result = {}
+            for i in chunk.index:
+                sub = chunk.at[i, "sub"]
+                nome = chunk.at[i, "nome"]
+                linha = chunk.at[i, "linha"]
+                chunk_result.setdefault(sub, {}).setdefault(nome, []).append(linha)
 
-            return chunk.groupby("nome")["linha"].agg(list).to_dict()
+            return chunk_result
 
-        linhas_dss = defaultdict(list)
+        dss_dict = {}
         console = Console()
 
         with Progress(
@@ -486,15 +494,15 @@ class LinecodeMediumVoltage:
                 chunk = df.iloc[start:start + chunk_size]
                 chunk_dict = to_dss_vetorizado_chunk(chunk)
 
-                # ✅ Soma acumulada por chave
-                for chave, linhas in chunk_dict.items():
-                    linhas_dss[chave].extend(linhas)
+                for sub, nomes in chunk_dict.items():
+                    if sub not in dss_dict:
+                        dss_dict[sub] = {}
+                    for nome, linhas in nomes.items():
+                        dss_dict[sub].setdefault(nome, []).extend(linhas)
 
                 progress.update(task, advance=len(chunk))
 
-        return dict(linhas_dss)
-
-
+        return dss_dict
 
 
 class LinecodeRamais:
@@ -504,6 +512,8 @@ class LinecodeRamais:
 
         def to_dss_vetorizado_chunk(chunk: pd.DataFrame) -> dict:
             chunk = chunk.copy()
+
+            # Conversões
             chunk["r1"] = (chunk["r1"] / 1000).astype(str)
             chunk["x1"] = (chunk["x1"] / 1000).astype(str)
             chunk["cnom"] = chunk["cnom"].astype(str)
@@ -511,28 +521,27 @@ class LinecodeRamais:
             chunk["phases"] = chunk["phases"].astype(str)
             chunk["tip_cnd"] = chunk["tip_cnd"].astype(str)
             chunk["nome"] = chunk["nome"].astype(str)
-
-            # chunk["linha"] = (
-            #     "New linecode." + chunk["tip_cnd"] + "_linecode_ramais nphases=" + chunk["phases"] + " BaseFreq=60\n" +
-            #     "~ r1=" + chunk["r1"] + "\n" +
-            #     "~ x1=" + chunk["x1"] + "\n" +
-            #     "~ c1=0\n" +
-            #     "~ Normamps=" + chunk["cnom"] + "\n" +
-            #     "~ Emergamps=" + chunk["cmax_renamed"] + "\n\n"
-            # )
+            chunk["sub"] = chunk["sub"].astype(str)
 
             chunk["linha"] = (
-                "New linecode." + chunk["tip_cnd"] + "_linecode_ramais nphases=" + '3' + " BaseFreq=60\n" +
-                "~ r1=" + chunk["r1"] + "\n" +
-                "~ x1=" + chunk["x1"] + "\n" +
-                "~ c1=0\n" +
-                "~ Normamps=" + chunk["cnom"] + "\n" +
-                "~ Emergamps=" + chunk["cmax_renamed"] + "\n\n"
+                "New linecode." + chunk["tip_cnd"] + "linecode_rml nphases=3 BaseFreq=60\n " +
+                "~ r1=" + chunk["r1"] + "\n " +
+                "~ x1=" + chunk["x1"] + "\n " +
+                "~ c1=0\n " +
+                "~ Normamps=" + chunk["cnom"] + "\n " +
+                "~ Emergamps=" + chunk["cmax_renamed"] + "\n\n "
             )
 
-            return chunk.groupby("nome")["linha"].agg(list).to_dict()
+            chunk_result = {}
+            for i in chunk.index:
+                sub = chunk.at[i, "sub"]
+                nome = chunk.at[i, "nome"]
+                linha = chunk.at[i, "linha"]
+                chunk_result.setdefault(sub, {}).setdefault(nome, []).append(linha)
 
-        linhas_dss = defaultdict(list)
+            return chunk_result
+
+        dss_dict = {}
         console = Console()
 
         with Progress(
@@ -548,14 +557,17 @@ class LinecodeRamais:
                 chunk = df.iloc[start:start + chunk_size]
                 chunk_dict = to_dss_vetorizado_chunk(chunk)
 
-                # ✅ soma corretamente as listas de linhas por chave
-                for chave, linhas in chunk_dict.items():
-                    linhas_dss[chave].extend(linhas)
+                for sub, nomes in chunk_dict.items():
+                    if sub not in dss_dict:
+                        dss_dict[sub] = {}
+                    for nome, linhas in nomes.items():
+                        dss_dict[sub].setdefault(nome, []).extend(linhas)
 
                 progress.update(task, advance=len(chunk))
 
-        return dict(linhas_dss)
-
+        return dss_dict
+    
+    
     
 class LineLowVoltage:
     @staticmethod
@@ -567,6 +579,7 @@ class LineLowVoltage:
         def to_dss_vetorizado_chunk(chunk: pd.DataFrame) -> dict:
             chunk = chunk.copy()
 
+            # Conversões para string para concatenar corretamente
             chunk["cod_id"] = chunk["cod_id"].astype(str)
             chunk["pac_1"] = chunk["pac_1"].astype(str)
             chunk["pac_2"] = chunk["pac_2"].astype(str)
@@ -575,23 +588,27 @@ class LineLowVoltage:
             chunk["rec_fases"] = chunk["rec_fases"].astype(str)
             chunk["phases"] = chunk["phases"].astype(str)
             chunk["nome"] = chunk["nome"].astype(str)
+            chunk["sub"] = chunk["sub"].astype(str)
 
             chunk["linha"] = (
                 "New Line." + chunk["cod_id"] + "_linha_baixa " +
-                "Phases = " + chunk["phases"] + " " +
-                "Bus1 = " + chunk["pac_1"] + chunk["rec_fases"] + " " +
-                "Bus2 = " + chunk["pac_2"] + chunk["rec_fases"] + " " +
-                "Linecode = " + chunk["tip_cnd"] + "_linecode_baixa " +
-                "Length = " + chunk["comp"] + " units = m\n"
+                "Phases=" + chunk["phases"] + " " +
+                "Bus1=" + chunk["pac_1"] + chunk["rec_fases"] + " " +
+                "Bus2=" + chunk["pac_2"] + chunk["rec_fases"] + " " +
+                "Linecode=" + chunk["tip_cnd"] + "_linecode_baixa " +
+                "Length=" + chunk["comp"] + " units=m\n"
             )
 
-            result = {}
-            for nome, linhas in chunk.groupby("nome")["linha"]:
-                result[nome] = linhas.tolist()
+            chunk_result = {}
+            for i in chunk.index:
+                sub = chunk.at[i, "sub"]
+                nome = chunk.at[i, "nome"]
+                linha = chunk.at[i, "linha"]
+                chunk_result.setdefault(sub, {}).setdefault(nome, []).append(linha)
 
-            return result
+            return chunk_result
 
-        linhas_dss = defaultdict(list)
+        dss_dict = {}
         console = Console()
 
         with Progress(
@@ -604,16 +621,18 @@ class LineLowVoltage:
             task = progress.add_task("Modelando...", total=len(df))
 
             for start in range(0, len(df), chunk_size):
-                chunk = df[start:start + chunk_size]
+                chunk = df.iloc[start:start + chunk_size]
                 chunk_dict = to_dss_vetorizado_chunk(chunk)
 
-                for chave, linhas in chunk_dict.items():
-                    linhas_dss[chave].extend(linhas)
+                for sub, nomes in chunk_dict.items():
+                    if sub not in dss_dict:
+                        dss_dict[sub] = {}
+                    for nome, linhas in nomes.items():
+                        dss_dict[sub].setdefault(nome, []).extend(linhas)
 
                 progress.update(task, advance=len(chunk))
 
-        return linhas_dss
-
+        return dss_dict
 
 
 class LineMediumVoltage:
@@ -627,30 +646,38 @@ class LineMediumVoltage:
         def to_dss_vetorizado_chunk(chunk: pd.DataFrame) -> dict:
             chunk = chunk.copy()
 
-            # Converte tudo que for necessário para string
+            # Conversões para string
             chunk["cod_id"] = chunk["cod_id"].astype(str)
             chunk["pac_1"] = chunk["pac_1"].astype(str)
             chunk["pac_2"] = chunk["pac_2"].astype(str)
             chunk["nome"] = chunk["nome"].astype(str)
+            chunk["sub"] = chunk["sub"].astype(str)
             chunk["comp"] = chunk["comp"].astype(str)
             chunk["tip_cnd"] = chunk["tip_cnd"].astype(str)
             chunk["rec_fases"] = chunk["rec_fases"].astype(str)
             chunk["phases"] = chunk["phases"].astype(str)
 
-            # Cria a coluna 'linha' com a string DSS usando concatenação vetorizada
+            # Geração da linha DSS
             chunk["linha"] = (
                 "New Line." + chunk["cod_id"] + "_linha_media " +
-                "Phases = " + '3' + " " +
-                "Bus1 = " + chunk["pac_1"] + '.1.2.3' + " " +
-                "Bus2 = " + chunk["pac_2"] + '.1.2.3' + " " +
-                "Linecode = " + chunk["tip_cnd"] + "_linecode_media " +
-                "Length = " + chunk["comp"] + " units = m\n"
+                "Phases=3 " +
+                "Bus1=" + chunk["pac_1"] + ".1.2.3 " +
+                "Bus2=" + chunk["pac_2"] + ".1.2.3 " +
+                "Linecode=" + chunk["tip_cnd"] + "_linecode_media " +
+                "Length=" + chunk["comp"] + " units=m\n "
             )
 
-            # Agrupa as linhas por 'nome'
-            return chunk.groupby("nome")["linha"].agg(list).to_dict()
+            # Estrutura aninhada: sub -> nome -> [linhas]
+            chunk_result = {}
+            for i in chunk.index:
+                sub = chunk.at[i, "sub"]
+                nome = chunk.at[i, "nome"]
+                linha = chunk.at[i, "linha"]
+                chunk_result.setdefault(sub, {}).setdefault(nome, []).append(linha)
 
-        linhas_dss = defaultdict(list)
+            return chunk_result
+
+        dss_dict = {}
         console = Console()
 
         with Progress(
@@ -666,13 +693,15 @@ class LineMediumVoltage:
                 chunk = df.iloc[start:start + chunk_size]
                 chunk_dict = to_dss_vetorizado_chunk(chunk)
 
-                for chave, linhas in chunk_dict.items():
-                    linhas_dss[chave].extend(linhas)
+                for sub, nomes in chunk_dict.items():
+                    if sub not in dss_dict:
+                        dss_dict[sub] = {}
+                    for nome, linhas in nomes.items():
+                        dss_dict[sub].setdefault(nome, []).extend(linhas)
 
                 progress.update(task, advance=len(chunk))
 
-        return dict(linhas_dss)
-
+        return dss_dict 
 
 
 class RamalLine:
@@ -684,21 +713,39 @@ class RamalLine:
         console = Console()
 
         def to_dss_vetorizado_chunk(chunk: pd.DataFrame) -> dict:
-            # Construir a coluna das linhas DSS usando concatenação vetorizada
-            linhas = (
-                'New Line.' + chunk['cod_id'].astype(str) + '_linha_ramal '
-                + 'Phases=' + chunk['phases'].astype(str) + ' '
-                + 'Bus1=' + chunk['pac_1'].astype(str) + chunk['rec_fases'].astype(str) + ' '
-                + 'Bus2=' + chunk['pac_2'].astype(str) + chunk['rec_fases'].astype(str) + ' '
-                + 'Linecode=' + chunk['tip_cnd'].astype(str) + '_linecode_ramais '
-                + 'Length=' + chunk['comp'].astype(str) + ' units=m\n'
+            chunk = chunk.copy()
+
+            # Garantir tipos corretos
+            chunk["cod_id"] = chunk["cod_id"].astype(str)
+            chunk["phases"] = chunk["phases"].astype(str)
+            chunk["pac_1"] = chunk["pac_1"].astype(str)
+            chunk["pac_2"] = chunk["pac_2"].astype(str)
+            chunk["rec_fases"] = chunk["rec_fases"].astype(str)
+            chunk["tip_cnd"] = chunk["tip_cnd"].astype(str)
+            chunk["comp"] = chunk["comp"].astype(str)
+            chunk["nome"] = chunk["nome"].astype(str)
+            chunk["sub"] = chunk["sub"].astype(str)
+
+            chunk["linha"] = (
+                "New Line." + chunk["cod_id"] + "_linha_ramal " +
+                "Phases=" + chunk["phases"] + " " +
+                "Bus1=" + chunk["pac_1"] + chunk["rec_fases"] + " " +
+                "Bus2=" + chunk["pac_2"] + chunk["rec_fases"] + " " +
+                "Linecode=" + chunk["tip_cnd"] + "_linecode_ramais " +
+                "Length=" + chunk["comp"] + " units=m\n "
             )
 
-            # Agrupar as linhas pelo nome e juntar em listas
-            grouped = linhas.groupby(chunk['nome']).apply(list).to_dict()
-            return grouped
+            # Organiza por sub -> nome -> [linhas]
+            chunk_result = {}
+            for i in chunk.index:
+                sub = chunk.at[i, "sub"]
+                nome = chunk.at[i, "nome"]
+                linha = chunk.at[i, "linha"]
+                chunk_result.setdefault(sub, {}).setdefault(nome, []).append(linha)
 
-        linhas_dss = {}
+            return chunk_result
+
+        dss_dict = {}
 
         with Progress(
             TextColumn("[bold green]Carregando..."),
@@ -710,16 +757,18 @@ class RamalLine:
             task = progress.add_task("Modelando...", total=len(df))
 
             for start in range(0, len(df), chunk_size):
-                chunk = df.iloc[start : start + chunk_size]
+                chunk = df.iloc[start:start + chunk_size]
                 chunk_dict = to_dss_vetorizado_chunk(chunk)
 
-                for nome, linhas in chunk_dict.items():
-                    linhas_dss.setdefault(nome, []).extend(linhas)
+                for sub, nomes in chunk_dict.items():
+                    if sub not in dss_dict:
+                        dss_dict[sub] = {}
+                    for nome, linhas in nomes.items():
+                        dss_dict[sub].setdefault(nome, []).extend(linhas)
 
                 progress.update(task, advance=len(chunk))
 
-        return linhas_dss
-
+        return dss_dict
 
     
 class LoadLowVoltage:

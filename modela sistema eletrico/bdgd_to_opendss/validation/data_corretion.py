@@ -259,7 +259,7 @@ class ValidatorGeradorMediaTensao:
         )
 
         # Selecionar colunas finais
-        return df[["nome", "fas_con", "ten_con", "ten_nom_voltage", "pot_inst", "cod_id", "pac", "rec_fases", "phases"]]
+        return df[["nome", "fas_con", "ten_con", "ten_nom_voltage", "pot_inst", "cod_id", "pac", "rec_fases", "phases", "sub"]]
 
   
 
@@ -309,7 +309,7 @@ class ValidatorLinecodesBaixaTensao:
         df["cmax_renamed"] = np.minimum(df["cmax_renamed"], self.cmax_max)
 
         # Colunas finais
-        return df[["nome", "tip_cnd", "fas_con", "r1", "x1", "cnom", "cmax_renamed", "rec_fases", "phases"]]
+        return df[["nome", "tip_cnd", "fas_con", "r1", "x1", "cnom", "cmax_renamed", "rec_fases", "phases", "sub"]]
 
     
 
@@ -358,7 +358,7 @@ class ValidatorLinecodesMediaTensao:
         df["cmax_renamed"] = np.minimum(df["cmax_renamed"], self.cmax_max)
 
         # Retorna somente colunas relevantes
-        return df[["nome", "tip_cnd", "fas_con", "r1", "x1", "cnom", "cmax_renamed", "rec_fases", "phases"]]
+        return df[["nome", "tip_cnd", "fas_con", "r1", "x1", "cnom", "cmax_renamed", "rec_fases", "phases", "sub"]]
 
 
 
@@ -405,7 +405,7 @@ class ValidatorLinecodesRamais:
         df["cmax_renamed"] = np.minimum(df["cmax_renamed"], self.cmax_max)
 
         # Seleciona somente colunas relevantes
-        return df[["nome", "tip_cnd", "fas_con", "r1", "x1", "cnom", "cmax_renamed", "rec_fases", "phases"]]
+        return df[["nome", "tip_cnd", "fas_con", "r1", "x1", "cnom", "cmax_renamed", "rec_fases", "phases", "sub"]]
 
 
 
@@ -447,7 +447,7 @@ class ValidatorLinhasBaixaTensao:
         df = df[df["pac_2"].notna() & df["pac_2"].astype(str).str.strip().ne("")]
 
         # Selecionar colunas finais na ordem desejada
-        return df[["cod_id", "pac_1", "pac_2", "nome", "fas_con", "comp", "tip_cnd", "rec_fases", "phases"]]
+        return df[["cod_id", "pac_1", "pac_2", "nome", "fas_con", "comp", "tip_cnd", "rec_fases", "phases", "sub"]]
 
 
 class ValidatorLinhasMediaTensao:
@@ -495,7 +495,7 @@ class ValidatorLinhasMediaTensao:
 
 
         # Ordena e retorna as colunas
-        return df[["cod_id", "pac_1", "pac_2", "nome", "fas_con", "comp", "tip_cnd", "rec_fases", "phases"]]
+        return df[["cod_id", "pac_1", "pac_2", "nome", "fas_con", "comp", "tip_cnd", "rec_fases", "phases", "sub"]]
 
 
 
@@ -530,7 +530,7 @@ class ValidadorRamaisLigacao:
         df = df[df['pac_2'].notna() & (df['pac_2'] != 0)]
 
 
-        return df[["cod_id", "pac_1", "pac_2", "nome", "fas_con", "comp", "tip_cnd", "rec_fases", "phases"]]
+        return df[["cod_id", "pac_1", "pac_2", "nome", "fas_con", "comp", "tip_cnd", "rec_fases", "phases", "sub"]]
 
 
 class ValidadorCargasBaixaTensao:
