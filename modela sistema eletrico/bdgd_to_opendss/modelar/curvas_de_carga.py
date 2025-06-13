@@ -25,7 +25,6 @@ class loashape_class:
         self.resul_crvcrg = None
         self.resul_ctmt = None
         self.curvas_somadas = {}
-        self.curva_alimentador_dic = {}
         self.np = np
         self.pd = pd
         
@@ -95,7 +94,8 @@ class loashape_class:
 
 
         self.curva_alim_temp_extracao = defaultdict(lambda: defaultdict(float))
-
+        self.curva_alimentador_dic = defaultdict(lambda: defaultdict(lambda: defaultdict(float)))
+        curva_temp = defaultdict(lambda: defaultdict(lambda: defaultdict(float)))
 
         for linha in self.resul_ctmt:
             ctmt = linha[0]
@@ -115,73 +115,63 @@ class loashape_class:
      
             energia_diaria = round((energia_ctmt + kwh_interesse) / 30, 3)
 
-            if ctmt not in self.curva_alimentador_dic: self.curva_alimentador_dic[ctmt] = {}
-            if nome not in self.curva_alimentador_dic[ctmt]: self.curva_alimentador_dic[ctmt][nome] = 0.0
+            self.curva_alimentador_dic[sub][ctmt][nome] = energia_diaria
 
-            self.curva_alimentador_dic[ctmt][nome] = energia_diaria
+        # Normalizando a curva resultante das cargas, mantendo por subestação e ctmt
+        for sub, ctmt_dict in self.curvas_somadas.items():
+            curva_temp[sub] = {}
 
-
-        # Normalizando a curva resultantes das cargas
-        curva_temp = {}
-        for ctmt, curva in self.curvas_somadas.items():
-            max_valor = max(curva)
-            if max_valor != 0: curva_temp[ctmt] = self.np.round(self.np.array(curva) / max_valor, 3)
-            else: curva_temp[ctmt] = self.np.zeros(len(curva))
+            for ctmt, curva in ctmt_dict.items():
+                max_valor = max(curva)
+                if max_valor != 0:
+                    curva_temp[sub][ctmt] = self.np.round(self.np.array(curva) / max_valor, 3)
+                else:
+                    curva_temp[sub][ctmt] = self.np.zeros(len(curva))
 
 
         # Agora construindo a curva do alimentador baseado na curva normalizada das cargas
-        #self.ctmt_substituto = '4311221'
         self.curva_alim_temp = defaultdict(lambda: defaultdict(float))
-        for ctmt, sub_dict in self.curva_alimentador_dic.items():
-            for nome, potencia in sub_dict.items():
-                
-                
-                # Alimentador tem medição de energia 
-                if round(potencia, 3) != 0.000:
-                    
-                    # E Alimentador tem cargas conectadas diretamente 
-                    if not curva_temp.get(ctmt) is None: 
-                        
-                          # Somando os pontos da curva
-                        soma_energia_dia = sum(curva_temp[self.ctmt])
-                    
-                                                
-                        # calculando o parametro multilicador da curva
-                        multiplicador = 4 * potencia / soma_energia_dia
-                        self.curva_alim_temp[nome][ctmt] = multiplicador * self.np.array(curva_temp[ctmt])
-      
-                    else: 
-                        # Somando os pontos da curva
-                        soma_energia_dia = sum(self.curva_temp_substituta)
-                        
-                        # calculando o parametro multilicador da curva
-                        multiplicador = 4 * potencia / soma_energia_dia
-                        self.curva_alim_temp[nome][ctmt] = multiplicador * self.np.array(curva_temp[self.ctmt])
-                
-                # Alimentador não tem medição de energia
-                else:
-                    
-                    # E Alimentador tem cargas conectadas diretamente 
-                    if ctmt in self.curvas_somadas: self.curva_alim_temp[nome][ctmt] = self.curvas_somadas[ctmt]
-                        
-                    # E Alimentador não tem cargas conectadas diretamente
-                    else: self.curva_alim_temp[nome][ctmt] = self.np.zeros(96) 
-                    
+
+        for sub, ctmt_dict in self.curva_alimentador_dic.items():
+            for ctmt, nome_dict in ctmt_dict.items():
+                for nome, potencia in nome_dict.items():
+
+                    if round(potencia, 3) != 0.000:  # Tem medição de energia
+                        curva_normalizada = curva_temp.get(sub, {}).get(ctmt)
+
+                        if curva_normalizada is not None:  # Tem curva normalizada para o CTMT
+                            soma_energia_dia = sum(curva_normalizada)
+                            multiplicador = 4 * potencia / soma_energia_dia
+                            self.curva_alim_temp[sub][ctmt] = multiplicador * self.np.array(curva_normalizada)
+
+                        else:  # Usa curva substituta
+                            soma_energia_dia = sum(self.curva_temp_substituta)
+                            multiplicador = 4 * potencia / soma_energia_dia
+                            self.curva_alim_temp[sub][ctmt] = multiplicador * self.np.array(self.curva_temp_substituta)
+
+                    else:  # Não tem medição de energia
+                        curva_somada = self.curvas_somadas.get(sub, {}).get(ctmt)
+                        if curva_somada is not None:
+                            self.curva_alim_temp[sub][ctmt] = curva_somada
+                        else:
+                            self.curva_alim_temp[sub][ctmt] = self.np.zeros(96)
+
                     
         # Extraindo max, min e media da curva do alimentador
-        for nome, sub in self.curva_alim_temp.items():
-            for ctmt, curva in sub.items():
-                curva_array = self.np.array(curva)  
+        for sub, ctmt_dict in self.curva_alim_temp.items():
+            for ctmt, curva in ctmt_dict.items():
+                curva_array = self.np.array(curva)
 
                 media = self.np.mean(curva_array)
                 minimo = self.np.min(curva_array)
                 maximo = self.np.max(curva_array)
 
-                self.curva_alim_temp_extracao[ctmt] = {
+                self.curva_alim_temp_extracao[sub][ctmt] = {
                     'KVA(MED)': round(media, 2),
                     'KVA(MIN)': round(minimo, 2),
                     'KVA(MAX) COINCIDENTE': round(maximo, 2)
                 }
+
                         
         return self.curva_alim_temp_extracao
 
@@ -208,9 +198,10 @@ class loashape_class:
     def carrega_dados_cargas(self):
         """ Coleta os dados das cargas da baixa e da média """
 
-        colunas_1 = ["cod_id", "ctmt", "sub", "tip_cc"]
+        colunas_1 = ["cod_id", "ctmt", "tip_cc"]
         colunas_2 = [f"ene_{str(i).zfill(2)}" for i in range(1, 13)]
-        colunas_str = ", ".join(colunas_1 + colunas_2)
+        colunas_3 = ["sub"]
+        colunas_str = ", ".join(colunas_1 + colunas_3 + colunas_2)
 
         # Consulta para ucbt_tab
         #query = f"SELECT {colunas_str} FROM ucbt_tab WHERE ctmt = %s"
@@ -250,7 +241,7 @@ class loashape_class:
         carga_media = []
         for linha in self.resul_ucbt_tab:
 
-            energias = [float(kwh) for kwh in linha[4:]]
+            energias = [float(kwh) for kwh in linha[5:]]
             carga_baixa.append((
                 linha[0], linha[1], linha[2],
                 linha[3], [round(valor / 720, 3) for valor in energias] if any(valor != 0 for valor in energias)
@@ -258,7 +249,7 @@ class loashape_class:
            ))
 
         for linha in self.resul_ucmt_tab:
-            energias = [float(kwh) for kwh in linha[4:]]
+            energias = [float(kwh) for kwh in linha[5:]]
             carga_media.append((
                 linha[0], linha[1], linha[2],
                 linha[3], [round(valor / 720, 3) for valor in energias] if any(valor != 0 for valor in energias)
@@ -271,12 +262,13 @@ class loashape_class:
 
 
 
+
     def somar_curvas_carga(self):
 
 
         # Converte listas para DataFrames para facilitar operações
         # Supondo que self.todas_cargas tem estrutura: [cod_id, ctmt, ?, tip_cc, potencia_lista, ...]
-        col_cargas = ['cod_id', 'ctmt', 'col3', 'tip_cc', 'potencias']
+        col_cargas = ['cod_id', 'ctmt', 'tip_cc', 'sub', 'potencias']
         df_cargas = pd.DataFrame(self.todas_cargas, columns=col_cargas)
 
         # Extrai a potência do mês atual (mes-1)
@@ -324,92 +316,96 @@ class loashape_class:
             return potencia * curva
 
         df_cargas['curva_final'] = df_cargas.apply(multiplica_potencia_curva, axis=1)
+        max_nao_coincidente = {}
+        # Itera por sub
+        for sub, df_sub in df_cargas.groupby('sub'):
+            self.curvas_somadas[sub] = {}
+            max_nao_coincidente[sub] = {}
 
-        # Agora soma as curvas por ctmt
-        self.curvas_somadas = df_cargas.groupby('ctmt')['curva_final'].apply(
-            lambda curvas: np.sum(np.stack(curvas.values), axis=0)
-        )
+            # Dentro do sub, agrupa por ctmt
+            for ctmt, df_ctmt in df_sub.groupby('ctmt'):
+                curvas = df_ctmt['curva_final'].values
+                curvas_stack = np.stack(curvas)
 
-        # Calcula o máximo não coincidente: soma dos máximos individuais por ctmt
-        max_nao_coincidente = df_cargas.groupby('ctmt')['curva_final'].apply(
-            lambda curvas: np.sum([np.max(curva) for curva in curvas])
-        )
+                curva_somada = np.sum(curvas_stack, axis=0)
+                max_nao_coinc = np.sum([np.max(curva) for curva in curvas])
 
-        # Extrai max, min, média de curvas somadas (coincidente)
+                self.curvas_somadas[sub][ctmt] = curva_somada
+                max_nao_coincidente[sub][ctmt] = max_nao_coinc
+
+                # Extrai max, min, média de curvas somadas (coincidente)
+        # Extrai estatísticas por sub e ctmt
         curvas_somadas_extracao = {}
         curvas_somadas_classficadas_nao_coincidente = {}
 
-        for ctmt, curva in self.curvas_somadas.items():
-            media = np.mean(curva)
-            minimo = np.min(curva)
-            maximo = np.max(curva)
-            curvas_somadas_extracao[ctmt] = {
-                'KVA(MED)': round(media, 2),
-                'KVA(MIN)': round(minimo, 2),
-                'KVA(MAX) CONINCIDENTE': round(maximo, 2)
-            }
-            curvas_somadas_classficadas_nao_coincidente[ctmt] = {
-                'KVA(MAX) NÃO COINCIDENTE': round(max_nao_coincidente[ctmt], 2)
-            }
+        for sub, ctmt_dict in self.curvas_somadas.items():
+            curvas_somadas_extracao[sub] = {}
+            curvas_somadas_classficadas_nao_coincidente[sub] = {}
 
+            for ctmt, curva in ctmt_dict.items():
+                media = np.mean(curva)
+                minimo = np.min(curva)
+                maximo = np.max(curva)
+
+                curvas_somadas_extracao[sub][ctmt] = {
+                    'KVA(MED)': round(media, 2),
+                    'KVA(MIN)': round(minimo, 2),
+                    'KVA(MAX) CONINCIDENTE': round(maximo, 2)
+                }
+
+                curvas_somadas_classficadas_nao_coincidente[sub][ctmt] = {
+                    'KVA(MAX) NÃO COINCIDENTE': round(max_nao_coincidente[sub][ctmt], 2)
+                }
         return curvas_somadas_extracao, curvas_somadas_classficadas_nao_coincidente
 
-    
+
+
+
+
     def curva_final(self):  
         """ Faz o calculo da curva final por alimentador baseado na comparação 
         da curva das cargas somadas e a curva do alimentador """
         
         self.curva_final_por_alimentador_dic_extracao = defaultdict(lambda: defaultdict(float))
-        self.curva_final_por_alimentador_dic = defaultdict(lambda: defaultdict(float))
-        self.curva_final_por_alimentador_dic_temp = defaultdict(float)
+        self.curva_final_por_alimentador_dic = defaultdict(lambda: defaultdict(lambda: defaultdict(float)))
+        self.curva_final_por_alimentador_dic_temp = defaultdict(lambda: defaultdict(float))
 
+        for sub, ctmt_dict in self.curva_alim_temp.items():
+            for ctmt, curva_alim in ctmt_dict.items():
 
+                curva_somada = self.curvas_somadas.get(sub, {}).get(ctmt)
+                curva_somada_nao_coincidente = self.curvas_somadas_classficadas_nao_coincidente.get(sub, {}).get(ctmt, {})
 
-        for nome, sub_dict in self.curva_alim_temp.items():
-            for ctmt, curva in sub_dict.items():
-                
-                # Para cada alimentador, da tabela ctmt, verificar / comparar com a curva das cargas somadas
-                if ctmt in self.curvas_somadas:
-                    # Se a curva do alimentador for maior que a curva das cargas somadas
-                    if self.np.max(curva) > self.np.max(self.curvas_somadas[ctmt]):
-                        # Se a curva do alimentador for maior que a curva das cargas somadas
-                        self.curva_final_por_alimentador_dic[ctmt][nome] = self.np.array(curva)
-                        self.curva_final_por_alimentador_dic_temp[ctmt] = 0.0
-
-                        
-                    # Se a curva do alimentador for menor que a curva das cargas somadas
+                if curva_somada is not None:
+                    if self.np.max(curva_alim) > self.np.max(curva_somada):
+                        self.curva_final_por_alimentador_dic[sub][ctmt] = curva_alim
+                        self.curva_final_por_alimentador_dic_temp[sub][ctmt] = 0.0
                     else:
-                        # Se a curva do alimentador for menor que a curva das cargas somadas
-                    
-                        self.curva_final_por_alimentador_dic_temp[ctmt] = self.curvas_somadas_classficadas_nao_coincidente[ctmt]['KVA(MAX) NÃO COINCIDENTE'] 
-                        self.curva_final_por_alimentador_dic[ctmt][nome] = self.np.array(self.curvas_somadas[ctmt])
-
-
-                
-                # Se não tiver nenhuma curv a de carga somadas, então pegar a do alimentador mesmo
+                        self.curva_final_por_alimentador_dic[sub][ctmt] = self.np.array(curva_somada)
+                        self.curva_final_por_alimentador_dic_temp[sub][ctmt] = curva_somada_nao_coincidente.get('KVA(MAX) NÃO COINCIDENTE', 0.0)
                 else:
-                    self.curva_final_por_alimentador_dic[nome][ctmt] = curva
- 
-              
+                    self.curva_final_por_alimentador_dic[sub][ctmt] = curva_alim
+                    self.curva_final_por_alimentador_dic_temp[sub][ctmt] = 0.0
+
         # Extraindo max, min e media da curva final
-        for ctmt, sub in self.curva_final_por_alimentador_dic.items():
-            for nome, curva in sub.items():
+        for sub, ctmt_dict in self.curva_final_por_alimentador_dic.items():
+            for ctmt, curva in ctmt_dict.items():
                 curva_final = self.np.array(curva)
 
                 media = self.np.mean(curva_final)
                 minimo = self.np.min(curva_final)
                 maximo = self.np.max(curva_final)
-                valor_nao_coincidente = self.curva_final_por_alimentador_dic_temp.get(ctmt, 0.0)
-                
+                valor_nao_coincidente = self.curva_final_por_alimentador_dic_temp.get(sub, {}).get(ctmt, 0.0)
 
-                self.curva_final_por_alimentador_dic_extracao[ctmt] = {
+                self.curva_final_por_alimentador_dic_extracao[sub][ctmt] = {
                     'KVA(MED)': round(media, 2),
                     'KVA(MIN)': round(minimo, 2),
                     'KVA(MAX) COINCIDENTE': round(maximo, 2),
                     'KVA(MAX) NÃO COINCIDENTE': round(valor_nao_coincidente, 2)
                 }
+
         return self.curva_final_por_alimentador_dic_extracao
-    
+
     
     def perdas_por_alimentador(self):
         """ Este método calcula as perdas percentuais por alimentador """
@@ -481,16 +477,53 @@ class loashape_class:
         
         # Gerar tabelas de curvas de carga
          # Converte o dicionário aninhado para DataFrame
-        curvas_somadas_extracao = self.pd.DataFrame.from_dict(self.curvas_somadas_extracao, orient='index')
-        df_curvas_somadas_nao_coincidente = self.pd.DataFrame.from_dict(self.curvas_somadas_classficadas_nao_coincidente, orient='index')
-        df_curva_alimentador = self.pd.DataFrame.from_dict(self.curva_alim_temp_extracao, orient='index')
-        df_curva_final = self.pd.DataFrame.from_dict(self.curva_final_por_alimentador_dic_extracao, orient='index')
+        curvas_somadas_extracao = []
+        for sub, ctmt_dict in self.curvas_somadas_extracao.items():
+            for ctmt, dados in ctmt_dict.items():
+                linha = {'SUB': sub, 'CTMT': ctmt}
+                linha.update(dados)
+                curvas_somadas_extracao.append(linha)
+        curvas_somadas_extracao = self.pd.DataFrame(curvas_somadas_extracao)
+
+
+        df_curvas_somadas_nao_coincidente = []
+        for sub, ctmt_dict in self.curvas_somadas_classficadas_nao_coincidente.items():
+            for ctmt, dados in ctmt_dict.items():
+                linha = {'SUB': sub, 'CTMT': ctmt}
+                linha.update(dados)
+                df_curvas_somadas_nao_coincidente.append(linha)
+        df_curvas_somadas_nao_coincidente = self.pd.DataFrame(df_curvas_somadas_nao_coincidente)
+
+
+        df_curva_alimentador = []
+        for sub, ctmt_dict in self.curva_alim_temp_extracao.items():
+            for ctmt, dados in ctmt_dict.items():
+                linha = {'SUB': sub, 'CTMT': ctmt}
+                linha.update(dados)
+                df_curva_alimentador.append(linha)
+        df_curva_alimentador = self.pd.DataFrame(df_curva_alimentador)
+
+
+        df_curva_final = []
+        for sub, ctmt_dict in self.curva_final_por_alimentador_dic_extracao.items():
+            for ctmt, dados in ctmt_dict.items():
+                linha = {'SUB': sub, 'CTMT': ctmt}
+                linha.update(dados)
+                df_curva_final.append(linha)
+        df_curva_final = self.pd.DataFrame(df_curva_final)
+
+
+        # # Reseta o índice e define o nome da coluna de CTMT
+        # df_curvas_somadas_extracao = curvas_somadas_extracao.reset_index().rename(columns={'index': 'CTMT'})
+        # df_curvas_somadas_nao_coincidente = df_curvas_somadas_nao_coincidente.reset_index().rename(columns={'index': 'CTMT'})
+        # df_curva_alimentador = df_curva_alimentador.reset_index().rename(columns={'index': 'CTMT'})
+        # df_curva_final = df_curva_final.reset_index().rename(columns={'index': 'CTMT'})
 
         # Reseta o índice e define o nome da coluna de CTMT
-        df_curvas_somadas_extracao = curvas_somadas_extracao.reset_index().rename(columns={'index': 'CTMT'})
-        df_curvas_somadas_nao_coincidente = df_curvas_somadas_nao_coincidente.reset_index().rename(columns={'index': 'CTMT'})
-        df_curva_alimentador = df_curva_alimentador.reset_index().rename(columns={'index': 'CTMT'})
-        df_curva_final = df_curva_final.reset_index().rename(columns={'index': 'CTMT'})
+        df_curvas_somadas_extracao = curvas_somadas_extracao.reset_index()
+        df_curvas_somadas_nao_coincidente = df_curvas_somadas_nao_coincidente.reset_index()
+        df_curva_alimentador = df_curva_alimentador.reset_index()
+        df_curva_final = df_curva_final.reset_index()
 
 
         # Substitui NaN por string vazia
@@ -501,19 +534,17 @@ class loashape_class:
 
 
         # Extraindo as listas da coluna cargas do excell
-        ctmts_carga = df_curvas_somadas_extracao['CTMT'].tolist()
-        kva_coninci_carga = df_curvas_somadas_extracao['KVA(MAX) CONINCIDENTE'].tolist()
- 
+        ctmts_carga = list(zip(df_curvas_somadas_extracao['SUB'], df_curvas_somadas_extracao['CTMT']))
+        kva_coninci_carga = df_curvas_somadas_extracao['KVA(MAX) CONINCIDENTE'].astype(float).tolist()
+
+        
  
         # Extraindo as listas da coluna alimentador do excell
-        ctmts_alimentador = df_curva_alimentador['CTMT'].tolist()
-        kva_coin_alimentador = df_curva_alimentador['KVA(MAX) COINCIDENTE'].tolist()
-        
-        
-        # Mapeia os CTMTs para seus valores de carga
-        dict_carga = dict(zip(ctmts_carga, kva_coninci_carga))
+        ctmts_alimentador = list(zip(df_curva_alimentador['SUB'], df_curva_alimentador['CTMT']))
+        kva_coin_alimentador = df_curva_alimentador['KVA(MAX) COINCIDENTE'].astype(float).tolist()
 
-        # Mapeia os CTMTs para seus valores de alimentador
+        
+        dict_carga = dict(zip(ctmts_carga, kva_coninci_carga))
         dict_alimentador = dict(zip(ctmts_alimentador, kva_coin_alimentador))
 
         # Obtém a interseção dos CTMTs presentes nas duas listas
@@ -529,17 +560,24 @@ class loashape_class:
         # usando o dicionário: self.armazena_perdas_por_alimentador[ctmt]
         
         
-        self.armazena_perdas_por_alimentador = self.perdas_por_alimentador() # de 7% a 10% na maioria dos alimentadores
+        self.armazena_perdas_por_alimentador = self.perdas_por_alimentador()  # agora espera-se que o dicionário use (SUB, CTMT) também!
         self.load_mult_por_alimentador = defaultdict(lambda: defaultdict(float))
-        for ctmt, kva_carga, kva_alimentador in ctmt_kvas_zipado:
-            
+
+        for sub_ctmt in sorted(ctmts_comuns):
+            sub, ctmt = sub_ctmt
+            kva_carga = dict_carga[sub_ctmt]
+            kva_alimentador = dict_alimentador[sub_ctmt]
+
             if kva_carga == 0 or kva_carga is None or kva_alimentador == 0 or kva_alimentador is None:
                 kva_carga = 100
                 kva_alimentador = 100
-            perda = self.armazena_perdas_por_alimentador.get(ctmt, 0.1)
+
+            perda = self.armazena_perdas_por_alimentador.get(sub_ctmt, 0.1)
             kva_alimentador = kva_alimentador - (kva_alimentador * perda)
             multiplicador = kva_alimentador / kva_carga
-            self.load_mult_por_alimentador[ctmt] = multiplicador 
+
+            self.load_mult_por_alimentador[sub][ctmt] = multiplicador
+
 
         return self.load_mult_por_alimentador
 

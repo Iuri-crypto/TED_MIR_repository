@@ -256,30 +256,32 @@ class load_bdgd:
         
         ugbt_ugmt_bdgd = """
                     SELECT 
-                            g.ctmt, 
-                            g.pot_inst, 
-                            g.ceg_gd, 
-                            ctmt.nome
-                        FROM 
-                            ugbt_tab AS g
-                        JOIN 
+                            ugbt_tab.ctmt, 
+                            ugbt_tab.pot_inst, 
+                            ugbt_tab.ceg_gd, 
+                            ctmt.nome,
+							ugbt_tab.sub
+                    FROM 
+                            ugbt_tab 
+                    JOIN 
                             ctmt 
-                        ON 
-                            g.ctmt = ctmt.cod_id
+                    ON 
+                            ugbt_tab.ctmt = ctmt.cod_id
 
-                        UNION ALL
+                    UNION ALL
 
-                        SELECT 
-                            m.ctmt, 
-                            m.pot_inst, 
-                            m.ceg_gd, 
-                            ctmt.nome
-                        FROM 
-                            ugmt_tab AS m
-                        JOIN 
+                    SELECT 
+                            ugmt_tab.ctmt, 
+                            ugmt_tab.pot_inst, 
+                            ugmt_tab.ceg_gd, 
+                            ctmt.nome,
+							ugmt_tab.sub
+                    FROM 
+                            ugmt_tab 
+                    JOIN 
                             ctmt 
-                        ON 
-                            m.ctmt = ctmt.cod_id;
+                    ON 
+                            ugmt_tab.ctmt = ctmt.cod_id;
         """
 
         query_total = """
@@ -290,27 +292,28 @@ class load_bdgd:
 
         query_data_template = """
             SELECT DISTINCT
-                ucbt_tab.cod_id, ucbt_tab.tip_cc, ucbt_tab.pac, ctmt.nome,
-                ctmt.ene_01 AS ene_01_alimentador, ctmt.ene_02 AS ene_02_alimentador,
-                ctmt.ene_03 AS ene_03_alimentador, ctmt.ene_04 AS ene_04_alimentador,
-                ctmt.ene_05 AS ene_05_alimentador, ctmt.ene_06 AS ene_06_alimentador,
-                ctmt.ene_07 AS ene_07_alimentador, ctmt.ene_08 AS ene_08_alimentador,
-                ctmt.ene_09 AS ene_09_alimentador, ctmt.ene_10 AS ene_10_alimentador,
-                ctmt.ene_11 AS ene_11_alimentador, ctmt.ene_12 AS ene_12_alimentador,
-                ctmt.pntbt_01 AS pntbt_01_alimentador, ctmt.pntbt_02 AS pntbt_02_alimentador,
-                ctmt.pntbt_03 AS pntbt_03_alimentador, ctmt.pntbt_04 AS pntbt_04_alimentador,
-                ctmt.pntbt_05 AS pntbt_05_alimentador, ctmt.pntbt_06 AS pntbt_06_alimentador,
-                ctmt.pntbt_07 AS pntbt_07_alimentador, ctmt.pntbt_08 AS pntbt_08_alimentador,
-                ctmt.pntbt_09 AS pntbt_09_alimentador, ctmt.pntbt_10 AS pntbt_10_alimentador,
-                ctmt.pntbt_11 AS pntbt_11_alimentador, ctmt.pntbt_12 AS pntbt_12_alimentador,
-                ucbt_tab.fas_con, ucbt_tab.ten_forn,
-                ucbt_tab.ene_01 AS ene_01_carga, ucbt_tab.ene_02 AS ene_02_carga,
-                ucbt_tab.ene_03 AS ene_03_carga, ucbt_tab.ene_04 AS ene_04_carga,
-                ucbt_tab.ene_05 AS ene_05_carga, ucbt_tab.ene_06 AS ene_06_carga,
-                ucbt_tab.ene_07 AS ene_07_carga, ucbt_tab.ene_08 AS ene_08_carga,
-                ucbt_tab.ene_09 AS ene_09_carga, ucbt_tab.ene_10 AS ene_10_carga,
-                ucbt_tab.ene_11 AS ene_11_carga, ucbt_tab.ene_12 AS ene_12_carga, 
-                ucbt_tab.ctmt
+                        ucbt_tab.cod_id, ucbt_tab.tip_cc, ucbt_tab.pac, ctmt.nome,
+                        ctmt.ene_01 AS ene_01_alimentador, ctmt.ene_02 AS ene_02_alimentador,
+                        ctmt.ene_03 AS ene_03_alimentador, ctmt.ene_04 AS ene_04_alimentador,
+                        ctmt.ene_05 AS ene_05_alimentador, ctmt.ene_06 AS ene_06_alimentador,
+                        ctmt.ene_07 AS ene_07_alimentador, ctmt.ene_08 AS ene_08_alimentador,
+                        ctmt.ene_09 AS ene_09_alimentador, ctmt.ene_10 AS ene_10_alimentador,
+                        ctmt.ene_11 AS ene_11_alimentador, ctmt.ene_12 AS ene_12_alimentador,
+                        ctmt.pntbt_01 AS pntbt_01_alimentador, ctmt.pntbt_02 AS pntbt_02_alimentador,
+                        ctmt.pntbt_03 AS pntbt_03_alimentador, ctmt.pntbt_04 AS pntbt_04_alimentador,
+                        ctmt.pntbt_05 AS pntbt_05_alimentador, ctmt.pntbt_06 AS pntbt_06_alimentador,
+                        ctmt.pntbt_07 AS pntbt_07_alimentador, ctmt.pntbt_08 AS pntbt_08_alimentador,
+                        ctmt.pntbt_09 AS pntbt_09_alimentador, ctmt.pntbt_10 AS pntbt_10_alimentador,
+                        ctmt.pntbt_11 AS pntbt_11_alimentador, ctmt.pntbt_12 AS pntbt_12_alimentador,
+                        ucbt_tab.fas_con, ucbt_tab.ten_forn,
+                        ucbt_tab.ene_01 AS ene_01_carga, ucbt_tab.ene_02 AS ene_02_carga,
+                        ucbt_tab.ene_03 AS ene_03_carga, ucbt_tab.ene_04 AS ene_04_carga,
+                        ucbt_tab.ene_05 AS ene_05_carga, ucbt_tab.ene_06 AS ene_06_carga,
+                        ucbt_tab.ene_07 AS ene_07_carga, ucbt_tab.ene_08 AS ene_08_carga,
+                        ucbt_tab.ene_09 AS ene_09_carga, ucbt_tab.ene_10 AS ene_10_carga,
+                        ucbt_tab.ene_11 AS ene_11_carga, ucbt_tab.ene_12 AS ene_12_carga, 
+                        ucbt_tab.ctmt,
+                        ucbt_tab.sub
             FROM ucbt_tab
             JOIN ctmt ON ctmt.cod_id = ucbt_tab.ctmt
             WHERE ucbt_tab.gru_ten = 'BT'
@@ -387,7 +390,8 @@ class load_bdgd:
                 ucmt_tab.ene_07 AS ene_07_carga, ucmt_tab.ene_08 AS ene_08_carga,
                 ucmt_tab.ene_09 AS ene_09_carga, ucmt_tab.ene_10 AS ene_10_carga,
                 ucmt_tab.ene_11 AS ene_11_carga, ucmt_tab.ene_12 AS ene_12_carga, 
-                ucmt_tab.ctmt
+                ucmt_tab.ctmt,
+                ucmt_tab.sub
             FROM 
                 ucmt_tab
             JOIN 
@@ -456,10 +460,10 @@ class load_bdgd:
             for offset in range(0, total_rows, limit):
                 query_ugbt = f"""
                     SELECT DISTINCT 
-                        ugbt_tab.cod_id, ugbt_tab.ceg_gd, ugbt_tab.pac, ctmt.nome, 
-                        ugbt_tab.fas_con, ugbt_tab.ten_con, ugbt_tab.pot_inst
+                            ugbt_tab.cod_id, ugbt_tab.ceg_gd, ugbt_tab.pac, ctmt.nome, 
+                            ugbt_tab.fas_con, ugbt_tab.ten_con, ugbt_tab.pot_inst, ugbt_tab.sub
                     FROM 
-                        ugbt_tab
+                            ugbt_tab
                     JOIN 
                         ctmt ON ctmt.cod_id = ugbt_tab.ctmt
                     ORDER BY 
@@ -520,7 +524,7 @@ class load_bdgd:
                 query_ugmt = f"""
                     SELECT DISTINCT 
                         ugmt_tab.cod_id, ugmt_tab.ceg_gd, ugmt_tab.pac, ctmt.nome, 
-                        ugmt_tab.fas_con, ugmt_tab.ten_con, ugmt_tab.pot_inst
+                        ugmt_tab.fas_con, ugmt_tab.ten_con, ugmt_tab.pot_inst, ugmt_tab.sub
                     FROM 
                         ugmt_tab
                     JOIN 
@@ -568,7 +572,7 @@ class load_bdgd:
                 query = f"""
                     SELECT DISTINCT 
                         pip.cod_id, pip.tip_cc, pip.pac, ctmt.nome, 
-                        pip.fas_con, pip.ten_forn, pip.pot_lamp 
+                        pip.fas_con, pip.ten_forn, pip.pot_lamp, pip.sub 
                     FROM pip 
                     JOIN ctmt ON ctmt.cod_id = pip.ctmt 
                     ORDER BY ctmt.nome 
@@ -611,7 +615,7 @@ class load_bdgd:
         query = (
             "SELECT DISTINCT untrmt.cod_id, untrmt.pac_1, untrmt.pac_2, ctmt.nome, eqtrmt.pot_nom, "
             "eqtrmt.lig, eqtrmt.ten_pri, eqtrmt.ten_sec, eqtrmt.lig_fas_p, eqtrmt.lig_fas_s, eqtrmt.r, "
-            "eqtrmt.xhl, untrmt.per_fer, eqtrmt.lig_fas_t, untrmt.pac_3 "
+            "eqtrmt.xhl, untrmt.per_fer, eqtrmt.lig_fas_t, untrmt.pac_3, untrmt.sub "
             "FROM untrmt "
             "LEFT JOIN eqtrmt ON eqtrmt.uni_tr_mt = untrmt.cod_id "
             "LEFT JOIN ctmt ON ctmt.cod_id = untrmt.ctmt "

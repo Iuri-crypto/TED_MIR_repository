@@ -147,38 +147,38 @@ class ModelRunner:
             conn_mt = get_connection(**db_configs["energisa_mt"])
             conn_aneel = get_connection(**db_configs["aneel"])
 
-            #df_slack = load_bdgd.barra_slack(conn_mt)
-            #df_slack = ValidatorBarraSlack().validate_dataframe(df_slack)
-            #modelated_slacks = SlackBus().to_dss(df_slack)
+            df_slack = load_bdgd.barra_slack(conn_mt)
+            df_slack = ValidatorBarraSlack().validate_dataframe(df_slack)
+            modelated_slacks = SlackBus().to_dss(df_slack)
 
-            #df_compensadores_reativo_media = load_bdgd.compensadores_reativo_media(conn_mt)
-            #df_compensadores_reativo_media = ValidatorCompensadorMedia().validate_dataframe(df_compensadores_reativo_media)
-            #modelated_compensadores_reativo_media = ReactiveCompensatorMT().to_dss(df_compensadores_reativo_media)
+            df_compensadores_reativo_media = load_bdgd.compensadores_reativo_media(conn_mt)
+            df_compensadores_reativo_media = ValidatorCompensadorMedia().validate_dataframe(df_compensadores_reativo_media)
+            modelated_compensadores_reativo_media = ReactiveCompensatorMT().to_dss(df_compensadores_reativo_media)
 
-            #df_compensadores_reativo_baixa = load_bdgd.compensadores_reativo_baixa(conn_mt)
-            #df_compensadores_reativo_baixa = ValidatorCompensadorBaixa().validate_dataframe(df_compensadores_reativo_baixa)
-            #modelated_compensadores_reativo_baixa = ReactiveCompensatorBT().to_dss(df_compensadores_reativo_baixa)
+            df_compensadores_reativo_baixa = load_bdgd.compensadores_reativo_baixa(conn_mt)
+            df_compensadores_reativo_baixa = ValidatorCompensadorBaixa().validate_dataframe(df_compensadores_reativo_baixa)
+            modelated_compensadores_reativo_baixa = ReactiveCompensatorBT().to_dss(df_compensadores_reativo_baixa)
 
 
             #df_chaves_seccionadoras_baixa_tensao = load_bdgd.chaves_seccionadoras_baixa_tensao(conn_mt)
             #df_chaves_seccionadoras_baixa_tensao = ValidatorChaveSeccionadoraBT().validate_dataframe(df_chaves_seccionadoras_baixa_tensao)
             #modelated_chaves_seccionadoras_baixa_tensao = SwitchLowVoltage().to_dss(df_chaves_seccionadoras_baixa_tensao)
 
-            #df_chaves_seccionadoras_media_tensao = load_bdgd.chaves_seccionadoras_media_tensao(conn_mt)
-            #df_chaves_seccionadoras_media_tensao = ValidatorChaveSeccionadoraMT().validate_dataframe(df_chaves_seccionadoras_media_tensao)
-            #modelated_chaves_seccionadoras_media_tensao = SwitchMediumVoltage().to_dss(df_chaves_seccionadoras_media_tensao)
+            df_chaves_seccionadoras_media_tensao = load_bdgd.chaves_seccionadoras_media_tensao(conn_mt)
+            df_chaves_seccionadoras_media_tensao = ValidatorChaveSeccionadoraMT().validate_dataframe(df_chaves_seccionadoras_media_tensao)
+            modelated_chaves_seccionadoras_media_tensao = SwitchMediumVoltage().to_dss(df_chaves_seccionadoras_media_tensao)
 
-            #df_geradores_media_tensao = load_bdgd.geradores_media_tensao(conn_mt)
-            #df_geradores_media_tensao = ValidatorGeradorMediaTensao().validate_dataframe(df_geradores_media_tensao)
-            #modelated_geradores_media_tensao = GeneratorMediumVoltage().to_dss(df_geradores_media_tensao)
+            df_geradores_media_tensao = load_bdgd.geradores_media_tensao(conn_mt)
+            df_geradores_media_tensao = ValidatorGeradorMediaTensao().validate_dataframe(df_geradores_media_tensao)
+            modelated_geradores_media_tensao = GeneratorMediumVoltage().to_dss(df_geradores_media_tensao)
 
             #df_linecodes_baixa_tensao = load_bdgd.linecodes_baixa_tensao(conn_mt)
             #df_linecodes_baixa_tensao = ValidatorLinecodesBaixaTensao().validate_dataframe(df_linecodes_baixa_tensao)
             #modelated_linecodes_baixa_tensao = LinecodeLowVoltage().to_dss(df_linecodes_baixa_tensao)
             
-            #df_linecodes_media_tensao = load_bdgd.linecodes_media_tensao(conn_mt)
-            #df_linecodes_media_tensao = ValidatorLinecodesMediaTensao().validate_dataframe(df_linecodes_media_tensao)
-            #modelated_linecodes_media_tensao = LinecodeMediumVoltage().to_dss(df_linecodes_media_tensao)
+            df_linecodes_media_tensao = load_bdgd.linecodes_media_tensao(conn_mt)
+            df_linecodes_media_tensao = ValidatorLinecodesMediaTensao().validate_dataframe(df_linecodes_media_tensao)
+            modelated_linecodes_media_tensao = LinecodeMediumVoltage().to_dss(df_linecodes_media_tensao)
 
             #df_linecodes_ramais = load_bdgd.linecodes_ramais(conn_mt)
             #df_linecodes_ramais = ValidatorLinecodesRamais().validate_dataframe(df_linecodes_ramais)
@@ -188,9 +188,9 @@ class ModelRunner:
             #df_linhas_baixa_tensao = ValidatorLinhasBaixaTensao().validate_dataframe(df_linhas_baixa_tensao)
             #modelated_linhas_baixa_tensao = LineLowVoltage().to_dss(df_linhas_baixa_tensao)
 
-            #df_linhas_media_tensao = load_bdgd.linhas_media_tensao(conn_mt)
-            #df_linhas_media_tensao = ValidatorLinhasMediaTensao().validate_dataframe(df_linhas_media_tensao)
-            #modelated_linhas_media_tensao = LineMediumVoltage().to_dss(df_linhas_media_tensao)
+            df_linhas_media_tensao = load_bdgd.linhas_media_tensao(conn_mt)
+            df_linhas_media_tensao = ValidatorLinhasMediaTensao().validate_dataframe(df_linhas_media_tensao)
+            modelated_linhas_media_tensao = LineMediumVoltage().to_dss(df_linhas_media_tensao)
             
             #df_Ramais_Ligacao = load_bdgd.Ramais_Ligacao(conn_mt)
             #df_Ramais_Ligacao = ValidadorRamaisLigacao().validate_dataframe(df_Ramais_Ligacao)
@@ -221,6 +221,9 @@ class ModelRunner:
             df_transformadores_Media_tensao = ValidadorTransformadoresMediaTensao().validate_dataframe(df_transformadores_Media_tensao)
             modelated_transformadores_Media_tensao = TransformerMediumVoltage().to_dss(df_transformadores_Media_tensao)
 
+            #df_Reguladores_Media_Tensao = load_bdgd.Reguladores_Media_Tensao(conn_mt)
+            #df_Reguladores_Media_Tensao = ValidadorReguladoresMediaTensao().validate_dataframe(df_Reguladores_Media_Tensao)
+            #modelated_Reguladores_Media_Tensao = RegulatorMediumVoltage().to_dss(df_Reguladores_Media_Tensao)
 
             df_curvas_de_carga = load_bdgd.Curvas_de_Carga(conn_mt)
             df_curvas_de_carga = ValidadorCurvas_Cargas().validate_dataframe(df_curvas_de_carga)

@@ -581,7 +581,7 @@ class ValidadorCargasBaixaTensao:
         df["phases"] = df["fases"].str.replace("N", "").str.len()
 
 
-        return df[["cod_id", "pac", "nome", "potencias", "tip_cc", "conn", "phases", "rec_fases", "ten_nom_voltage"]]
+        return df[["cod_id", "pac", "nome", "potencias", "tip_cc", "conn", "phases", "rec_fases", "ten_nom_voltage", "sub"]]
 
 
 
@@ -668,7 +668,7 @@ class ValidadorCargasMediaTensao:
         df["phases"] = df["fases"].str.replace("N", "").str.len()
 
 
-        return df[["cod_id", "pac", "nome", "potencias", "tip_cc", "conn", "phases", "rec_fases", "ten_nom_voltage"]]
+        return df[["cod_id", "pac", "nome", "potencias", "tip_cc", "conn", "phases", "rec_fases", "ten_nom_voltage", "sub"]]
 
 
 

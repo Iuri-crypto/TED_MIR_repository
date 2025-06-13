@@ -69,12 +69,12 @@ class ReactiveCompensatorMT:
             basekv = (chunk['ten_nom_voltage'] / 1000).round(3)
             rec_fases = chunk.get('rec_fases', pd.Series('', index=chunk.index)).astype(str)
             phases = chunk.get('phases', pd.Series(3, index=chunk.index))
-            pot_nom = chunk['pot_nom']
-            pac_1 = chunk['pac_1']
-            tip_unid = chunk['tip_unid']
-            cod_id = chunk['cod_id']
-            nome = chunk['nome']
-            sub = chunk['sub']
+            pot_nom = chunk['pot_nom'].astype(str)
+            pac_1 = chunk['pac_1'].astype(str)
+            tip_unid = chunk['tip_unid'].astype(str)
+            cod_id = chunk['cod_id'].astype(str)
+            nome = chunk['nome'].astype(str)
+            sub = chunk['sub'].astype(str)
 
             for i in chunk.index:
                 bus1 = f"{pac_1[i]}{rec_fases[i]}"
@@ -92,12 +92,12 @@ class ReactiveCompensatorMT:
 
                 if tip_unid[i] == 56:
                     linha = (
-                            f"New Reactor.{sub}_{nome}_{cod_id_rec}_Banco_de_Reator Bus1 = {bus1}{rec} "
+                            f"New Reactor.{cod_id_rec}_Banco_de_Reator Bus1 = {bus1}{rec} "
                             f"kv = {kv} kvar = {kvar} phases = {fases} conn = wye\n\n"
                     )
                 else:
                     linha = (
-                            f"New Capacitor.{sub}_{nome}_{cod_id_rec}_Banco_de_Capacitor Bus1 = {bus1} "
+                            f"New Capacitor.{cod_id_rec}_Banco_de_Capacitor Bus1 = {bus1} "
                             f"kv = {kv} kVAR = {kvar} phases = {fases} conn = wye\n\n"
                     )
 
@@ -145,13 +145,13 @@ class ReactiveCompensatorBT:
             basekv = (chunk['ten_nom_voltage'] / 1000).round(3)
             rec_fases = chunk.get('rec_fases', pd.Series('', index=chunk.index)).astype(str)
             phases = chunk.get('phases', pd.Series(3, index=chunk.index))
-            pot_nom = chunk['pot_nom']
-            pac_1 = chunk['pac_1']
-            tip_unid = chunk['tip_unid']
-            cod_id = chunk['cod_id']
-            nome = chunk['nome']
-            sub = chunk['sub']
-            cod_id_rec = chunk['cod_id']
+            pot_nom = chunk['pot_nom'].astype(str)
+            pac_1 = chunk['pac_1'].astype(str)
+            tip_unid = chunk['tip_unid'].astype(str)
+            cod_id = chunk['cod_id'].astype(str)
+            nome = chunk['nome'].astype(str)
+            sub = chunk['sub'].astype(str)
+            cod_id_rec = chunk['cod_id'].astype(str)
             rec = '.0'
 
             for i in chunk.index:
@@ -167,12 +167,12 @@ class ReactiveCompensatorBT:
 
                 if tip_unid[i] == 56:
                     linha = (
-                        f"New Reactor.{sub}_{nome}_{cod_id_rec}_Banco_de_Reator Bus1 = {bus1}{rec} "
+                        f"New Reactor.{cod_id_rec}_Banco_de_Reator Bus1 = {bus1}{rec} "
                         f"kv = {kv} kvar = {kvar} phases = {fases} conn = wye\n\n"
                     )
                 else:
                     linha = (
-                        f"New Capacitor.{sub}_{nome}_{cod_id_rec}_Banco_de_Capacitor Bus1 = {bus1}{rec} "
+                        f"New Capacitor.{cod_id_rec}_Banco_de_Capacitor Bus1 = {bus1}{rec} "
                         f"kv = {kv} kVAR = {kvar} phases = {fases} conn = wye\n\n"
                     )
 
@@ -219,12 +219,12 @@ class SwitchLowVoltage:
 
             cod_id = chunk["cod_id"]
             phases = chunk.get("phases", pd.Series(3, index=chunk.index))
-            pac_1 = chunk["pac_1"]
-            pac_2 = chunk["pac_2"]
-            rec_fases = chunk["rec_fases"]
-            pn_ope = chunk["p_n_ope"]
-            nome = chunk["nome"]
-            sub = chunk['sub']
+            pac_1 = chunk["pac_1"].astype(str)
+            pac_2 = chunk["pac_2"].astype(str)
+            rec_fases = chunk["rec_fases"].astype(str)
+            pn_ope = chunk["p_n_ope"].astype(str)
+            nome = chunk["nome"].astype(str)
+            sub = chunk['sub'].astype(str)
 
             for i in chunk.index:
                 if pn_ope[i] == 'F':
@@ -273,14 +273,14 @@ class SwitchMediumVoltage:
         def process_chunk(chunk: pd.DataFrame) -> dict:
             chunk_result = {}
 
-            cod_id = chunk["cod_id"]
+            cod_id = chunk["cod_id"].astype(str)
             #phases = chunk.get("phases", pd.Series(3, index=chunk.index))
-            pac_1 = chunk["pac_1"]
-            pac_2 = chunk["pac_2"]
+            pac_1 = chunk["pac_1"].astype(str)
+            pac_2 = chunk["pac_2"].astype(str)
             #rec_fases = chunk["rec_fases"]
-            pn_ope = chunk["p_n_ope"]
-            nome = chunk['nome']
-            sub = chunk['sub']
+            pn_ope = chunk["p_n_ope"].astype(str)
+            nome = chunk['nome'].astype(str)
+            sub = chunk['sub'].astype(str)
 
             for i in chunk.index:
                 if pn_ope[i] == 'F':
@@ -334,15 +334,15 @@ class GeneratorMediumVoltage:
         def process_chunk(chunk: pd.DataFrame) -> dict:
             chunk_result = {}
 
-            rec_fases = chunk["rec_fases"]
+            rec_fases = chunk["rec_fases"].astype(str)
             rec_fases = rec_fases.apply(lambda x: x if '.4' in x else x + '.4')
 
-            cod_id = chunk["cod_id"]
-            pot_inst = chunk["pot_inst"]
-            pac = chunk["pac"]
+            cod_id = chunk["cod_id"].astype(str)
+            pot_inst = chunk["pot_inst"].astype(str)
+            pac = chunk["pac"].astype(str)
             ten_nom_voltage = (chunk["ten_nom_voltage"] / 1000)
-            nome = chunk["nome"]
-            sub = chunk["sub"]
+            nome = chunk["nome"].astype(str)
+            sub = chunk["sub"].astype(str)
 
             for i in chunk.index:
                 chave = cod_id[i]
@@ -451,15 +451,21 @@ class LinecodeMediumVoltage:
             chunk = chunk.copy()
 
             # Conversões vetoriais
-            chunk["r1"] = (chunk["r1"] / 1000)
-            chunk["x1"] = (chunk["x1"] / 1000)
-            chunk["cnom"] = chunk["cnom"]
-            chunk["cmax_renamed"] = chunk["cmax_renamed"]
-            chunk["phases"] = chunk["phases"]
-            chunk["tip_cnd"] = chunk["tip_cnd"]
-            chunk["nome"] = chunk["nome"]
-            chunk["sub"] = chunk["sub"]
+            chunk["r1"] = chunk["r1"] / 1000
+            chunk["x1"] = chunk["x1"] / 1000
 
+            # Converte os floats para string após divisão
+            chunk["r1"] = chunk["r1"].astype(str)
+            chunk["x1"] = chunk["x1"].astype(str)
+
+            chunk["cnom"] = chunk["cnom"].astype(str)
+            chunk["cmax_renamed"] = chunk["cmax_renamed"].astype(str)
+            chunk["phases"] = chunk["phases"].astype(str)
+            chunk["tip_cnd"] = chunk["tip_cnd"].astype(str)
+            chunk["nome"] = chunk["nome"].astype(str)
+            chunk["sub"] = chunk["sub"].astype(str)
+
+            # Geração da string
             chunk["linha"] = (
                 "New linecode." + chunk["tip_cnd"] + "_mt nphases=3 BaseFreq=60\n " +
                 "~ r1=" + chunk["r1"] + "\n " +
@@ -468,6 +474,7 @@ class LinecodeMediumVoltage:
                 "~ Normamps=" + chunk["cnom"] + "\n " +
                 "~ Emergamps=" + chunk["cmax_renamed"] + "\n\n "
             )
+
 
             chunk_result = {}
             for i in chunk.index:
@@ -770,7 +777,8 @@ class RamalLine:
 
         return dss_dict
 
-    
+
+
 class LoadLowVoltage:
     @staticmethod
     def to_dss(df: pd.DataFrame, chunk_size=1000) -> dict:
@@ -787,10 +795,9 @@ class LoadLowVoltage:
                                                     ten_nom_voltage / math.sqrt(3))
             
             # Ajustar rec_fases: adicionar '.4' apenas onde phase == 1 e não termina com '.4'
-            rec_fases = chunk["rec_fases"].astype(str)
+            rec_fases = chunk["rec_fases"].astype(str).copy()
             mask = (chunk["phases"] == 1) & (~rec_fases.str.endswith('.4'))
-            rec_fases[mask] = rec_fases[mask] + '.4'
-
+            rec_fases.loc[mask] = rec_fases.loc[mask] + '.4'
 
             # Substituir espaços por tabs na string de potências
             potencias_tab = chunk["potencias"].astype(str).str.replace(" ", "_")
@@ -808,9 +815,15 @@ class LoadLowVoltage:
                 + ' Kw=1 pf=0.92\n\n'
             )
 
-            # Agrupar por nome, juntar as linhas em listas
-            grouped = linhas.groupby(chunk["nome"]).apply(list).to_dict()
-            return grouped
+            # Organizar por sub -> nome -> [linhas]
+            chunk_result = {}
+            for i in chunk.index:
+                sub = chunk.at[i, "sub"]
+                nome = chunk.at[i, "nome"]
+                linha = linhas[i]
+                chunk_result.setdefault(sub, {}).setdefault(nome, []).append(linha)
+
+            return chunk_result
 
         linhas_dss = {}
 
@@ -827,12 +840,16 @@ class LoadLowVoltage:
                 chunk = df.iloc[start : start + chunk_size]
                 chunk_dict = to_dss_vetorizado_chunk(chunk)
 
-                for nome, linhas in chunk_dict.items():
-                    linhas_dss.setdefault(nome, []).extend(linhas)
+                for sub, nomes in chunk_dict.items():
+                    if sub not in linhas_dss:
+                        linhas_dss[sub] = {}
+                    for nome, linhas in nomes.items():
+                        linhas_dss[sub].setdefault(nome, []).extend(linhas)
 
                 progress.update(task, advance=len(chunk))
 
         return linhas_dss
+
 
 
 class LoadMediumVoltage:
@@ -849,33 +866,37 @@ class LoadMediumVoltage:
             ten_nom_voltage = chunk["ten_nom_voltage"] / 1000
             ten_nom_voltage = ten_nom_voltage.where(chunk["phases"] >= 2,
                                                     ten_nom_voltage / math.sqrt(3))
-            rec_fases = chunk["rec_fases"].astype(str)
-            # Ajustar rec_fases: adicionar '.4' apenas onde phase == 1 e não termina com '.4'
-            rec_fases = chunk["rec_fases"].astype(str)
-            mask = (chunk["phases"] == 1) & (~rec_fases.str.endswith('.4'))
-            rec_fases[mask] = rec_fases[mask] + '.4'
 
+            # Ajustar rec_fases: adicionar '.4' apenas onde phase == 1 e não termina com '.4'
+            rec_fases = chunk["rec_fases"].astype(str).copy()
+            mask = (chunk["phases"] == 1) & (~rec_fases.str.endswith('.4'))
+            rec_fases.loc[mask] = rec_fases.loc[mask] + '.4'
 
             # Substituir espaços por tabs na string de potências
             potencias_tab = chunk["potencias"].astype(str).str.replace(" ", "_")
-            
-            
+
             # Montar as linhas DSS vetorized
             linhas = (
                 'New Load.nome_' + chunk["cod_id"].astype(str)
                 + '_curva_diaria_' + chunk["tip_cc"].astype(str)
                 + '_curva_anual_' + potencias_tab
                 + '_carga_media '
-                + 'Bus1=' + chunk["pac"].astype(str) +  rec_fases.astype(str) + ' '
-                + 'Phases=' + chunk["phases"].astype(str) + '\n'
+                + 'Bus1=' + chunk["pac"].astype(str) + '.1.2.3.0' + ' '
+                + 'Phases = 3\n '
                 + '~ Conn=' + chunk["conn"].astype(str)
                 + ' Model=1 Kv=' + ten_nom_voltage.round(4).astype(str)
                 + ' Kw=1 pf=0.92\n\n'
             )
 
-            # Agrupar por nome, juntar as linhas em listas
-            grouped = linhas.groupby(chunk["nome"]).apply(list).to_dict()
-            return grouped
+            # Organizar por sub -> nome -> [linhas]
+            chunk_result = {}
+            for i in chunk.index:
+                sub = chunk.at[i, "sub"]
+                nome = chunk.at[i, "nome"]
+                linha = linhas[i]
+                chunk_result.setdefault(sub, {}).setdefault(nome, []).append(linha)
+
+            return chunk_result
 
         linhas_dss = {}
 
@@ -892,13 +913,15 @@ class LoadMediumVoltage:
                 chunk = df.iloc[start : start + chunk_size]
                 chunk_dict = to_dss_vetorizado_chunk(chunk)
 
-                for nome, linhas in chunk_dict.items():
-                    linhas_dss.setdefault(nome, []).extend(linhas)
+                for sub, nomes in chunk_dict.items():
+                    if sub not in linhas_dss:
+                        linhas_dss[sub] = {}
+                    for nome, linhas in nomes.items():
+                        linhas_dss[sub].setdefault(nome, []).extend(linhas)
 
                 progress.update(task, advance=len(chunk))
 
         return linhas_dss
-
 
 
 
@@ -911,6 +934,10 @@ class GD_FV_BT:
 
         # Remove duplicatas por 'cod_id'
         df = df.drop_duplicates(subset="cod_id")
+
+        # Verifica se 'sub' existe no dataframe, se não, cria coluna default
+        if 'sub' not in df.columns:
+            df['sub'] = 'sem_sub'  # Pode ajustar para valor padrão desejado
 
         with Progress(
             TextColumn("[bold green]Carregando..."),
@@ -930,11 +957,11 @@ class GD_FV_BT:
                 mdpotenciaoutorgada = row.get('mdpotenciaoutorgada')
                 mdpotenciainstalada = row.get('mdpotenciainstalada')
                 pac = row.get('pac')
-                nome = row['nome']
+                sub = row.get('sub', 'sem_sub')  # pega sub ou default
 
                 if phases < 2:
                     ten_nom_voltage = ten_nom_voltage / math.sqrt(3)
-                
+
                 fases = rec_fases.strip('.').split('.')  # Ex: ['1', '2', '3']
 
                 # Adiciona '.4' somente se phases == 1 e ainda não contém '4'
@@ -956,11 +983,10 @@ class GD_FV_BT:
                     f"~ conn = wye model = 1 kv = {ten_nom_voltage} kw = 0.0001\n\n"
                 )
 
-                chunk_dict.setdefault(nome, []).append(linha)
+                chunk_dict.setdefault(sub, {}).setdefault(nome, []).append(linha)
                 progress.advance(task)
 
         return chunk_dict
-
 
 
 
@@ -973,7 +999,11 @@ class GD_FV_MT:
 
         # Remove duplicatas por 'cod_id'
         df = df.drop_duplicates(subset="cod_id")
-        
+
+        # Verifica se 'sub' existe, senão cria coluna padrão
+        if 'sub' not in df.columns:
+            df['sub'] = 'sem_sub'
+
         with Progress(
             TextColumn("[bold green]Carregando..."),
             BarColumn(bar_width=60, style="green"),
@@ -982,7 +1012,7 @@ class GD_FV_MT:
             console=console,
         ) as progress:
             task = progress.add_task("Modelando...", total=len(df))
-            
+
             for _, row in df.iterrows():
                 rec_fases = row.get('rec_fases', '') 
                 phases = row.get('phases', 3) 
@@ -992,8 +1022,8 @@ class GD_FV_MT:
                 mdpotenciaoutorgada = row.get('mdpotenciaoutorgada')
                 mdpotenciainstalada = row.get('mdpotenciainstalada')
                 pac = row.get('pac')
-                nome = row['nome']
-                
+                sub = row.get('sub', 'sem_sub')
+
                 if phases < 2:
                     ten_nom_voltage = ten_nom_voltage / math.sqrt(3)
 
@@ -1017,12 +1047,11 @@ class GD_FV_MT:
                     f"New load.{cod_id}_carga_no_pv bus1 = {pac}{rec} phases = {phases}\n"
                     f"~ conn = wye model = 1 kv = {ten_nom_voltage} kw = 0.0001\n\n"
                 )
-                
-                chunk_dict.setdefault(nome, []).append(linha)
+
+                chunk_dict.setdefault(sub, {}).setdefault(nome, []).append(linha)
                 progress.advance(task)
 
         return chunk_dict
-
 
 
 
@@ -1034,6 +1063,10 @@ class PublicLightingLoad:
         df = df.drop_duplicates(subset="cod_id")
         console = Console()
         chunk_dict = {}
+
+        # Garante que existe a coluna 'sub'
+        if 'sub' not in df.columns:
+            df['sub'] = 'sem_sub'
 
         with Progress(
             TextColumn("[bold green]Carregando..."),
@@ -1047,32 +1080,29 @@ class PublicLightingLoad:
             for start in range(0, len(df), chunk_size):
                 chunk = df.iloc[start:start + chunk_size].copy()
 
-              # Conversões vetoriais
                 chunk["cod_id"] = chunk["cod_id"].astype(str)
                 chunk["pac"] = chunk["pac"].astype(str)
                 chunk["rec_fases"] = chunk["rec_fases"].astype(str)
                 chunk["ten_nom_voltage"] = chunk["ten_nom_voltage"] / 1000
                 chunk["pot_lamp"] = chunk["pot_lamp"] / 1000  # W → kW
 
-                # Ajuste para fases monofásicas
+                # Ajuste para monofásicas
                 monofasicas = chunk["phases"] < 2
-                chunk.loc[monofasicas, "ten_nom_voltage"] = chunk.loc[monofasicas, "ten_nom_voltage"] / math.sqrt(3)
+                chunk.loc[monofasicas, "ten_nom_voltage"] /= math.sqrt(3)
 
-                # Ajustar rec_fases: adicionar '.4' apenas onde phase == 1 e não termina com '.4'
+                # Ajustar rec_fases: adicionar '.4' onde necessário
                 rec_fases = chunk["rec_fases"].astype(str)
                 mask = (chunk["phases"] == 1) & (~rec_fases.str.endswith('.4'))
                 rec_fases[mask] = rec_fases[mask] + '.4'
 
-                # Curva diária base: 96 valores (15 min), 1.0 fora das 6h-18h, 0.0 dentro
+                # Curva base: 96 valores, 0.0 entre 6h e 18h, 1.0 no restante
                 curva_base_diaria = [0.0 if 6 <= (i * 0.25) < 18 else 1.0 for i in range(96)]
 
-                # Geração das strings
                 linhas = []
                 for i, row in chunk.iterrows():
                     cod_id = row["cod_id"]
                     tip_cc = str(row["tip_cc"])
                     pot_kw = round(row["pot_lamp"], 5)
-
                     curva_diaria = "_".join([str(round(v, 5)) for v in curva_base_diaria])
                     curva_anual = "_".join([str(pot_kw)] * 12)
 
@@ -1090,20 +1120,15 @@ class PublicLightingLoad:
                         " Kw = " + str(pot_kw) + " pf = 0.92\n\n"
                     )
 
-                    linhas.append((row["nome"], linha))
+                    linhas.append((row["sub"], row["nome"], linha))
 
-                chunk["linha"] = [linha for _, linha in linhas]
-
-                # Agrupamento por nome
-                agrupado = chunk.groupby("nome")["linha"].apply(list).to_dict()
-
-                for nome, linhas in agrupado.items():
-                    chunk_dict.setdefault(nome, []).extend(linhas)
+                # Agrupamento por sub e nome
+                for sub, nome, linha in linhas:
+                    chunk_dict.setdefault(sub, {}).setdefault(nome, []).append(linha)
 
                 progress.update(task, advance=len(chunk))
 
         return chunk_dict
-
 
 
 
@@ -1115,6 +1140,10 @@ class TransformerMediumVoltage:
         df = df.drop_duplicates(subset="cod_id")
         console = Console()
         linhas_dss = {}
+
+        # Garante que existe a coluna 'sub'
+        if 'sub' not in df.columns:
+            df['sub'] = 'sem_sub'
 
         with Progress(
             TextColumn("[bold green]Carregando..."),
@@ -1128,7 +1157,6 @@ class TransformerMediumVoltage:
             for start in range(0, len(df), chunk_size):
                 chunk = df.iloc[start:start + chunk_size].copy()
 
-                # Pré-processamento
                 chunk["cod_id"] = chunk["cod_id"].astype(str)
                 chunk["pac_1"] = chunk["pac_1"].astype(str)
                 chunk["pac_2"] = chunk["pac_2"].astype(str)
@@ -1136,7 +1164,6 @@ class TransformerMediumVoltage:
                 chunk["ten_pri"] = chunk["ten_pri"] / 1000
                 chunk["ten_sec"] = chunk["ten_sec"] / 1000
 
-                # Inversão para fases monofásicas
                 def inverter_fase_monofasica(fase: str) -> str:
                     if isinstance(fase, str) and fase.count('.') == 2:
                         partes = fase.strip('.').split('.')
@@ -1147,7 +1174,6 @@ class TransformerMediumVoltage:
                 mask_monofasico = chunk["phases_p"] == 1
                 chunk.loc[mask_monofasico, "rec_fases_t"] = chunk.loc[mask_monofasico, "rec_fases_p"].apply(inverter_fase_monofasica)
 
-                # Substitui .4 por .0 nas fases
                 def substituir_quatro_por_zero(fase: str) -> str:
                     if isinstance(fase, str):
                         return fase.replace(".4", ".0")
@@ -1165,27 +1191,11 @@ class TransformerMediumVoltage:
                     xhl, per_fer, r = row["xhl"], row["per_fer"], row["r"]
                     rec_fases_t = row.get("rec_fases_t", "")
 
-                    # Ajuste especial no bus1 para trafo monofásico — remove .0 se existir
                     bus1_fase = rec_fases_p
                     if phases_p == 1 and rec_fases_p.endswith(".0"):
                         bus1_fase = rec_fases_p.replace(".0", "")
 
                     if phases_p == 1:
-                        #ten_pri = round(ten_pri / math.sqrt(3), 3)
-                        #ten_sec = round(ten_sec / math.sqrt(3), 3)
-                        # return (
-                        #     f"New Transformer.{cod_id} Phases=1 Windings=3 xhl={xhl} %noloadloss={per_fer}\n"
-                        #     f"~ wdg=1 bus={pac_1}{bus1_fase} conn=wye kv={ten_pri} kva={pot_nom} %r={r/2} tap=1\n"
-                        #     f"~ wdg=2 bus={pac_2}{rec_fases_p} conn=wye kv={ten_sec} kva={pot_nom} %r={r} tap=1\n"
-                        #     f"~ wdg=3 bus={pac_2}{rec_fases_t} conn=wye kv={ten_sec} kva={pot_nom} %r={r} tap=1\n\n"
-                        # )
-
-                        # return (
-                        #     f"New Transformer.{cod_id} Phases=1 Windings=2 xhl={xhl} %noloadloss={per_fer}\n"
-                        #     f"~ wdg=1 bus={pac_1}{rec_fases_p} conn=wye kv={ten_pri} kva={pot_nom} %r={r} tap=1\n"
-                        #     f"~ wdg=2 bus={pac_2}{rec_fases_p} conn=wye kv={ten_sec} kva={pot_nom} %r={r} tap=1\n\n"
-                        # )
-                    
                         return (
                             f"New Transformer.{cod_id} Phases=3 Windings=2 xhl={xhl} %noloadloss={per_fer}\n"
                             f"~ wdg=1 bus={pac_1}.1.2.3 conn=delta kv={ten_pri} kva={pot_nom} %r={r} tap=1\n"
@@ -1202,12 +1212,6 @@ class TransformerMediumVoltage:
                         )
 
                     elif phases_p == 3:
-                        # return (
-                        #     f"New Transformer.{cod_id} Phases=3 Windings=2 xhl={xhl} %noloadloss={per_fer}\n"
-                        #     f"~ wdg=1 bus={pac_1}{rec_fases_p} conn=delta kv={ten_pri} kva={pot_nom} %r={r} tap=1\n"
-                        #     f"~ wdg=2 bus={pac_2}{rec_fases_s} conn=wye kv={ten_sec} kva={pot_nom} %r={r} tap=1\n\n"
-                        # )
-                    
                         return (
                             f"New Transformer.{cod_id} Phases=3 Windings=2 xhl={xhl} %noloadloss={per_fer}\n"
                             f"~ wdg=1 bus={pac_1}.1.2.3 conn=delta kv={ten_pri} kva={pot_nom} %r={r} tap=1\n"
@@ -1218,10 +1222,13 @@ class TransformerMediumVoltage:
 
                 chunk["linha"] = chunk.apply(gerar_linha, axis=1)
 
-                agrupado = chunk.groupby("nome")["linha"].apply(lambda x: [linha for linha in x if linha]).to_dict()
-
-                for nome, linhas in agrupado.items():
-                    linhas_dss.setdefault(nome, []).extend(linhas)
+                # Agrupar por 'sub' e depois por 'nome'
+                for (_, row) in chunk.iterrows():
+                    sub = row.get("sub", "sem_sub")
+                    nome = row["nome"]
+                    linha = row["linha"]
+                    if linha:
+                        linhas_dss.setdefault(sub, {}).setdefault(nome, []).append(linha)
 
                 progress.update(task, advance=len(chunk))
 

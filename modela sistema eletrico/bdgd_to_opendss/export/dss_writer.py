@@ -75,37 +75,37 @@ class write_cenario_1:
 
 
 
-
 class write_cenario_2:
     def __init__(self, caminho):
         self.caminho_saida = caminho
 
     def to_dss(self,
-       modelated_slacks, modelated_compensadores_reativo_media, modelated_compensadores_reativo_baixa,
-       modelated_chaves_seccionadoras_media_tensao, modelated_cargas_baixa_tensa, modelated_cargas_media_tensao,
-       modelated_geradores_media_tensao, modelated_linecodes_media_tensao, modelated_gd_baixa_tensao,
-       modelated_Cargas_PIP, modelated_linhas_media_tensao, modelated_gd_media_tensao,
-       modelated_transformadores_Media_tensao, df_curvas_de_carga
-    ):
-        # Lista de dicionários a serem escritos nos arquivos
-        demais_dicionarios = [
-            modelated_compensadores_reativo_media, modelated_compensadores_reativo_baixa,
-            modelated_chaves_seccionadoras_media_tensao, modelated_cargas_baixa_tensa, modelated_cargas_media_tensao,
-            modelated_geradores_media_tensao, modelated_linecodes_media_tensao, modelated_gd_baixa_tensao,
-            modelated_Cargas_PIP, modelated_linhas_media_tensao, modelated_gd_media_tensao,
-            modelated_transformadores_Media_tensao
+               modelated_slacks, modelated_compensadores_reativo_media, modelated_compensadores_reativo_baixa,
+               modelated_chaves_seccionadoras_media_tensao, modelated_cargas_baixa_tensa, modelated_cargas_media_tensao,
+               modelated_geradores_media_tensao, modelated_linecodes_media_tensao, modelated_gd_baixa_tensao,
+               modelated_Cargas_PIP, modelated_linhas_media_tensao, modelated_gd_media_tensao,
+               modelated_transformadores_Media_tensao, df_curvas_de_carga):
+
+        todos_dics = [
+            ("slack", modelated_slacks),
+            ("comp_reativo_media", modelated_compensadores_reativo_media),
+            ("comp_reativo_baixa", modelated_compensadores_reativo_baixa),
+            ("chaves", modelated_chaves_seccionadoras_media_tensao),
+            ("cargas_baixa", modelated_cargas_baixa_tensa),
+            ("cargas_media", modelated_cargas_media_tensao),
+            ("geradores", modelated_geradores_media_tensao),
+            ("linecodes", modelated_linecodes_media_tensao),
+            ("gd_baixa", modelated_gd_baixa_tensao),
+            ("cargas_pip", modelated_Cargas_PIP),
+            ("linhas", modelated_linhas_media_tensao),
+            ("gd_media", modelated_gd_media_tensao),
+            ("trafos", modelated_transformadores_Media_tensao)
         ]
 
-        # Definir curvas_path antes do bloco condicional
+        # Geração do arquivo de curvas de carga
         curvas_path = os.path.join(self.caminho_saida, "curvas_de_carga.txt")
-
-        # Criar curvas de carga uma única vez na pasta principal
         if not df_curvas_de_carga.empty:
-            # caminho da pasta do arquivo
-            pasta = os.path.dirname(curvas_path)
-            if not os.path.exists(pasta):
-                os.makedirs(pasta)
-            # curvas_path já está definida aqui
+            os.makedirs(os.path.dirname(curvas_path), exist_ok=True)
             with open(curvas_path, "w", encoding="utf-8") as f_txt:
                 for _, linha in df_curvas_de_carga.iterrows():
                     cod = linha["crvcrg_cod_id"]
@@ -114,7 +114,6 @@ class write_cenario_2:
                     linha_txt = f"{cod}:{tip_dia} = [{', '.join(potencias)}]\n"
                     f_txt.write(linha_txt)
 
-        # Progresso e escrita dos arquivos individuais
         with Progress(
             TextColumn("[bold cyan]Escrevendo modelagens: [green]{task.fields[barra_nome]}"),
             BarColumn(bar_width=50, style="green"),
@@ -122,28 +121,33 @@ class write_cenario_2:
             TimeRemainingColumn(),
             console=console
         ) as progress:
-            task = progress.add_task("Escrevendo", total=len(modelated_slacks), barra_nome="")
+            total_itens = sum(
+                max(1, len(nomes_dict))
+                for _, dic in todos_dics
+                for nomes_dict in dic.values()
+            )
+            task = progress.add_task("Escrevendo", total=total_itens, barra_nome="")
 
-            for nome in modelated_slacks.keys():
-                progress.update(task, barra_nome=nome)
+            for nome_arquivo, dic in todos_dics:
+                for sub, nomes_dict in dic.items():
+                    if not nomes_dict:
+                        nomes_dict = {"default": []}
 
-                pasta_saida = os.path.join(self.caminho_saida, nome)
-                os.makedirs(pasta_saida, exist_ok=True)
+                    for nome, linhas in nomes_dict.items():
+                        sub_ajustado = sub.strip() if str(sub).strip() else "default"
+                        nome_ajustado = nome.strip() if str(nome).strip() else "default"
 
-                # Arquivo principal .dss
-                nome_dss = os.path.join(pasta_saida, "run.dss")
-                with open(nome_dss, "w", encoding="utf-8") as f_dss:
-                    # 1. Slack
-                    if nome in modelated_slacks:
-                        f_dss.writelines(modelated_slacks[nome])
+                        pasta_saida = os.path.join(self.caminho_saida, sub_ajustado, nome_ajustado)
+                        os.makedirs(pasta_saida, exist_ok=True)  # Garante que a estrutura existe
 
-                    # 2. Linecodes
-                    if nome in modelated_linecodes_media_tensao:
-                        f_dss.writelines(modelated_linecodes_media_tensao[nome])
+                        if isinstance(linhas, pd.Series):
+                            linhas = linhas.astype(str).tolist()
 
-                    # 3. Demais elementos
-                    for d in demais_dicionarios:
-                        if nome in d:
-                            f_dss.writelines(d[nome])
+                        caminho_arquivo = os.path.join(pasta_saida, f"{nome_arquivo}.dss")
 
-                progress.advance(task)
+                        with open(caminho_arquivo, "w", encoding="utf-8") as f_out:
+                            f_out.writelines(l + '\n' for l in linhas)
+
+                        progress.update(task, advance=1, barra_nome=f"{sub_ajustado}/{nome_ajustado}")
+
+
