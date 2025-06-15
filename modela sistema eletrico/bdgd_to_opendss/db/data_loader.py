@@ -22,7 +22,7 @@ class load_bdgd:
     def compensadores_reativo_media(conn) -> pd.DataFrame:
         query1 = """
             SELECT DISTINCT ctmt.nome, uncrmt.fas_con, uncrmt.tip_unid, uncrmt.pot_nom,
-                            uncrmt.pac_1, ctmt.ten_nom, uncrmt.cod_id, uncrmt.sub, uncrmt.ctmt
+                            uncrmt.pac_1, ctmt.ten_nom, uncrmt.cod_id, uncrmt.sub, uncrmt.ctmt, uncrmt.coord_latlon
             FROM uncrmt
             JOIN ctmt ON uncrmt.ctmt = ctmt.cod_id
             ORDER BY uncrmt.sub
@@ -41,7 +41,7 @@ class load_bdgd:
     def compensadores_reativo_baixa(conn) -> pd.DataFrame:
         query1 = """
              SELECT DISTINCT ctmt.nome, uncrbt.fas_con, uncrbt.tip_unid, uncrbt.pot_nom,
-                            uncrbt.pac_1, ctmt.ten_nom, uncrbt.cod_id, uncrbt.sub, uncrbt.ctmt
+                            uncrbt.pac_1, ctmt.ten_nom, uncrbt.cod_id, uncrbt.sub, uncrbt.ctmt, uncrbt.coord_latlon
             FROM uncrbt
             JOIN ctmt ON uncrbt.ctmt = ctmt.cod_id
             ORDER BY uncrbt.sub
@@ -69,7 +69,8 @@ class load_bdgd:
                             unsebt.cor_nom,
                             unsebt.fas_con, 
                             ctmt.nome, 
-                            unsebt.p_n_ope
+                            unsebt.p_n_ope,
+                            unsebt.coord_latlon 
                         FROM unsebt 
                         JOIN ctmt ON unsebt.ctmt = ctmt.cod_id
                         ORDER BY unsebt.sub;
@@ -94,7 +95,8 @@ class load_bdgd:
                             unsemt.cor_nom,
                             unsemt.fas_con, 
                             ctmt.nome, 
-                            unsemt.p_n_ope
+                            unsemt.p_n_ope,
+                            unsemt.coord_latlon
             FROM unsemt 
             JOIN ctmt ON unsemt.ctmt = ctmt.cod_id
             ORDER BY unsemt.sub;
@@ -213,7 +215,7 @@ class load_bdgd:
     @staticmethod
     def linhas_baixa_tensao(conn) -> pd.DataFrame:
         query = """
-            SELECT distinct ssdbt.cod_id, pac_1, pac_2, ctmt.nome, fas_con, comp, tip_cnd, ssdbt.sub
+            SELECT distinct ssdbt.cod_id, pac_1, pac_2, ctmt.nome, fas_con, comp, tip_cnd, ssdbt.sub, ssdbt.coord_latlon
             FROM ssdbt
             JOIN ctmt ON ctmt.cod_id = ssdbt.ctmt
 
@@ -228,7 +230,7 @@ class load_bdgd:
     @staticmethod
     def linhas_media_tensao(conn) -> pd.DataFrame:
         query = """
-            SELECT DISTINCT ssdmt.cod_id, pac_1, pac_2, ctmt.nome, fas_con, comp, tip_cnd, ssdmt.sub
+            SELECT DISTINCT ssdmt.cod_id, pac_1, pac_2, ctmt.nome, fas_con, comp, tip_cnd, ssdmt.sub, ssdmt.coord_latlon
             FROM ssdmt
             JOIN ctmt ON ctmt.cod_id = ssdmt.ctmt
         """
@@ -615,7 +617,7 @@ class load_bdgd:
         query = (
             "SELECT DISTINCT untrmt.cod_id, untrmt.pac_1, untrmt.pac_2, ctmt.nome, eqtrmt.pot_nom, "
             "eqtrmt.lig, eqtrmt.ten_pri, eqtrmt.ten_sec, eqtrmt.lig_fas_p, eqtrmt.lig_fas_s, eqtrmt.r, "
-            "eqtrmt.xhl, untrmt.per_fer, eqtrmt.lig_fas_t, untrmt.pac_3, untrmt.sub "
+            "eqtrmt.xhl, untrmt.per_fer, eqtrmt.lig_fas_t, untrmt.pac_3, untrmt.sub, untrmt.coord_latlon "
             "FROM untrmt "
             "LEFT JOIN eqtrmt ON eqtrmt.uni_tr_mt = untrmt.cod_id "
             "LEFT JOIN ctmt ON ctmt.cod_id = untrmt.ctmt "
@@ -638,7 +640,7 @@ class load_bdgd:
         query = (
             "SELECT DISTINCT unremt.cod_id, unremt.fas_con, unremt.pac_1, unremt.pac_2, ctmt.nome, "
             "eqre.pot_nom, eqre.lig_fas_p, eqre.lig_fas_s, eqre.per_fer, eqre.per_tot, eqre.r, eqre.xhl, "
-            "ctmt.ten_nom, eqre.cor_nom, eqre.rel_tp, eqre.rel_tc "
+            "ctmt.ten_nom, eqre.cor_nom, eqre.rel_tp, eqre.rel_tc, unremt.coord_latlon "
             "FROM unremt "
             "JOIN eqre ON unremt.cod_id = eqre.un_re "
             "JOIN ctmt ON unremt.ctmt = ctmt.cod_id "
@@ -757,6 +759,21 @@ class load_bdgd:
 
 
 
+    @staticmethod
+    def Consulta_Coords_Subestacoes(conn) -> pd.DataFrame:
+        """Extração dos dados das GD's de BT aos seus trafos vinculados """
+
+        query = ( """
+                    select cod_id, nome, coord_latlon from sub
+                """
+        )
+
+        try:
+            df = pd.read_sql(query, conn)
+            return df
+        except Exception as e:
+            print(f"Erro ao carregar latitude e longitudes das subestações: {e}")
+            return pd.DataFrame()
 
 
                     

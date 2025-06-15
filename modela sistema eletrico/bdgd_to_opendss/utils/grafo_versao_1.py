@@ -107,51 +107,55 @@ class GrafoDSS:
 
 
 
-
     def encontrar_tensoes_base(self):
         try:
-            # Caminho raiz fixo (pasta com subpastas)
-            caminho_raiz = self.caminho_base  # deve ser a pasta principal, não o arquivo!
+            caminho_raiz = self.caminho_base  # deve ser a pasta principal
 
-            for nome_pasta in os.listdir(caminho_raiz):
-                caminho_pasta = os.path.join(caminho_raiz, nome_pasta)
-                if os.path.isdir(caminho_pasta):
-                    arquivo_dss = os.path.join(caminho_pasta, "run_cargas_agregadas.dss")
-                    if os.path.isfile(arquivo_dss):
-                        print(f"Processando arquivo: {arquivo_dss}")
-                        # Ajusta o caminho base para o arquivo atual
-                        self.caminho_base = arquivo_dss
+            for pasta_superior in os.listdir(caminho_raiz):
+                caminho_superior = os.path.join(caminho_raiz, pasta_superior)
+                if not os.path.isdir(caminho_superior):
+                    continue
 
-                        # Executa todo o processamento para este arquivo
-                        barra_slack_bus = self.extrair_barra_slack()
-                        pac_cargas = self.extrair_buses_cargas()
-                        self.extrair_tensoes_transformadores()
-                        self.vincular_buses()
+                for subpasta in os.listdir(caminho_superior):
+                    caminho_subpasta = os.path.join(caminho_superior, subpasta)
+                    if not os.path.isdir(caminho_subpasta):
+                        continue
 
-                        if barra_slack_bus:
-                            visitados = set(nx.dfs_preorder_nodes(self.grafo, barra_slack_bus))
-                        else:
-                            visitados = set()
+                    arquivo_dss = os.path.join(caminho_subpasta, "run_cargas_agregadas.dss")
+                    if not os.path.isfile(arquivo_dss):
+                        print(f"Arquivo 'run_cargas_agregadas.dss' não encontrado em: {caminho_subpasta}")
+                        continue
 
-                        cargas_conectadas = pac_cargas.intersection(visitados)
-                        cargas_desconectadas = pac_cargas.difference(visitados)
+                    print(f"Processando arquivo: {arquivo_dss}")
+                    self.caminho_base = arquivo_dss  # define novo caminho temporário
 
-                        self.extrair_transformadores()
-                        self.vincular_buses()
-                        self.propagar_tensoes()
+                    barra_slack_bus = self.extrair_barra_slack()
+                    pac_cargas = self.extrair_buses_cargas()
+                    self.extrair_tensoes_transformadores()
+                    self.vincular_buses()
 
-                        # Agora escreve as tensões base no arquivo
-                        self.listar_tensoes_presentes_em_subpastas_single(arquivo_dss)
-
-                        # Limpa dados para a próxima iteração
-                        self.grafo.clear()
-                        self.tensoes_transformadores.clear()
-                        self.tensoes_buses.clear()
-
+                    if barra_slack_bus:
+                        visitados = set(nx.dfs_preorder_nodes(self.grafo, barra_slack_bus))
                     else:
-                        print(f"Arquivo 'run_cargas_agregadas.dss' não encontrado em: {caminho_pasta}")
+                        visitados = set()
+
+                    cargas_conectadas = pac_cargas.intersection(visitados)
+                    cargas_desconectadas = pac_cargas.difference(visitados)
+
+                    self.extrair_transformadores()
+                    self.vincular_buses()
+                    self.propagar_tensoes()
+
+                    self.listar_tensoes_presentes_em_subpastas_single(arquivo_dss)
+
+                    # limpa os dados para o próximo ciclo
+                    self.grafo.clear()
+                    self.tensoes_transformadores.clear()
+                    self.tensoes_buses.clear()
+
         except Exception as e:
-            print(f"Erro ao processar subpastas: {e}")
+            print(f"Erro ao processar pastas: {e}")
+
 
     def listar_tensoes_presentes_em_subpastas_single(self, arquivo_dss):
         tensoes_presentes = set()

@@ -151,3 +151,55 @@ class write_cenario_2:
                         progress.update(task, advance=1, barra_nome=f"{sub_ajustado}/{nome_ajustado}")
 
 
+
+
+
+class write_cenario_2_subestacoes:
+    def __init__(self, caminho):
+        self.caminho_saida = caminho
+
+    def to_dss(self, modelated_slacks):
+        todos_dics = [("cod_id", modelated_slacks)]
+
+        with Progress(
+            TextColumn("[bold cyan]Escrevendo modelagens: [green]{task.fields[barra_nome]}"),
+            BarColumn(bar_width=50, style="green"),
+            TextColumn("[progress.percentage]{task.percentage:>3.0f}%"),
+            TimeRemainingColumn(),
+            console=console
+        ) as progress:
+            total_itens = sum(
+                max(1, len(nomes_dict))
+                for _, dic in todos_dics
+                for nomes_dict in dic.values()
+            )
+            task = progress.add_task("Escrevendo", total=total_itens, barra_nome="")
+
+            for nome_arquivo, dic in todos_dics:
+                for sub, linhas in dic.items():  # linhas já é uma lista agora
+                    sub_ajustado = sub.strip() if str(sub).strip() else "default"
+
+                    if isinstance(linhas, pd.Series):
+                        linhas = linhas.astype(str).tolist()
+
+                    # Caminho base da subestação
+                    pasta_base_sub = os.path.join(self.caminho_saida, sub_ajustado)
+                    os.makedirs(pasta_base_sub, exist_ok=True)
+
+                    # Pega todas as subpastas dentro da subestação
+                    subpastas = [
+                        os.path.join(pasta_base_sub, nome_subpasta)
+                        for nome_subpasta in os.listdir(pasta_base_sub)
+                        if os.path.isdir(os.path.join(pasta_base_sub, nome_subpasta))
+                    ]
+
+                    # Se não houver subpastas, salva diretamente em pasta_base_sub
+                    if not subpastas:
+                        subpastas = [pasta_base_sub]
+
+                    for subpasta in subpastas:
+                        caminho_arquivo = os.path.join(subpasta, "sub_coords.dss")
+                        with open(caminho_arquivo, "w", encoding="utf-8") as f_out:
+                            f_out.writelines(l + '\n' for l in linhas)
+
+                        progress.update(task, advance=1, barra_nome=f"{sub_ajustado}/{os.path.basename(subpasta)}")

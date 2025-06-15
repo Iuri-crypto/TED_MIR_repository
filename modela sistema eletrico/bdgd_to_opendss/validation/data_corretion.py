@@ -80,7 +80,7 @@ class ValidatorCompensadorMedia:
         df["pot_nom"] = df["pot_nom"].clip(upper=self.pot_nom_padrao_kva)
 
         # Colunas finais
-        return df[["nome", "fas_con", "pac_1", "ten_nom", "ten_nom_voltage", "cod_id", "pot_nom", "rec_fases", "phases", "tip_unid", "sub"]]
+        return df[["nome", "fas_con", "pac_1", "ten_nom", "ten_nom_voltage", "cod_id", "pot_nom", "rec_fases", "phases", "tip_unid", "sub", 'coord_latlon']]
 
 
 
@@ -126,7 +126,7 @@ class ValidatorCompensadorBaixa:
         df["pot_nom"] = df["pot_nom"].clip(upper=self.pot_nom_padrao_kva)
 
         # Colunas finais
-        return df[["nome", "fas_con", "pac_1", "ten_nom", "ten_nom_voltage", "cod_id", "pot_nom", "rec_fases", "phases", "tip_unid", "sub"]]
+        return df[["nome", "fas_con", "pac_1", "ten_nom", "ten_nom_voltage", "cod_id", "pot_nom", "rec_fases", "phases", "tip_unid", "sub", 'coord_latlon']]
 
 
 
@@ -159,7 +159,7 @@ class ValidatorChaveSeccionadoraBT:
         df["cod_id"] = df.apply(lambda row: row["cod_id"] if row["cod_id"] else f"{row['nome']}_{row.name}", axis=1)
 
         # Colunas finais
-        return df[["nome", "fas_con", "pac_1", "pac_2", "cod_id", "p_n_ope", "phases", "rec_fases", "sub"]]
+        return df[["nome", "fas_con", "pac_1", "pac_2", "cod_id", "p_n_ope", "phases", "rec_fases", "sub", 'coord_latlon']]
 
  
 
@@ -195,7 +195,7 @@ class ValidatorChaveSeccionadoraMT:
         )
 
         # Retornar apenas as colunas relevantes
-        return df[["nome", "fas_con", "pac_1", "pac_2", "cod_id", "p_n_ope", "phases", "rec_fases", "sub"]]
+        return df[["nome", "fas_con", "pac_1", "pac_2", "cod_id", "p_n_ope", "phases", "rec_fases", "sub", 'coord_latlon']]
 
 
 
@@ -447,7 +447,7 @@ class ValidatorLinhasBaixaTensao:
         df = df[df["pac_2"].notna() & df["pac_2"].astype(str).str.strip().ne("")]
 
         # Selecionar colunas finais na ordem desejada
-        return df[["cod_id", "pac_1", "pac_2", "nome", "fas_con", "comp", "tip_cnd", "rec_fases", "phases", "sub"]]
+        return df[["cod_id", "pac_1", "pac_2", "nome", "fas_con", "comp", "tip_cnd", "rec_fases", "phases", "sub", 'coord_latlon']]
 
 
 class ValidatorLinhasMediaTensao:
@@ -495,7 +495,7 @@ class ValidatorLinhasMediaTensao:
 
 
         # Ordena e retorna as colunas
-        return df[["cod_id", "pac_1", "pac_2", "nome", "fas_con", "comp", "tip_cnd", "rec_fases", "phases", "sub"]]
+        return df[["cod_id", "pac_1", "pac_2", "nome", "fas_con", "comp", "tip_cnd", "rec_fases", "phases", "sub", 'coord_latlon']]
 
 
 

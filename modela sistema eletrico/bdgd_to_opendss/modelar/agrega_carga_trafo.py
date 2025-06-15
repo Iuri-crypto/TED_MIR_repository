@@ -27,193 +27,186 @@ class Agrega_Carga_Trafos:
         return grupos
 
 
-
     def soma_cargas_e_gd_nos_trafos(self, dicionario_cargas_por_nome, dicionario_gd_por_nome):
         """
-        Processa as cargas e as unidades de geração distribuída (GD) associadas a cada transformador.
-
-        Objetivos:
-        - Associar cargas e GDs aos transformadores com base no código de identificação (cod_id).
-        - Ignorar as curvas de GD (xycurve, loadshape, etc.).
-        - Extrair informações elétricas dos transformadores (tensão e barramento secundário).
-        - Retornar uma estrutura organizada por transformador.
-
-        Parâmetros:
-        - dicionario_cargas_por_nome: dict com DataFrames contendo as cargas por nome de pasta.
-        - dicionario_gd_por_nome: dict com DataFrames contendo GDs por nome de pasta.
-
-        Retorna:
-        - trafos_cargas: dict estruturado por pasta e por transformador, contendo:
-            - cargas associadas
-            - GDs associadas
-            - informações do trafo (tensão secundária e barramento secundário)
+        Processa as cargas e GDs vinculadas a trafos a partir de arquivos run.dss em subpastas de self.caminho.
+        (corpo original preservado, apenas a parte de iteração por pastas foi modificada)
         """
+
         trafos_cargas = {}
 
-        # Padrões regex para encontrar elementos no run.dss
+        # Padrões regex mantidos...
         padrao_carga = re.compile(r"(?i)new\s+load\.nome_([^_\s]+).*?(carga_pip|carga_baixa)\b")
         padroes_gd = ("New pvsystem", "New xycurve", "New loadshape", "New tshape")
         padrao_trafo = re.compile(r"(?i)new\s+transformer\.(\S+)")
         padrao_kv2 = re.compile(r"(?i)~\s*wdg\s*=\s*2.*?kv\s*=\s*([\d.]+)")
         padrao_bus2 = re.compile(r"(?i)~\s*wdg\s*=\s*2.*?bus\s*=\s*(\S+)")
 
-        # Percorre os diretórios que contêm os arquivos run.dss
-        for root, dirs, files in os.walk(self.caminho):
-            if 'run.dss' not in files:
-                continue  # pula pastas que não contêm o arquivo principal
+        # 🚨 AQUI está a parte modificada:
+        for subpasta in os.listdir(self.caminho):
+            caminho_subpasta = os.path.join(self.caminho, subpasta)
+            if not os.path.isdir(caminho_subpasta):
+                continue
 
-            nome_pasta = os.path.basename(root)
-            if nome_pasta not in dicionario_cargas_por_nome:
-                continue  # ignora pastas sem carga mapeada
-
-            # Cria mapeamento cod_id -> trafo a partir do DataFrame de cargas
-            df_cargas = dicionario_cargas_por_nome[nome_pasta]
-            cod_id_para_trafo = dict(zip(df_cargas["cod_id"].astype(str), df_cargas["uni_tr_mt"]))
-
-            # Faz o mesmo para GD, se houver
-            df_gd = dicionario_gd_por_nome.get(nome_pasta)
-            cod_id_para_trafo_gd = {}
-            if df_gd is not None:
-                cod_id_para_trafo_gd = dict(zip(df_gd["cod_id"].astype(str), df_gd["uni_tr_mt"]))
-
-            caminho_arquivo = os.path.join(root, 'run.dss')
-            with open(caminho_arquivo, 'r', encoding='utf-8') as f:
-                linhas = f.readlines()
-
-            # Inicializa listas de resultados temporários
-            linhas_sem_gd = []         # armazenará linhas do run.dss sem as curvas de GD
-            cargas_encontradas = []    # armazenará tuplas (trafo, linha) para cargas
-            gd_encontradas = []        # armazenará tuplas (trafo, linha) para GDs
-            trafos_info = {}           # armazenará info extraída dos trafos
-
-            # Armazena blocos de curvas auxiliares temporariamente por cod_id (fora do loop!)
-            curvas_aux_por_cod_id = {}
-
-            # Leitura linha a linha
-            i = 0
-            while i < len(linhas):
-                linha = linhas[i]
-
-
-                linha_strip = linha.strip().lower()
-
-                # Detecta curvas auxiliares e armazena temporariamente
-                if linha_strip.startswith("new xycurve.") or \
-                linha_strip.startswith("new loadshape.") or \
-                linha_strip.startswith("new tshape."):
-
-                    curva_linhas = [linha.strip()]
-                    i += 1
-
-                    # Coleta linhas de continuação
-                    while i < len(linhas) and linhas[i].strip().startswith("~"):
-                        curva_linhas.append(linhas[i].strip())
-                        i += 1
-
-                    curva_bloco = "\n".join(curva_linhas)
-
-                    # Tenta identificar cod_id
-                    for cod_id in cod_id_para_trafo_gd:
-                        if cod_id in curva_bloco:
-                            curvas_aux_por_cod_id.setdefault(cod_id, []).append(curva_bloco)
-                            break
-
-                    continue  # pula para a próxima linha
-
-                # Detecta um novo PVSystem
-                if linha_strip.startswith("new pvsystem."):
-                    bloco_gd = [linha.strip()]
-                    i += 1
-
-                    # Coleta linhas ~ de continuação
-                    while i < len(linhas) and linhas[i].strip().startswith("~"):
-                        bloco_gd.append(linhas[i].strip())
-                        i += 1
-
-                    bloco_texto = " ".join(bloco_gd)
-
-                    for cod_id, trafo in cod_id_para_trafo_gd.items():
-                        if cod_id in bloco_texto:
-                            # Inclui curvas auxiliares associadas antes do pvsystem
-                            curvas_aux = curvas_aux_por_cod_id.get(cod_id, [])
-                            bloco_completo = curvas_aux + bloco_gd  # mantém ordem correta
-                            gd_encontradas.append((trafo, "\n".join(bloco_completo)))
-                            break
-
-                    continue  # já avançou 'i', então próxima linha
-
-
-                # Caso seja um transformador
-                match_trafo = padrao_trafo.search(linha)
-                if match_trafo:
-                    nome_trafo = match_trafo.group(1)
-                    tensao_secundario = None
-                    bus2 = None
-
-                    # Lê as próximas linhas (~) para extrair kv e bus2 do enrolamento secundário
-                    j = i + 1
-                    while j < len(linhas) and linhas[j].strip().startswith("~"):
-                        linha_sub = linhas[j]
-                        if "wdg=2" in linha_sub.lower():
-                            match_kv2 = padrao_kv2.search(linha_sub)
-                            match_bus2 = padrao_bus2.search(linha_sub)
-                            if match_kv2:
-                                tensao_secundario = float(match_kv2.group(1))
-                            if match_bus2:
-                                bus2 = match_bus2.group(1)
-                        j += 1
-
-                    # Armazena as infos do trafo se encontradas
-                    if tensao_secundario is not None and bus2 is not None:
-                        trafos_info[nome_trafo] = {
-                            "tensao_secundario_kv": tensao_secundario,
-                            "bus2": bus2
-                        }
-
-                    # Mantém as linhas do trafo no processamento interno
-                    linhas_sem_gd.append(linha)
-                    linhas_sem_gd.extend(linhas[i + 1:j])
-                    i = j
+            # Agora sim: percorre as pastas internas (nome_pasta)
+            for nome_pasta in os.listdir(caminho_subpasta):
+                root = os.path.join(caminho_subpasta, nome_pasta)
+                if not os.path.isdir(root):
                     continue
 
-                # Caso seja uma carga válida
-                match_carga = padrao_carga.search(linha)
-                if match_carga:
-                    cod_id_sujo = match_carga.group(1)
-                    cod_id = cod_id_sujo.strip('"')
-                    trafo = cod_id_para_trafo.get(cod_id)
-                    if trafo:
-                        cargas_encontradas.append((trafo, linha.strip()))
+                if 'run.dss' not in os.listdir(root):
+                    continue  # pula pastas que não contêm o arquivo principal
 
-                # Mantém a linha (não é GD)
-                linhas_sem_gd.append(linha)
-                i += 1
+                # A partir daqui, TODO o resto da função continua igual...
+                if nome_pasta not in dicionario_cargas_por_nome:
+                    continue
 
-            # → Não salva mais o run_clean.dss (removido conforme solicitado)
+                df_cargas = dicionario_cargas_por_nome[nome_pasta]
+                cod_id_para_trafo = dict(zip(df_cargas["cod_id"].astype(str), df_cargas["uni_tr_mt"]))
 
-            # Inicializa estrutura para a pasta, se necessário
-            if nome_pasta not in trafos_cargas:
-                trafos_cargas[nome_pasta] = {}
+                df_gd = dicionario_gd_por_nome.get(nome_pasta)
+                cod_id_para_trafo_gd = {}
+                if df_gd is not None:
+                    cod_id_para_trafo_gd = dict(zip(df_gd["cod_id"].astype(str), df_gd["uni_tr_mt"]))
 
-            # Agrupa as cargas por transformador
-            for trafo, linha_carga in cargas_encontradas:
-                trafos_cargas[nome_pasta].setdefault(trafo, {"cargas": [], "gd": []})
-                trafos_cargas[nome_pasta][trafo]["cargas"].append(linha_carga)
+                caminho_arquivo = os.path.join(root, 'run.dss')
+                with open(caminho_arquivo, 'r', encoding='utf-8') as f:
+                    linhas = f.readlines()
 
-            # Agrupa as GDs por transformador
-            for trafo, linha_gd in gd_encontradas:
-                trafos_cargas[nome_pasta].setdefault(trafo, {"cargas": [], "gd": []})
-                trafos_cargas[nome_pasta][trafo]["gd"].append(linha_gd)
+                # Inicializa listas de resultados temporários
+                linhas_sem_gd = []         # armazenará linhas do run.dss sem as curvas de GD
+                cargas_encontradas = []    # armazenará tuplas (trafo, linha) para cargas
+                gd_encontradas = []        # armazenará tuplas (trafo, linha) para GDs
+                trafos_info = {}           # armazenará info extraída dos trafos
 
-            # Adiciona informações dos transformadores (tensão e bus2)
-            for trafo, info in trafos_info.items():
-                if trafo not in trafos_cargas[nome_pasta]:
-                    trafos_cargas[nome_pasta][trafo] = {"cargas": [], "gd": []}
-                trafos_cargas[nome_pasta][trafo].update(info)
+                # Armazena blocos de curvas auxiliares temporariamente por cod_id (fora do loop!)
+                curvas_aux_por_cod_id = {}
 
-        # Se nada for encontrado, notifica
-        if not trafos_cargas:
-            print("Nenhuma carga ou GD vinculada a trafos foi encontrada.")
+                # Leitura linha a linha
+                i = 0
+                while i < len(linhas):
+                    linha = linhas[i]
+
+
+                    linha_strip = linha.strip().lower()
+
+                    # Detecta curvas auxiliares e armazena temporariamente
+                    if linha_strip.startswith("new xycurve.") or \
+                    linha_strip.startswith("new loadshape.") or \
+                    linha_strip.startswith("new tshape."):
+
+                        curva_linhas = [linha.strip()]
+                        i += 1
+
+                        # Coleta linhas de continuação
+                        while i < len(linhas) and linhas[i].strip().startswith("~"):
+                            curva_linhas.append(linhas[i].strip())
+                            i += 1
+
+                        curva_bloco = "\n".join(curva_linhas)
+
+                        # Tenta identificar cod_id
+                        for cod_id in cod_id_para_trafo_gd:
+                            if cod_id in curva_bloco:
+                                curvas_aux_por_cod_id.setdefault(cod_id, []).append(curva_bloco)
+                                break
+
+                        continue  # pula para a próxima linha
+
+                    # Detecta um novo PVSystem
+                    if linha_strip.startswith("new pvsystem."):
+                        bloco_gd = [linha.strip()]
+                        i += 1
+
+                        # Coleta linhas ~ de continuação
+                        while i < len(linhas) and linhas[i].strip().startswith("~"):
+                            bloco_gd.append(linhas[i].strip())
+                            i += 1
+
+                        bloco_texto = " ".join(bloco_gd)
+
+                        for cod_id, trafo in cod_id_para_trafo_gd.items():
+                            if cod_id in bloco_texto:
+                                # Inclui curvas auxiliares associadas antes do pvsystem
+                                curvas_aux = curvas_aux_por_cod_id.get(cod_id, [])
+                                bloco_completo = curvas_aux + bloco_gd  # mantém ordem correta
+                                gd_encontradas.append((trafo, "\n".join(bloco_completo)))
+                                break
+
+                        continue  # já avançou 'i', então próxima linha
+
+
+                    # Caso seja um transformador
+                    match_trafo = padrao_trafo.search(linha)
+                    if match_trafo:
+                        nome_trafo = match_trafo.group(1)
+                        tensao_secundario = None
+                        bus2 = None
+
+                        # Lê as próximas linhas (~) para extrair kv e bus2 do enrolamento secundário
+                        j = i + 1
+                        while j < len(linhas) and linhas[j].strip().startswith("~"):
+                            linha_sub = linhas[j]
+                            if "wdg=2" in linha_sub.lower():
+                                match_kv2 = padrao_kv2.search(linha_sub)
+                                match_bus2 = padrao_bus2.search(linha_sub)
+                                if match_kv2:
+                                    tensao_secundario = float(match_kv2.group(1))
+                                if match_bus2:
+                                    bus2 = match_bus2.group(1)
+                            j += 1
+
+                        # Armazena as infos do trafo se encontradas
+                        if tensao_secundario is not None and bus2 is not None:
+                            trafos_info[nome_trafo] = {
+                                "tensao_secundario_kv": tensao_secundario,
+                                "bus2": bus2
+                            }
+
+                        # Mantém as linhas do trafo no processamento interno
+                        linhas_sem_gd.append(linha)
+                        linhas_sem_gd.extend(linhas[i + 1:j])
+                        i = j
+                        continue
+
+                    # Caso seja uma carga válida
+                    match_carga = padrao_carga.search(linha)
+                    if match_carga:
+                        cod_id_sujo = match_carga.group(1)
+                        cod_id = cod_id_sujo.strip('"')
+                        trafo = cod_id_para_trafo.get(cod_id)
+                        if trafo:
+                            cargas_encontradas.append((trafo, linha.strip()))
+
+                    # Mantém a linha (não é GD)
+                    linhas_sem_gd.append(linha)
+                    i += 1
+
+                # → Não salva mais o run_clean.dss (removido conforme solicitado)
+
+                # Inicializa estrutura para a pasta, se necessário
+                if nome_pasta not in trafos_cargas:
+                    trafos_cargas[nome_pasta] = {}
+
+                # Agrupa as cargas por transformador
+                for trafo, linha_carga in cargas_encontradas:
+                    trafos_cargas[nome_pasta].setdefault(trafo, {"cargas": [], "gd": []})
+                    trafos_cargas[nome_pasta][trafo]["cargas"].append(linha_carga)
+
+                # Agrupa as GDs por transformador
+                for trafo, linha_gd in gd_encontradas:
+                    trafos_cargas[nome_pasta].setdefault(trafo, {"cargas": [], "gd": []})
+                    trafos_cargas[nome_pasta][trafo]["gd"].append(linha_gd)
+
+                # Adiciona informações dos transformadores (tensão e bus2)
+                for trafo, info in trafos_info.items():
+                    if trafo not in trafos_cargas[nome_pasta]:
+                        trafos_cargas[nome_pasta][trafo] = {"cargas": [], "gd": []}
+                    trafos_cargas[nome_pasta][trafo].update(info)
+
+            # Se nada for encontrado, notifica
+            if not trafos_cargas:
+                print("Nenhuma carga ou GD vinculada a trafos foi encontrada.")
 
         return trafos_cargas
 
@@ -251,8 +244,14 @@ class Agrega_Carga_Trafos:
         re_carga_no_pv = re.compile(r"(?i)new\s+load\..*?_carga_no_pv\b")
         re_carga_agregada_existente = re.compile(r"(?i)new\s+load\.nome_.*?_carga_pip\b")
 
-        lista_pastas = list(os.walk(self.caminho))
-        for root, _, files in tqdm(lista_pastas, desc="Pastas processadas"):
+        subpastas = [os.path.join(self.caminho, p) for p in os.listdir(self.caminho) if os.path.isdir(os.path.join(self.caminho, p))]
+        lista_pastas = []
+        for subpasta in subpastas:
+            for root, _, files in os.walk(subpasta):
+                lista_pastas.append((root, files))
+
+        for root, files in tqdm(lista_pastas, desc="Pastas processadas"):
+
 
             
             if 'run.dss' not in files:
@@ -456,7 +455,13 @@ class Agrega_Carga_Trafos:
                         lista = [float(v.strip()) for v in valores.split(',') if v.strip()]
                         curvas_de_carga[nome.strip()] = lista
 
-        for root, dirs, files in os.walk(caminho):
+        subpastas = [os.path.join(caminho, p) for p in os.listdir(caminho) if os.path.isdir(os.path.join(caminho, p))]
+        lista_pastas = []
+        for subpasta in subpastas:
+            for root, _, files in os.walk(subpasta):
+                lista_pastas.append((root, files))
+
+        for root, files in lista_pastas:
     
             if 'run_cargas_agregadas.dss' not in files:
                 continue
@@ -545,7 +550,13 @@ class Agrega_Carga_Trafos:
         caminho_curvas = os.path.join(self.caminho, 'curvas_de_carga.txt')
         curvas_de_carga = self.carregar_curvas_carga(caminho_curvas)
     
-        for root, dirs, files in os.walk(caminho):
+        subpastas = [os.path.join(caminho, p) for p in os.listdir(caminho) if os.path.isdir(os.path.join(caminho, p))]
+        lista_pastas = []
+        for subpasta in subpastas:
+            for root, _, files in os.walk(subpasta):
+                lista_pastas.append((root, files))
+
+        for root, files in lista_pastas:
  
             if 'run_cargas_agregadas.dss' not in files:
                 continue
@@ -572,7 +583,7 @@ class Agrega_Carga_Trafos:
 
                 nome_curva = match_nome_curva.group(1)
                 if nome_curva not in curvas_de_carga:
-                    print(f"⚠️ Curva '{nome_curva}' não encontrada para a linha: {linha.strip()}")
+                    print(f"Curva '{nome_curva}' não encontrada para a linha: {linha.strip()}")
                     novas_linhas.append(linha)
                     continue
 

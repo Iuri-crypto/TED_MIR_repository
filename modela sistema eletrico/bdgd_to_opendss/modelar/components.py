@@ -4,6 +4,8 @@ from rich.console import Console
 import math
 from collections import defaultdict
 console = Console()
+import ast
+
 
 
 class SlackBus:
@@ -60,8 +62,25 @@ class ReactiveCompensatorMT:
         dss_dict = {}
         console = Console()
 
-        # Elimina duplicatas com base no 'cod_id', mantendo a primeira ocorrência
+        # Remove duplicatas mantendo a primeira ocorrência
         df = df.drop_duplicates(subset="cod_id")
+
+        def format_coord(coord_raw):
+            # Tenta converter string que representa tupla/lista para objeto Python
+            if isinstance(coord_raw, str):
+                try:
+                    coord_raw = ast.literal_eval(coord_raw)
+                except Exception:
+                    pass
+            if isinstance(coord_raw, (list, tuple)):
+                try:
+                    lat = round(float(coord_raw[0]), 6)
+                    lon = round(float(coord_raw[1]), 6)
+                    return f"{lat}_{lon}"
+                except Exception:
+                    return "sem_coord"
+            else:
+                return str(coord_raw).replace(" ", "_")[:30] or "sem_coord"
 
         def process_chunk(chunk: pd.DataFrame) -> dict:
             chunk_result = {}
@@ -75,6 +94,7 @@ class ReactiveCompensatorMT:
             cod_id = chunk['cod_id'].astype(str)
             nome = chunk['nome'].astype(str)
             sub = chunk['sub'].astype(str)
+            coord_col = chunk['coord_latlon']
 
             for i in chunk.index:
                 bus1 = f"{pac_1[i]}{rec_fases[i]}"
@@ -82,28 +102,29 @@ class ReactiveCompensatorMT:
                 kvar = pot_nom[i]
                 fases = phases[i]
                 cod_id_rec = cod_id[i]
-                
-                
+
+                coord_formatada = format_coord(coord_col[i])
 
                 if fases < 2:
-                    kv = round(kv / math.sqrt(3), 3
-                    )
+                    kv = round(kv / math.sqrt(3), 3)
                     rec = '.0'
+                else:
+                    rec = ''
 
-                if tip_unid[i] == 56:
+                if tip_unid[i] == '56':
                     linha = (
-                            f"New Reactor.{cod_id_rec}_Banco_de_Reator Bus1 = {bus1}{rec} "
-                            f"kv = {kv} kvar = {kvar} phases = {fases} conn = wye\n\n"
+                        f"New Reactor.coord_{coord_formatada}_{cod_id_rec}_Banco_de_Reator Bus1 = {bus1}{rec} "
+                        f"kv = {kv} kvar = {kvar} phases = {fases} conn = wye\n\n"
                     )
                 else:
                     linha = (
-                            f"New Capacitor.{cod_id_rec}_Banco_de_Capacitor Bus1 = {bus1} "
-                            f"kv = {kv} kVAR = {kvar} phases = {fases} conn = wye\n\n"
+                        f"New Capacitor.coord_{coord_formatada}_{cod_id_rec}_Banco_de_Capacitor Bus1 = {bus1} "
+                        f"kv = {kv} kVAR = {kvar} phases = {fases} conn = wye\n\n"
                     )
 
                 chunk_result.setdefault(str(sub[i]), {}).setdefault(nome[i], []).append(linha)
 
-            return chunk_result
+            return chunk_result  # ← ESSENCIAL para retorno correto
 
         with Progress(
             TextColumn("[bold green]Carregando..."),
@@ -133,11 +154,29 @@ class ReactiveCompensatorBT:
     @staticmethod
     def to_dss(df: pd.DataFrame, chunk_size=1000) -> dict:
         print("Modelando Compensadores Reativos BT...")
-        dss_dict = defaultdict(list)
+        dss_dict = defaultdict(dict)
         console = Console()
 
-        # Elimina duplicatas com base no 'cod_id', mantendo a primeira ocorrência
         df = df.drop_duplicates(subset="cod_id")
+
+        def format_coord(coord_raw):
+            # Tenta converter string para lista/tupla (caso venha como texto)
+            if isinstance(coord_raw, str):
+                try:
+                    import ast
+                    coord_raw = ast.literal_eval(coord_raw)
+                except Exception:
+                    pass
+
+            if isinstance(coord_raw, (list, tuple)):
+                try:
+                    lat = round(float(coord_raw[0]), 6)
+                    lon = round(float(coord_raw[1]), 6)
+                    return f"{lat}_{lon}"
+                except Exception:
+                    return "sem_coord"
+            else:
+                return str(coord_raw).replace(" ", "_")[:30] or "sem_coord"
 
         def process_chunk(chunk: pd.DataFrame) -> dict:
             chunk_result = {}
@@ -151,8 +190,7 @@ class ReactiveCompensatorBT:
             cod_id = chunk['cod_id'].astype(str)
             nome = chunk['nome'].astype(str)
             sub = chunk['sub'].astype(str)
-            cod_id_rec = chunk['cod_id'].astype(str)
-            rec = '.0'
+            coord_col = chunk['coord_latlon']
 
             for i in chunk.index:
                 bus1 = f"{pac_1[i]}{rec_fases[i]}"
@@ -161,18 +199,22 @@ class ReactiveCompensatorBT:
                 fases = phases[i]
                 cod_id_rec = cod_id[i]
 
+                coord_formatada = format_coord(coord_col[i])
+
                 if fases < 2:
                     kv = round(kv / math.sqrt(3), 3)
                     rec = '.0'
+                else:
+                    rec = ''
 
-                if tip_unid[i] == 56:
+                if tip_unid[i] == '56':
                     linha = (
-                        f"New Reactor.{cod_id_rec}_Banco_de_Reator Bus1 = {bus1}{rec} "
+                        f"New Reactor.coord_{coord_formatada}_{cod_id_rec}_Banco_de_Reator Bus1 = {bus1}{rec} "
                         f"kv = {kv} kvar = {kvar} phases = {fases} conn = wye\n\n"
                     )
                 else:
                     linha = (
-                        f"New Capacitor.{cod_id_rec}_Banco_de_Capacitor Bus1 = {bus1}{rec} "
+                        f"New Capacitor.coord_{coord_formatada}_{cod_id_rec}_Banco_de_Capacitor Bus1 = {bus1}{rec} "
                         f"kv = {kv} kVAR = {kvar} phases = {fases} conn = wye\n\n"
                     )
 
@@ -193,7 +235,6 @@ class ReactiveCompensatorBT:
                 chunk = df.iloc[start:start + chunk_size]
                 chunk_dict = process_chunk(chunk)
 
-                # Acumula linhas para as mesmas chaves
                 for sub, nomes_dict in chunk_dict.items():
                     if sub not in dss_dict:
                         dss_dict[sub] = {}
@@ -204,6 +245,7 @@ class ReactiveCompensatorBT:
 
         return dict(dss_dict)
 
+    
     
 class SwitchLowVoltage:
     @staticmethod
@@ -217,24 +259,36 @@ class SwitchLowVoltage:
         def process_chunk(chunk: pd.DataFrame) -> dict:
             chunk_result = {}
 
-            cod_id = chunk["cod_id"]
+            cod_id = chunk["cod_id"].astype(str)
             phases = chunk.get("phases", pd.Series(3, index=chunk.index))
             pac_1 = chunk["pac_1"].astype(str)
             pac_2 = chunk["pac_2"].astype(str)
-            rec_fases = chunk["rec_fases"].astype(str)
-            pn_ope = chunk["p_n_ope"].astype(str)
+            rec_fases = chunk.get("rec_fases", pd.Series('', index=chunk.index)).astype(str)
+            pn_ope = chunk.get("p_n_ope", pd.Series('', index=chunk.index)).astype(str)
             nome = chunk["nome"].astype(str)
-            sub = chunk['sub'].astype(str)
+            sub = chunk["sub"].astype(str)
+            coord_col = chunk["coord_latlon"]  # ← mantém tipo original
 
             for i in chunk.index:
-                if pn_ope[i] == 'F':
-                    status = 'y'
+                if pn_ope[i] != 'F':
+                    continue
+
+                # ⬇️ Tratamento seguro para coordenada
+                coord_raw = coord_col[i]
+                if isinstance(coord_raw, (list, tuple)):
+                    try:
+                        coord_formatada = f"{round(coord_raw[0], 6)}_{round(coord_raw[1], 6)}"
+                    except (IndexError, TypeError):
+                        coord_formatada = "sem_coord"
                 else:
-                    status = 'n'
+                    coord_formatada = str(coord_raw).replace(" ", "_")[:30] or "sem_coord"
+
                 linha = (
-                    f"New line.{cod_id[i]}_chave_bt phases = {phases[i]} bus1 = {pac_1[i]}{rec_fases[i]} bus2 = {pac_2[i]}{rec_fases[i]} switch = {status}\n\n"
-          
+                    f"New line.coord_{coord_formatada}_{cod_id[i]}_chave_bt "
+                    f"phases = {phases[i]} bus1 = {pac_1[i]}{rec_fases[i]} "
+                    f"bus2 = {pac_2[i]}{rec_fases[i]} switch = y\n\n"
                 )
+
                 chunk_result.setdefault(sub[i], {}).setdefault(nome[i], []).append(linha)
 
             return chunk_result
@@ -251,14 +305,17 @@ class SwitchLowVoltage:
             for start in range(0, len(df), chunk_size):
                 chunk = df.iloc[start:start + chunk_size]
                 chunk_dict = process_chunk(chunk)
-                for sub, nomes in chunk_dict.items():
+
+                for sub, nomes_dict in chunk_dict.items():
                     if sub not in dss_dict:
                         dss_dict[sub] = {}
-                    for nome, linhas in chunk_dict.items():
+                    for nome, linhas in nomes_dict.items():
                         dss_dict[sub].setdefault(nome, []).extend(linhas)
+
                 progress.update(task, advance=len(chunk))
 
         return dss_dict
+
 
 
 class SwitchMediumVoltage:
@@ -270,31 +327,56 @@ class SwitchMediumVoltage:
 
         df = df.drop_duplicates(subset="cod_id")
 
+        def format_coords(coord_raw):
+            if isinstance(coord_raw, (list, tuple)):
+                if all(isinstance(p, (list, tuple)) and len(p) == 2 for p in coord_raw):
+                    partes = []
+                    for p in coord_raw:
+                        try:
+                            lat = round(float(p[0]), 6)
+                            lon = round(float(p[1]), 6)
+                            partes.append(f"{lat}_{lon}")
+                        except Exception:
+                            partes.append("sem_coord")
+                    return "__".join(partes)
+                else:
+                    try:
+                        lat = round(float(coord_raw[0]), 6)
+                        lon = round(float(coord_raw[1]), 6)
+                        return f"{lat}_{lon}"
+                    except Exception:
+                        return "sem_coord"
+            return str(coord_raw).replace(" ", "_")[:30] or "sem_coord"
+
+
         def process_chunk(chunk: pd.DataFrame) -> dict:
             chunk_result = {}
 
             cod_id = chunk["cod_id"].astype(str)
-            #phases = chunk.get("phases", pd.Series(3, index=chunk.index))
             pac_1 = chunk["pac_1"].astype(str)
             pac_2 = chunk["pac_2"].astype(str)
-            #rec_fases = chunk["rec_fases"]
             pn_ope = chunk["p_n_ope"].astype(str)
-            nome = chunk['nome'].astype(str)
-            sub = chunk['sub'].astype(str)
+            nome = chunk["nome"].astype(str)
+            sub = chunk["sub"].astype(str)
+            coord_col = chunk["coord_latlon"]
 
             for i in chunk.index:
-                if pn_ope[i] == 'F':
-                    status = 'y'
-                else:
-                    status = 'n'
+                if pn_ope[i] != 'F':
+                    continue
+
+                coord_raw = coord_col[i]
+                coord_formatada = format_coords(coord_raw)
+
                 chave = cod_id[i]
+
                 linha = (
-                    f"New line.{chave}_Chave_mt "
+                    f"New line.coord_{coord_formatada}_{chave}_Chave_mt "
                     f"phases = 3 "
                     f"bus1 = {pac_1[i]}.1.2.3 "
                     f"bus2 = {pac_2[i]}.1.2.3 "
-                    f"switch = {status}\n\n "
+                    f"switch = y\n\n"
                 )
+
                 chunk_result.setdefault(sub[i], {}).setdefault(nome[i], []).append(linha)
 
             return chunk_result
@@ -311,14 +393,17 @@ class SwitchMediumVoltage:
             for start in range(0, len(df), chunk_size):
                 chunk = df.iloc[start:start + chunk_size]
                 chunk_dict = process_chunk(chunk)
-                for sub, nomes in chunk_dict.items():
+
+                for sub, nomes_dict in chunk_dict.items():
                     if sub not in dss_dict:
                         dss_dict[sub] = {}
-                    for nome, linhas in chunk_dict.items():
+                    for nome, linhas in nomes_dict.items():
                         dss_dict[sub].setdefault(nome, []).extend(linhas)
+
                 progress.update(task, advance=len(chunk))
 
         return dss_dict
+
 
 
 
@@ -370,14 +455,16 @@ class GeneratorMediumVoltage:
                 for sub, nomes in chunk_dict.items():
                     if sub not in dss_dict:
                         dss_dict[sub] = {}
-                    for nome, linhas in chunk_dict.items():
+                    for nome, linhas in nomes.items(): 
                         dss_dict[sub].setdefault(nome, []).extend(linhas)
+
                 progress.update(task, advance=len(chunk))
 
         return dss_dict
 
-   
-   
+          
+          
+          
 class LinecodeLowVoltage:
     @staticmethod
     def to_dss(df: pd.DataFrame, chunk_size=1000) -> dict:
@@ -583,22 +670,49 @@ class LineLowVoltage:
 
         df = df.drop_duplicates(subset="cod_id")
 
+        def format_coord(coord_val):
+            if isinstance(coord_val, (list, tuple)):
+                # Se for lista/tupla com pelo menos dois pontos, cada um sendo uma tupla (lat, lon)
+                if len(coord_val) >= 2 and all(isinstance(p, (list, tuple)) and len(p) == 2 for p in coord_val[:2]):
+                    partes = []
+                    for p in coord_val[:2]:  # pega só os dois primeiros pontos da linha
+                        try:
+                            lat = round(float(p[0]), 6)
+                            lon = round(float(p[1]), 6)
+                            partes.append(f"{lat}_{lon}")
+                        except Exception:
+                            partes.append("sem_coord")
+                    return "__".join(partes)
+                else:
+                    # Se for só um par lat-lon simples
+                    try:
+                        lat = round(float(coord_val[0]), 6)
+                        lon = round(float(coord_val[1]), 6)
+                        return f"{lat}_{lon}"
+                    except Exception:
+                        return "sem_coord"
+            # Caso seja string ou outro tipo
+            return str(coord_val).replace(" ", "_")[:30] or "sem_coord"
+
         def to_dss_vetorizado_chunk(chunk: pd.DataFrame) -> dict:
             chunk = chunk.copy()
 
-            # Conversões para string para concatenar corretamente
+            # Conversões para string
             chunk["cod_id"] = chunk["cod_id"].astype(str)
             chunk["pac_1"] = chunk["pac_1"].astype(str)
             chunk["pac_2"] = chunk["pac_2"].astype(str)
             chunk["comp"] = chunk["comp"].astype(str)
             chunk["tip_cnd"] = chunk["tip_cnd"].astype(str)
             chunk["rec_fases"] = chunk["rec_fases"].astype(str)
-            chunk["phases"] = chunk["phases"].astype(str)
+            chunk["phases"] = chunk.get("phases", pd.Series(3, index=chunk.index)).astype(str)
             chunk["nome"] = chunk["nome"].astype(str)
             chunk["sub"] = chunk["sub"].astype(str)
 
+            # Aplica formatação segura nas coordenadas com múltiplos pontos
+            chunk["coord_formatada"] = chunk["coord_latlon"].apply(format_coord)
+
             chunk["linha"] = (
-                "New Line." + chunk["cod_id"] + "_linha_baixa " +
+                "New Line.coord_" + chunk["coord_formatada"] + "_" + chunk["cod_id"] + "_linha_baixa " +
                 "Phases=" + chunk["phases"] + " " +
                 "Bus1=" + chunk["pac_1"] + chunk["rec_fases"] + " " +
                 "Bus2=" + chunk["pac_2"] + chunk["rec_fases"] + " " +
@@ -642,14 +756,46 @@ class LineLowVoltage:
         return dss_dict
 
 
+
+
 class LineMediumVoltage:
     @staticmethod
     def to_dss(df: pd.DataFrame, chunk_size=1000) -> dict:
         print("Modelando Linhas MT...")
 
-        # Elimina duplicatas com base no 'cod_id'
         df = df.drop_duplicates(subset="cod_id")
 
+        def format_coord(coord_val):
+            # Se for string que parece lista/tupla, tenta converter para objeto Python real
+            if isinstance(coord_val, str):
+                try:
+                    coord_val = ast.literal_eval(coord_val)
+                except Exception:
+                    pass  # deixa coord_val como string mesmo se der erro
+
+            if isinstance(coord_val, (list, tuple)):
+                # Se for lista/tupla com pelo menos dois pontos, cada um sendo uma tupla (lat, lon)
+                if len(coord_val) >= 2 and all(isinstance(p, (list, tuple)) and len(p) == 2 for p in coord_val[:2]):
+                    partes = []
+                    for p in coord_val[:2]:  # pega só os dois primeiros pontos da linha
+                        try:
+                            lat = round(float(p[0]), 6)
+                            lon = round(float(p[1]), 6)
+                            partes.append(f"{lat}_{lon}")
+                        except Exception:
+                            partes.append("sem_coord")
+                    return "__".join(partes)
+                else:
+                    # Se for só um par lat-lon simples
+                    try:
+                        lat = round(float(coord_val[0]), 6)
+                        lon = round(float(coord_val[1]), 6)
+                        return f"{lat}_{lon}"
+                    except Exception:
+                        return "sem_coord"
+            # Caso seja string ou outro tipo
+            return str(coord_val).replace(" ", "_")[:30] or "sem_coord"
+        
         def to_dss_vetorizado_chunk(chunk: pd.DataFrame) -> dict:
             chunk = chunk.copy()
 
@@ -664,17 +810,18 @@ class LineMediumVoltage:
             chunk["rec_fases"] = chunk["rec_fases"].astype(str)
             chunk["phases"] = chunk["phases"].astype(str)
 
-            # Geração da linha DSS
+            # Formata coordenadas com tratamento para múltiplos pontos
+            chunk["coord_formatada"] = chunk["coord_latlon"].apply(format_coord)
+
             chunk["linha"] = (
-                "New Line." + chunk["cod_id"] + "_linha_media " +
+                "New Line.coord_" + chunk["coord_formatada"] + "_" + chunk["cod_id"] + "_linha_media " +
                 "Phases=3 " +
                 "Bus1=" + chunk["pac_1"] + ".1.2.3 " +
                 "Bus2=" + chunk["pac_2"] + ".1.2.3 " +
                 "Linecode=" + chunk["tip_cnd"] + "_linecode_media " +
-                "Length=" + chunk["comp"] + " units=m\n "
+                "Length=" + chunk["comp"] + " units=m\n"
             )
 
-            # Estrutura aninhada: sub -> nome -> [linhas]
             chunk_result = {}
             for i in chunk.index:
                 sub = chunk.at[i, "sub"]
@@ -708,8 +855,10 @@ class LineMediumVoltage:
 
                 progress.update(task, advance=len(chunk))
 
-        return dss_dict 
+        return dss_dict
 
+    
+    
 
 class RamalLine:
     @staticmethod
@@ -732,9 +881,11 @@ class RamalLine:
             chunk["comp"] = chunk["comp"].astype(str)
             chunk["nome"] = chunk["nome"].astype(str)
             chunk["sub"] = chunk["sub"].astype(str)
+            chunk['coord_latlon'] = chunk['coord_latlon'].astype(str)
+
 
             chunk["linha"] = (
-                "New Line." + chunk["cod_id"] + "_linha_ramal " +
+                "New Line." + "coord_" + chunk['coord_latlon'] + "_" + chunk["cod_id"] + "_linha_ramal " +
                 "Phases=" + chunk["phases"] + " " +
                 "Bus1=" + chunk["pac_1"] + chunk["rec_fases"] + " " +
                 "Bus2=" + chunk["pac_2"] + chunk["rec_fases"] + " " +
@@ -1141,9 +1292,21 @@ class TransformerMediumVoltage:
         console = Console()
         linhas_dss = {}
 
-        # Garante que existe a coluna 'sub'
         if 'sub' not in df.columns:
             df['sub'] = 'sem_sub'
+
+        def format_coord(coord_val):
+            if isinstance(coord_val, str):
+                try:
+                    coord_val = ast.literal_eval(coord_val)
+                except Exception:
+                    pass
+            if isinstance(coord_val, (list, tuple)):
+                try:
+                    return f"{round(coord_val[0], 6)}_{round(coord_val[1], 6)}"
+                except (IndexError, TypeError, ValueError):
+                    return "sem_coord"
+            return str(coord_val).replace(" ", "_")[:30] or "sem_coord"
 
         with Progress(
             TextColumn("[bold green]Carregando..."),
@@ -1161,6 +1324,7 @@ class TransformerMediumVoltage:
                 chunk["pac_1"] = chunk["pac_1"].astype(str)
                 chunk["pac_2"] = chunk["pac_2"].astype(str)
                 chunk["nome"] = chunk["nome"].astype(str)
+                chunk["coord_latlon"] = chunk["coord_latlon"].apply(format_coord)
                 chunk["ten_pri"] = chunk["ten_pri"] / 1000
                 chunk["ten_sec"] = chunk["ten_sec"] / 1000
 
@@ -1175,9 +1339,7 @@ class TransformerMediumVoltage:
                 chunk.loc[mask_monofasico, "rec_fases_t"] = chunk.loc[mask_monofasico, "rec_fases_p"].apply(inverter_fase_monofasica)
 
                 def substituir_quatro_por_zero(fase: str) -> str:
-                    if isinstance(fase, str):
-                        return fase.replace(".4", ".0")
-                    return ""
+                    return fase.replace(".4", ".0") if isinstance(fase, str) else ""
 
                 for col in ["rec_fases_p", "rec_fases_s", "rec_fases_t"]:
                     chunk[col] = chunk[col].apply(substituir_quatro_por_zero)
@@ -1190,10 +1352,7 @@ class TransformerMediumVoltage:
                     lig_fas_s, rec_fases_s = row["lig_fas_s"], row["rec_fases_s"]
                     xhl, per_fer, r = row["xhl"], row["per_fer"], row["r"]
                     rec_fases_t = row.get("rec_fases_t", "")
-
-                    bus1_fase = rec_fases_p
-                    if phases_p == 1 and rec_fases_p.endswith(".0"):
-                        bus1_fase = rec_fases_p.replace(".0", "")
+                    coord = row["coord_latlon"]
 
                     if phases_p == 1:
                         return (
@@ -1201,28 +1360,24 @@ class TransformerMediumVoltage:
                             f"~ wdg=1 bus={pac_1}.1.2.3 conn=delta kv={ten_pri} kva={pot_nom} %r={r} tap=1\n"
                             f"~ wdg=2 bus={pac_2}.1.2.3.0 conn=wye kv={ten_sec} kva={pot_nom} %r={r} tap=1\n\n"
                         )
-
                     elif phases_p == 2:
-                        ten_sec = round(ten_sec / math.sqrt(3), 3)
+                        ten_sec_adj = round(ten_sec / math.sqrt(3), 3)
                         return (
                             f"New Transformer.{cod_id} Phases=2 Windings=3 xhl={xhl} %noloadloss={per_fer}\n"
                             f"~ wdg=1 bus={pac_1}{rec_fases_p} conn=delta kv={ten_pri} kva={pot_nom} %r={r/2} tap=1\n"
-                            f"~ wdg=2 bus={pac_2}{rec_fases_s} conn=wye kv={ten_sec} kva={pot_nom} %r={r} tap=1\n"
-                            f"~ wdg=3 bus={pac_2}{rec_fases_t} conn=wye kv={ten_sec} kva={pot_nom} %r={r} tap=1\n\n"
+                            f"~ wdg=2 bus={pac_2}{rec_fases_s} conn=wye kv={ten_sec_adj} kva={pot_nom} %r={r} tap=1\n"
+                            f"~ wdg=3 bus={pac_2}{rec_fases_t} conn=wye kv={ten_sec_adj} kva={pot_nom} %r={r} tap=1\n\n"
                         )
-
                     elif phases_p == 3:
                         return (
                             f"New Transformer.{cod_id} Phases=3 Windings=2 xhl={xhl} %noloadloss={per_fer}\n"
                             f"~ wdg=1 bus={pac_1}.1.2.3 conn=delta kv={ten_pri} kva={pot_nom} %r={r} tap=1\n"
                             f"~ wdg=2 bus={pac_2}.1.2.3.0 conn=wye kv={ten_sec} kva={pot_nom} %r={r} tap=1\n\n"
                         )
-
                     return None
 
                 chunk["linha"] = chunk.apply(gerar_linha, axis=1)
 
-                # Agrupar por 'sub' e depois por 'nome'
                 for (_, row) in chunk.iterrows():
                     sub = row.get("sub", "sem_sub")
                     nome = row["nome"]
@@ -1236,7 +1391,6 @@ class TransformerMediumVoltage:
 
 
 
-
 class RegulatorMediumVoltage:
     @staticmethod
     def to_dss(df: pd.DataFrame, chunk_size=1000) -> dict:
@@ -1245,6 +1399,19 @@ class RegulatorMediumVoltage:
         df = df.drop_duplicates(subset="cod_id")
         console = Console()
         linhas_dss = {}
+
+        def format_coord(coord_val):
+            if isinstance(coord_val, str):
+                try:
+                    coord_val = ast.literal_eval(coord_val)
+                except Exception:
+                    pass
+            if isinstance(coord_val, (list, tuple)):
+                try:
+                    return f"{round(coord_val[0], 6)}_{round(coord_val[1], 6)}"
+                except (IndexError, TypeError, ValueError):
+                    return "sem_coord"
+            return str(coord_val).replace(" ", "_")[:30] or "sem_coord"
 
         with Progress(
             TextColumn("[bold green]Carregando..."),
@@ -1258,12 +1425,13 @@ class RegulatorMediumVoltage:
             for start in range(0, len(df), chunk_size):
                 chunk = df.iloc[start:start + chunk_size].copy()
 
-                # Conversões e ajustes vetoriais
                 chunk["cod_id"] = chunk["cod_id"].astype(str)
                 chunk["pac_1"] = chunk["pac_1"].astype(str)
                 chunk["pac_2"] = chunk["pac_2"].astype(str)
                 chunk["nome"] = chunk["nome"].astype(str)
+                chunk["coord_latlon"] = chunk["coord_latlon"].apply(format_coord)
                 chunk["ten_nom"] = chunk["ten_nom"] / 1000
+
                 banda_volts = 2  # constante
 
                 def gerar_linha(row):
@@ -1289,28 +1457,68 @@ class RegulatorMediumVoltage:
                     r = row["r"]
                     rel_tp = row["rel_tp"]
                     cor_nom = row["cor_nom"]
+                    coord = row["coord_latlon"]
 
                     return (
                         f"new transformer.reg{lig_fas_p}_{cod_id} phases={phases_p} windings=2 bank={cod_id} Maxtap=1.1 Mintap=0.9 ppm=0\n"
                         f"~ buses=({pac_1}{rec_fases_p} {pac_2}{rec_fases_s}) \n"
                         f"~ conns='wye wye' kvs='{ten_nom_adj} {ten_nom_adj}' \n"
                         f"~ kvas='{pot_nom} {pot_nom}' XHL = 0.1 %r={r}\n"
-                        f"new regcontrol.creg{lig_fas_p}_{cod_id} transformer=reg{lig_fas_p}_{cod_id} winding=2 \n"
+                        f"new regcontrol.coord_{coord}_creg{lig_fas_p}_{cod_id} transformer=reg{lig_fas_p}_{cod_id} winding=2 \n"
                         f"~ vreg={vreg:.5f} band={banda_volts} ptratio={rel_tp} ctprim={cor_nom}\n\n"
                     )
 
-                # Aplica a função linha a linha
                 chunk["linha"] = chunk.apply(gerar_linha, axis=1)
 
-                # Agrupa por nome
                 agrupado = chunk.groupby("nome")["linha"].apply(
                     lambda x: [linha for linha in x if linha is not None]
                 ).to_dict()
 
-                # Junta ao dicionário final
                 for nome, linhas in agrupado.items():
                     linhas_dss.setdefault(nome, []).extend(linhas)
 
                 progress.update(task, advance=len(chunk))
 
         return linhas_dss
+
+
+
+class Subestation_Coords_latlon:
+    @staticmethod
+    def to_dss(df: pd.DataFrame, chunk_size=1000) -> dict:
+        print("===================================================================================================")
+        print("Modelando Coordenadas das subestações...")
+        dss_dict = {}
+        console = Console()
+
+        def process_chunk(chunk: pd.DataFrame) -> dict:
+            chunk_dict = {}
+            for _, row in chunk.iterrows():
+                
+                cod_id = row['cod_id']
+                nome = row['nome']
+                coords = row['coord_latlon']
+
+                linha = (
+                        f"!coord_{coords}_nome_{nome}_cod_{cod_id} "
+                )
+                chunk_dict.setdefault(cod_id, []).append(linha)
+            return chunk_dict
+
+
+        with Progress(
+            TextColumn("[bold green]Carregando..."),
+            BarColumn(bar_width=60, style="green"),
+            TextColumn("[progress.percentage]{task.percentage:>3.0f}%"),
+            TimeRemainingColumn(),
+            console=console,
+        ) as progress:
+            task = progress.add_task("Modelando...", total=len(df))
+
+            for start in range(0, len(df), chunk_size):
+                chunk = df.iloc[start:start + chunk_size]
+                chunk_result = process_chunk(chunk)
+                dss_dict.update(chunk_result)
+                progress.update(task, advance=len(chunk))
+
+        return dss_dict
