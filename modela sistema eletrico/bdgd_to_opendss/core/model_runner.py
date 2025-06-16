@@ -252,8 +252,8 @@ class ModelRunner:
             # write_cenario_2_subestacoes(caminho).to_dss(modelated_slacks)
            
 
-            # Adicionar função para eliminar pastas erradas
-            # elimina_subpastas_sem_linhas_dss(caminho)
+            # #Adicionar função para eliminar pastas erradas
+            # #elimina_subpastas_sem_linhas_dss(caminho)
             
             # # Juntando pastas em uma só
             # processa_subpastas_gerando_run_dss(caminho)
@@ -267,15 +267,15 @@ class ModelRunner:
             # sub_cenarios.run()
 
 
-            # # Atribuindo as tensões bases 
-            #config = load_validation_config("tensoes_de_linha")
-            #tabela_tensoes = config.get("tensoes_de_linha", {})
-            #grafo = GrafoDSS(caminho, tabela_tensoes)
-            #grafo.encontrar_tensoes_base()
+            # Atribuindo as tensões bases 
+            config = load_validation_config("tensoes_de_linha")
+            tabela_tensoes = config.get("tensoes_de_linha", {})
+            grafo = GrafoDSS(caminho, tabela_tensoes)
+            grafo.encontrar_tensoes_base()
             
             
             # Criando barra slack para as SE desconectadas
-            #processa_arquivos_dss(caminho)
+            processa_arquivos_dss(caminho)
             
             # Renomeando arquivos sem "New Line"
             renomear_arquivos_sem_new_line(caminho)

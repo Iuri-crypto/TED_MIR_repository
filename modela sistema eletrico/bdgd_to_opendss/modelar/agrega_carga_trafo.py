@@ -27,6 +27,7 @@ class Agrega_Carga_Trafos:
         return grupos
 
 
+
     def soma_cargas_e_gd_nos_trafos(self, dicionario_cargas_por_nome, dicionario_gd_por_nome):
         """
         Processa as cargas e GDs vinculadas a trafos a partir de arquivos run.dss em subpastas de self.caminho.
@@ -42,17 +43,22 @@ class Agrega_Carga_Trafos:
         padrao_kv2 = re.compile(r"(?i)~\s*wdg\s*=\s*2.*?kv\s*=\s*([\d.]+)")
         padrao_bus2 = re.compile(r"(?i)~\s*wdg\s*=\s*2.*?bus\s*=\s*(\S+)")
 
-        # 🚨 AQUI está a parte modificada:
         for subpasta in os.listdir(self.caminho):
+            if subpasta.startswith('.'):  # ignora pastas ocultas como .git
+                continue
+
             caminho_subpasta = os.path.join(self.caminho, subpasta)
             if not os.path.isdir(caminho_subpasta):
                 continue
 
-            # Agora sim: percorre as pastas internas (nome_pasta)
             for nome_pasta in os.listdir(caminho_subpasta):
+                if nome_pasta.startswith('.'):  # ignora pastas ocultas novamente
+                    continue
+
                 root = os.path.join(caminho_subpasta, nome_pasta)
                 if not os.path.isdir(root):
                     continue
+
 
                 if 'run.dss' not in os.listdir(root):
                     continue  # pula pastas que não contêm o arquivo principal
@@ -543,72 +549,78 @@ class Agrega_Carga_Trafos:
 
 
 
-
     def adicionar_curvas_normalizadas_medias(self, caminho, trafos_cargas):
+
         # Lê o arquivo de curvas de carga uma vez
         curvas_de_carga = {}
         caminho_curvas = os.path.join(self.caminho, 'curvas_de_carga.txt')
         curvas_de_carga = self.carregar_curvas_carga(caminho_curvas)
-    
-        subpastas = [os.path.join(caminho, p) for p in os.listdir(caminho) if os.path.isdir(os.path.join(caminho, p))]
-        lista_pastas = []
-        for subpasta in subpastas:
-            for root, _, files in os.walk(subpasta):
-                lista_pastas.append((root, files))
 
-        for root, files in lista_pastas:
- 
-            if 'run_cargas_agregadas.dss' not in files:
+        for pasta in os.listdir(caminho):
+            caminho_pasta = os.path.join(caminho, pasta)
+            if not os.path.isdir(caminho_pasta):
                 continue
 
-            nome_pasta = os.path.basename(root)
-            if nome_pasta not in trafos_cargas:
-                continue
-
-            caminho_arquivo = os.path.join(root, 'run_cargas_agregadas.dss')
-            with open(caminho_arquivo, 'r', encoding='utf-8') as f:
-                linhas_existentes = f.readlines()
-
-            novas_linhas = []
-            for linha in linhas_existentes:
-                if 'carga_media ' not in linha:
-                    novas_linhas.append(linha)
+            for subpasta in os.listdir(caminho_pasta):
+                caminho_subpasta = os.path.join(caminho_pasta, subpasta)
+                if not os.path.isdir(caminho_subpasta):
                     continue
 
-                match_nome_curva = re.search(r"curva_diaria_([A-Za-z0-9\-]+)", linha)
-                if not match_nome_curva:
-                    novas_linhas.append(linha)
+                caminho_arquivo = os.path.join(caminho_subpasta, "run_cargas_agregadas.dss")
+                if not os.path.isfile(caminho_arquivo):
                     continue
 
-
-                nome_curva = match_nome_curva.group(1)
-                if nome_curva not in curvas_de_carga:
-                    print(f"Curva '{nome_curva}' não encontrada para a linha: {linha.strip()}")
-                    novas_linhas.append(linha)
+                nome_pasta = subpasta
+                if nome_pasta not in trafos_cargas:
                     continue
 
-                curva_do = curvas_de_carga[nome_curva].get("DO")
-                curva_du = curvas_de_carga[nome_curva].get("DU")
-                curva_sa = curvas_de_carga[nome_curva].get("SA")
-                #curva = curvas_de_carga[nome_curva]
-                #max_val = max(curva)
-                #curva_norm = [round(v / max_val, 4) if max_val > 0 else 0.0 for v in curva]
-                curva_str_do = "_".join(f"{v:.4f}" for v in curva_do)
-                curva_str_du = "_".join(f"{v:.4f}" for v in curva_du)
-                curva_str_sa = "_".join(f"{v:.4f}" for v in curva_sa)
+                with open(caminho_arquivo, 'r', encoding='utf-8') as f:
+                    linhas_existentes = f.readlines()
 
-                match_insercao = re.search(
-                    r"(curva_diaria_" + re.escape(nome_curva) + r")(_curva_anual_)", linha
-                )
-                if match_insercao:
-                    ponto_insercao = match_insercao.end(1)
-                    nova_linha = linha[:ponto_insercao] + f"_du_{curva_str_do}_sa_{curva_str_sa}_do_{curva_str_du}" + linha[ponto_insercao:]
-                    novas_linhas.append(nova_linha)
-                else:
-                    novas_linhas.append(linha)
+                novas_linhas = []
+                for linha in linhas_existentes:
+                    if 'carga_media ' not in linha:
+                        novas_linhas.append(linha)
+                        continue
 
-            with open(caminho_arquivo, 'w', encoding='utf-8') as f:
-                f.writelines(novas_linhas)
+                    match_nome_curva = re.search(r"curva_diaria_([A-Za-z0-9\-]+)", linha)
+                    if not match_nome_curva:
+                        novas_linhas.append(linha)
+                        continue
+
+                    nome_curva = match_nome_curva.group(1)
+                    if nome_curva not in curvas_de_carga:
+                        print(f"Curva '{nome_curva}' não encontrada para a linha: {linha.strip()}")
+                        novas_linhas.append(linha)
+                        continue
+
+                    curva_do = curvas_de_carga[nome_curva].get("DO")
+                    curva_du = curvas_de_carga[nome_curva].get("DU")
+                    curva_sa = curvas_de_carga[nome_curva].get("SA")
+
+                    curva_str_do = "_".join(f"{v:.4f}" for v in curva_do)
+                    curva_str_du = "_".join(f"{v:.4f}" for v in curva_du)
+                    curva_str_sa = "_".join(f"{v:.4f}" for v in curva_sa)
+
+                    match_insercao = re.search(
+                        r"(curva_diaria_" + re.escape(nome_curva) + r")(_curva_anual_)", linha
+                    )
+                    if match_insercao:
+                        ponto_insercao = match_insercao.end(1)
+                        nova_linha = (
+                            linha[:ponto_insercao]
+                            + f"_du_{curva_str_do}_sa_{curva_str_sa}_do_{curva_str_du}"
+                            + linha[ponto_insercao:]
+                        )
+                        novas_linhas.append(nova_linha)
+                    else:
+                        novas_linhas.append(linha)
+
+                with open(caminho_arquivo, 'w', encoding='utf-8') as f:
+                    f.writelines(novas_linhas)
+
+
+
 
 
     def run(self):

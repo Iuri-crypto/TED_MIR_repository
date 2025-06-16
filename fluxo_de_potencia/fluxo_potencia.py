@@ -10,6 +10,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import heapq
 from datetime import timedelta
+import heapq
+import math  # necessário para usar math.ceil
+import numpy as np
 
 """ Esta classe possui os métodos que configuram cenarios de simulação """
 
@@ -20,14 +23,39 @@ class class_Fluxo_de_Potencia:
         usar_cargas_bt: bool, usar_cargas_mt: bool, usar_gd_bt: bool, usar_gd_mt: bool,
         usar_geracao_hidraulica: bool, exibir_tensao: bool, exibir_corrente: bool,
         exibir_DEC: bool, exibir_FEC: bool, monitorar_subestacao: bool, gerar_grafico_circuito: bool,
-        caminho_base: str, nomes_que_devem_ser_carregados: list):
+        caminho_base):
         """ Recebe parâmetros de configuração dos cenários de simulação """
-        
+
+
         arquivos_dss = []
-        for root, _, files in os.walk(caminho_base):
-            for nome_arquivo in files:
-                if nome_arquivo.lower() == "run_cargas_agregadas.dss":
-                    arquivos_dss.append(os.path.join(root, nome_arquivo))
+     
+        def natural_sort_key(text):
+            # Divide texto em partes numéricas e não numéricas para ordenar naturalmente
+            return [int(t) if t.isdigit() else t.lower() for t in re.split(r'(\d+)', text)]
+
+        def buscar_dss(pasta):
+            if os.path.basename(pasta).startswith('.'):
+                return
+
+            # Lista ordenada naturalmente
+            itens = sorted(os.listdir(pasta), key=natural_sort_key)
+
+            # Primeiro, verifica arquivos
+            for item in itens:
+                caminho_completo = os.path.join(pasta, item)
+                if os.path.isfile(caminho_completo) and item.lower() == "run_cargas_agregadas.dss":
+                    arquivos_dss.append(caminho_completo)
+
+            # Depois, percorre subpastas
+            for item in itens:
+                if item.startswith('.'):
+                    continue
+                caminho_completo = os.path.join(pasta, item)
+                if os.path.isdir(caminho_completo):
+                    buscar_dss(caminho_completo)
+
+        # Chamada
+        buscar_dss(caminho_base)
 
 
         for caminho in arquivos_dss:
@@ -42,7 +70,9 @@ class class_Fluxo_de_Potencia:
             class_Fluxo_de_Potencia.config_gd(usar_gd_bt, usar_gd_mt)
             class_Fluxo_de_Potencia.config_geradores(usar_geracao_hidraulica)
             class_Fluxo_de_Potencia.config_cargas(usar_cargas_bt, usar_cargas_mt)
+ 
 
+            
             # Inicializa dicionários para armazenar potências e tensões
             potencias = defaultdict(lambda: defaultdict(float))
             tensoes = defaultdict(lambda: defaultdict(float))
@@ -61,28 +91,36 @@ class class_Fluxo_de_Potencia:
                 potencias[i]['kw'] = round(dss.circuit.total_power[0], 2)  # Potência ativa
                 potencias[i]['kvar'] = round(dss.circuit.total_power[1], 2)  # Potência reativa
 
-                barra_tensao = list(zip(dss.circuit.nodes_names, dss.circuit.buses_vmag_pu))
+                nomes = np.array(dss.circuit.nodes_names)
+                vpu_vals = np.array(dss.circuit.buses_vmag_pu)
 
-                # Filtra barramentos com sufixos de fase e tensão > 0
-                barra_tensao_filtrada = [(nome, vpu) for nome, vpu in barra_tensao
-                                        if nome.endswith((".1", ".2", ".3")) and vpu > 0]
+                # Filtro de nomes válidos e tensões > 0
+                mascara_fase = (
+                    np.char.endswith(nomes, ".1") |
+                    np.char.endswith(nomes, ".2") |
+                    np.char.endswith(nomes, ".3"))
+                
+                mascara_valida = (vpu_vals > 0) & mascara_fase
 
-                if barra_tensao_filtrada:
-                    n_pontos = max(1, len(barra_tensao_filtrada) // 100)  # Garante pelo menos 1 valor
+                #nomes_filtrados = nomes[mascara_valida]
+                tensoes_filtradas = vpu_vals[mascara_valida]
 
-                    # 1% mais baixos
-                    menores_tensoes = heapq.nsmallest(n_pontos, barra_tensao_filtrada, key=lambda x: x[1])
-                    menores_valores_tensao = [vpu for nome, vpu in menores_tensoes]
+                if tensoes_filtradas.size > 0:
+                    n_pontos = max(1, int(np.ceil(0.005 * tensoes_filtradas.size)))
 
-                    # 1% mais altos
-                    maiores_tensoes = heapq.nlargest(n_pontos, barra_tensao_filtrada, key=lambda x: x[1])
-                    maiores_valores_tensao = [vpu for nome, vpu in maiores_tensoes]
+                    # Usa np.argpartition para evitar sort completo (mais rápido)
+                    idx_menores = np.argpartition(tensoes_filtradas, n_pontos)[:n_pontos]
+                    idx_maiores = np.argpartition(-tensoes_filtradas, n_pontos)[:n_pontos]
 
-                    # Juntando os dois conjuntos em uma lista só
-                    tensoes[i] = menores_valores_tensao + maiores_valores_tensao
+                    menores_valores = tensoes_filtradas[idx_menores]
+                    maiores_valores = tensoes_filtradas[idx_maiores]
+
+                    tensoes[i] = np.concatenate((menores_valores, maiores_valores)).tolist()
+
+
                 print("Iterações necessárias: {}".format(dss.solution.iterations))
 
-                if i % 5 == 0:
+                if i % 2 == 0:
                     nome_alimentador = os.path.basename(os.path.dirname(caminho))
 
 
@@ -106,162 +144,6 @@ class class_Fluxo_de_Potencia:
             print("here")
 
 
-
-
-
-
-    @staticmethod
-    def plot_potencias(nome_alimentador, potencias):
-        sns.set_style("whitegrid")
-        plt.rcParams.update({
-            'axes.facecolor': '#f9f9f9',
-            'grid.color': '#e5e5e5',
-            'axes.edgecolor': '#cccccc',
-            'font.size': 10,
-            'axes.titlesize': 16,
-            'axes.labelsize': 12,
-            'xtick.labelsize': 9,
-            'ytick.labelsize': 9
-        })
-
-        pontos_por_dia = 96  # 24h * 4 (15 minutos)
-        total_pontos = pontos_por_dia * 3  # 3 dias
-
-        # Extrair potências ativas para todos os pontos
-        potencias_ativas = [-potencias[i]['kw'] for i in range(total_pontos)]
-
-        plt.figure(figsize=(15, 6))
-        plt.plot(range(total_pontos), potencias_ativas, label='Potência Ativa (kW)', color='#1f77b4', linewidth=2)
-        plt.fill_between(range(total_pontos), potencias_ativas, color='#1f77b4', alpha=0.1)
-
-        # Marcar ticks a cada 45 minutos (45 min = 3 intervalos de 15 min)
-        tick_interval = 3
-        xticks_pos = list(range(0, total_pontos, tick_interval))
-
-        dias = ['Dia Útil', 'Sábado', 'Domingo']
-        xticks_labels = []
-
-        for pos in xticks_pos:
-            dia = pos // pontos_por_dia
-            ponto_dia = pos % pontos_por_dia
-            hora = ponto_dia // 4  # 4 intervalos de 15 min = 1 hora
-            minuto = (ponto_dia % 4) * 15
-            label = f"{hora:02d}:{minuto:02d}"
-            if ponto_dia == 0:
-                label = dias[dia] + "\n" + label
-            xticks_labels.append(label)
-
-        plt.xticks(xticks_pos, xticks_labels, rotation=45, ha='right')
-
-        ax = plt.gca()
-        for label in ax.get_xticklabels():
-            text = label.get_text()
-            for dia in dias:
-                if text.startswith(dia):
-                    label.set_color('blue')
-                    label.set_fontsize(12)
-                    label.set_fontweight('bold')
-
-
-
-        # Linhas verticais para separar os dias
-        for separador in [pontos_por_dia, 2 * pontos_por_dia]:
-            plt.axvline(x=separador, color='gray', linestyle='--', linewidth=1)
-
-        plt.title(f"Potência Ativa no Alimentador: {nome_alimentador}", fontsize=16, weight='bold')
-        plt.xlabel("Hora do Dia")
-        plt.ylabel("Potência Ativa (kW)")
-
-        max_pot = max(potencias_ativas)
-        min_pot = min(potencias_ativas)
-        margem = (max_pot - min_pot) * 0.1
-        plt.ylim(min_pot - margem, max_pot + margem)
-
-        sns.despine()
-        plt.legend(loc='upper right', frameon=True, framealpha=0.9)
-        plt.tight_layout()
-        plt.show()
-
-
-    @staticmethod
-    def plot_tensao(nome_alimentador, tensoes_dict):
-        if not tensoes_dict:
-            print("Nenhuma tensão válida para exibir.")
-            return
-
-        # Configurações iguais ao gráfico de potências
-        sns.set_style("whitegrid")
-        plt.rcParams.update({
-            'axes.facecolor': '#f9f9f9',
-            'grid.color': '#e5e5e5',
-            'axes.edgecolor': '#cccccc',
-            'font.size': 10,
-            'axes.titlesize': 16,
-            'axes.labelsize': 12,
-            'xtick.labelsize': 9,
-            'ytick.labelsize': 9
-        })
-
-        pontos_por_dia = 96  # 24h * 4 (15 minutos)
-        total_pontos = pontos_por_dia * 3  # 3 dias
-
-        indices_tempo = sorted(tensoes_dict.keys())
-        tensoes_plot = [min(tensoes_dict[i]) for i in indices_tempo]
-
-        # Criar labels dos horários
-        dias = ['Dia Útil', 'Sábado', 'Domingo']
-        tick_interval = 3  # a cada 45 minutos (3 intervalos de 15 min)
-
-        xticks_pos = list(range(0, total_pontos, tick_interval))
-        xticks_labels = []
-
-        for pos in xticks_pos:
-            dia = pos // pontos_por_dia
-            ponto_dia = pos % pontos_por_dia
-            hora = ponto_dia // 4
-            minuto = (ponto_dia % 4) * 15
-            label = f"{hora:02d}:{minuto:02d}"
-            if ponto_dia == 0:
-                label = dias[dia] + "\n" + label
-            xticks_labels.append(label)
-
-        plt.figure(figsize=(15, 6))
-
-        plt.plot(indices_tempo, tensoes_plot, marker='o', linestyle='-', linewidth=2, markersize=5,
-                color='#1f77b4', alpha=0.8)
-        plt.fill_between(indices_tempo, tensoes_plot, color='#1f77b4', alpha=0.1)
-
-        # Linhas de limite
-        plt.axhline(1.0, color='green', linestyle='--', linewidth=1, label='1.0 pu')
-        plt.axhline(0.93, color='orange', linestyle='--', linewidth=1, label='Limite Inferior (0.93 pu)')
-        plt.axhline(1.05, color='red', linestyle='--', linewidth=1, label='Limite Superior (1.05 pu)')
-
-        plt.xticks(ticks=xticks_pos, labels=xticks_labels, rotation=45, ha='right')
-
-        # Destacar nomes dos dias em azul e maior
-        ax = plt.gca()
-        for label in ax.get_xticklabels():
-            text = label.get_text()
-            for dia in dias:
-                if text.startswith(dia):
-                    label.set_color('blue')
-                    label.set_fontsize(12)
-                    label.set_fontweight('bold')
-
-        # Linhas verticais para separar os dias
-        for separador in [pontos_por_dia, 2 * pontos_por_dia]:
-            plt.axvline(x=separador, color='gray', linestyle='--', linewidth=1)
-
-        plt.title(f"Tensão Mínima (1%) por Tempo - {nome_alimentador}", fontsize=16, weight='bold')
-        plt.xlabel("Hora do Dia", fontsize=12)
-        plt.ylabel("Tensão (pu)", fontsize=12)
-
-        plt.ylim(0.85, max(tensoes_plot) + 0.05)
-
-        sns.despine()
-        plt.legend(loc='upper right', frameon=True, framealpha=0.9)
-        plt.tight_layout()
-        plt.show()
 
 
 
@@ -343,19 +225,30 @@ class class_Fluxo_de_Potencia:
 
         # Criar eixo y secundário para a tensão
         ax2 = ax1.twinx()
-        ax2.plot(indices_tempo, tensoes_plot, marker='o', linestyle='-', linewidth=2, markersize=5,
-                color='orange', alpha=0.8, label='Tensão Mínima (pu)')
-        ax2.fill_between(indices_tempo, tensoes_plot, color='orange', alpha=0.1)
 
-        # Linhas de limite na tensão
-        ax2.axhline(1.0, color='green', linestyle='--', linewidth=1, label='1.0 pu')
-        ax2.axhline(0.93, color='red', linestyle='--', linewidth=1, label='Limite Inferior (0.93 pu)')
-        ax2.axhline(1.05, color='red', linestyle='--', linewidth=1, label='Limite Superior (1.05 pu)')
+        # Garantir que tensoes_plot não esteja vazio e contém valores válidos
+        if tensoes_plot and any(t is not None for t in tensoes_plot):
+            ax2.plot(indices_tempo, tensoes_plot, marker='o', linestyle='-', linewidth=2, markersize=5,
+                    color='orange', alpha=0.8, label='Tensão Mínima (pu)')
+            ax2.fill_between(indices_tempo, tensoes_plot, color='orange', alpha=0.1)
 
-        ax2.set_ylabel("Tensão (pu)", color='orange')
-        ax2.tick_params(axis='y', labelcolor='orange')
+            # Linhas de limite na tensão
+            ax2.axhline(1.0, color='green', linestyle='--', linewidth=1, label='1.0 pu')
+            ax2.axhline(0.93, color='red', linestyle='--', linewidth=1, label='Limite Inferior (0.93 pu)')
+            ax2.axhline(1.05, color='red', linestyle='--', linewidth=1, label='Limite Superior (1.05 pu)')
 
-        ax2.set_ylim(0.85, max(tensoes_plot) + 0.05)
+            ax2.set_ylabel("Tensão (pu)", color='orange')
+            ax2.tick_params(axis='y', labelcolor='orange')
+
+            # Ajustar limite y mesmo se tensoes_plot for muito pequeno
+            max_tensao = max(tensoes_plot) if max(tensoes_plot) > 0 else 1.05
+            ax2.set_ylim(0.7, max_tensao + 0.05)
+        else:
+            # Caso não haja dados, plotar uma linha neutra para indicar ausência
+            ax2.plot([], [], label='Tensão Mínima (pu)')
+            ax2.set_ylabel("Tensão (pu)", color='orange')
+            ax2.tick_params(axis='y', labelcolor='orange')
+            ax2.set_ylim(0.7, 1.1)
 
         # Título geral
         plt.title(f"Potência e Tensão no Alimentador: {nome_alimentador}", fontsize=16, weight='bold')
@@ -371,7 +264,10 @@ class class_Fluxo_de_Potencia:
 
         plt.tight_layout()
         plt.show()
+
         
+
+
         
 
     @staticmethod

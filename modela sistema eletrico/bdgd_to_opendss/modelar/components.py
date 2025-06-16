@@ -317,7 +317,6 @@ class SwitchLowVoltage:
         return dss_dict
 
 
-
 class SwitchMediumVoltage:
     @staticmethod
     def to_dss(df: pd.DataFrame, chunk_size=1000) -> dict:
@@ -346,8 +345,8 @@ class SwitchMediumVoltage:
                         return f"{lat}_{lon}"
                     except Exception:
                         return "sem_coord"
-            return str(coord_raw).replace(" ", "_")[:30] or "sem_coord"
-
+            # Remove parênteses, colchetes e espaços
+            return str(coord_raw).replace("(", "").replace(")", "").replace("[", "").replace("]", "").replace(" ", "_")[:50] or "sem_coord"
 
         def process_chunk(chunk: pd.DataFrame) -> dict:
             chunk_result = {}
@@ -364,17 +363,17 @@ class SwitchMediumVoltage:
                 if pn_ope[i] != 'F':
                     continue
 
-                coord_raw = coord_col[i]
-                coord_formatada = format_coords(coord_raw)
+                #coord_raw = coord_col[i]
+                #coord_formatada = format_coords(coord_raw)
 
                 chave = cod_id[i]
 
                 linha = (
-                    f"New line.coord_{coord_formatada}_{chave}_Chave_mt "
+                    f"New line.{chave}_Chave_mt "
                     f"phases = 3 "
                     f"bus1 = {pac_1[i]}.1.2.3 "
                     f"bus2 = {pac_2[i]}.1.2.3 "
-                    f"switch = y\n\n"
+                    f"switch = y\n\n "
                 )
 
                 chunk_result.setdefault(sub[i], {}).setdefault(nome[i], []).append(linha)
@@ -484,7 +483,7 @@ class LinecodeLowVoltage:
 
             # Geração das linhas DSS
             chunk["linha"] = (
-                "New linecode." + chunk["tip_cnd"] + "_bt nphases=3 BaseFreq=60\n " +
+                "New linecode." + chunk["tip_cnd"] + "_linecode_baixa nphases=3 BaseFreq=60\n " +
                 "~ r1=" + chunk["r1"] + "\n " +
                 "~ x1=" + chunk["x1"] + "\n " +
                 "~ c1=0\n " +
@@ -554,7 +553,7 @@ class LinecodeMediumVoltage:
 
             # Geração da string
             chunk["linha"] = (
-                "New linecode." + chunk["tip_cnd"] + "_mt nphases=3 BaseFreq=60\n " +
+                "New linecode." + chunk["tip_cnd"] + "_linecode_media nphases=3 BaseFreq=60\n " +
                 "~ r1=" + chunk["r1"] + "\n " +
                 "~ x1=" + chunk["x1"] + "\n " +
                 "~ c1=0\n " +
