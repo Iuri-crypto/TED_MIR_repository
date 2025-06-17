@@ -75,26 +75,26 @@ for x,y in dicionario_pac_cod_id.items():
 
 
 
-G = nx.Graph()
-G.add_edges_from(lista_arestas)
+    G = nx.Graph()
+    G.add_edges_from(lista_arestas)
 
 
-B = nx.bfs_tree(G,"584202") #Objeto raiz da arvore radial
+    B = nx.bfs_tree(G,"584202") #Objeto raiz da arvore radial
 
 
-A = nx.nx_agraph.to_agraph(B)
+    A = nx.nx_agraph.to_agraph(B)
 
-A.graph_attr["nodesep"] = "3" #separacao horizontal dos nos no grafo
-A.graph_attr["ranksep"] = "3" #separacao vertical dos nos no grafo
-
-
-A.node_attr["shape"] = "circle"
-A.edge_attr["arrowsize"] = "1"
-A.edge_attr["weight"] = "2"
+    A.graph_attr["nodesep"] = "3" #separacao horizontal dos nos no grafo
+    A.graph_attr["ranksep"] = "3" #separacao vertical dos nos no grafo
 
 
-A.layout(prog="dot")
-A.draw('teste.svg')
+    A.node_attr["shape"] = "circle"
+    A.edge_attr["arrowsize"] = "1"
+    A.edge_attr["weight"] = "2"
+
+
+    A.layout(prog="dot")
+    A.draw('teste.svg')
 
 
 

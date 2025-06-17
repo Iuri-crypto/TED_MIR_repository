@@ -42,6 +42,7 @@ class Agrega_Carga_Trafos:
         padrao_trafo = re.compile(r"(?i)new\s+transformer\.(\S+)")
         padrao_kv2 = re.compile(r"(?i)~\s*wdg\s*=\s*2.*?kv\s*=\s*([\d.]+)")
         padrao_bus2 = re.compile(r"(?i)~\s*wdg\s*=\s*2.*?bus\s*=\s*(\S+)")
+        padrao_kva_trafo = re.compile(r"(?i)~\s*wdg\s*=\s*2.*?kva\s*=\s*([\d.]+)")
 
         for subpasta in os.listdir(self.caminho):
             if subpasta.startswith('.'):  # ignora pastas ocultas como .git
@@ -156,8 +157,11 @@ class Agrega_Carga_Trafos:
                             if "wdg=2" in linha_sub.lower():
                                 match_kv2 = padrao_kv2.search(linha_sub)
                                 match_bus2 = padrao_bus2.search(linha_sub)
+                                match_kva = padrao_kva_trafo.search(linha_sub)
                                 if match_kv2:
                                     tensao_secundario = float(match_kv2.group(1))
+                                if match_kva:
+                                    kva_trafo = float(match_kva.group(1))
                                 if match_bus2:
                                     bus2 = match_bus2.group(1)
                             j += 1
@@ -166,7 +170,8 @@ class Agrega_Carga_Trafos:
                         if tensao_secundario is not None and bus2 is not None:
                             trafos_info[nome_trafo] = {
                                 "tensao_secundario_kv": tensao_secundario,
-                                "bus2": bus2
+                                "bus2": bus2,
+                                'kva': kva_trafo
                             }
 
                         # Mantém as linhas do trafo no processamento interno
@@ -346,6 +351,7 @@ class Agrega_Carga_Trafos:
                 cargas = dados["cargas"]
                 tensao_trafo = dados.get("tensao_secundario_kv")
                 bus2 = dados.get("bus2")
+                
 
                 if not cargas or tensao_trafo is None:
                     continue
@@ -491,6 +497,7 @@ class Agrega_Carga_Trafos:
                     pmpp_total = 0.0
                     bus = dados.get("bus2")
                     tensao = dados.get("tensao_secundario_kv", 0.22)
+                    kva = dados.get("kva", 700)
                     phases = 3
                     hash_id = gerar_hash(trafo)
 
@@ -515,6 +522,9 @@ class Agrega_Carga_Trafos:
                             print(f"[{nome_pasta}] GD com potência alta (kVA: {kva_total:.1f}, Pmpp: {pmpp_total:.1f}) → limitando para 200.")
                             kva_total = min(kva_total, 200)
                             pmpp_total = min(pmpp_total, 200)
+                        if kva_total > kva:
+                            kva_total = kva * 0.9
+                            pmpp_total = kva * 0.9
 
                         nome_pv = f"pv_{hash_id}"
                         nome_ptcurve = f"mypvst_{hash_id}"
@@ -545,6 +555,68 @@ class Agrega_Carga_Trafos:
                     f.write('\n')
                     f.writelines(linhas_pvsystems)
 
+
+
+
+ 
+
+    def ajustar_pvsystems_media_tensao(self, caminho_base):
+        padrao_inicio_pv = re.compile(r"(?i)new\s+pvsystem\.(\S+)")
+        padrao_kv = re.compile(r"(?i)\bkv\s*=\s*([\d\.]+)")
+        padrao_kva = re.compile(r"(?i)\bkva\s*=\s*([\d\.]+)")
+
+        subpastas = [os.path.join(caminho_base, p) for p in os.listdir(caminho_base) if os.path.isdir(os.path.join(caminho_base, p))]
+
+        for subpasta in subpastas:
+            for root, _, files in os.walk(subpasta):
+                if 'run_cargas_agregadas.dss' not in files:
+                    continue
+
+                caminho_arquivo = os.path.join(root, 'run_cargas_agregadas.dss')
+                with open(caminho_arquivo, 'r', encoding='utf-8') as f:
+                    linhas = f.readlines()
+
+                novas_linhas = []
+                i = 0
+                while i < len(linhas):
+                    linha = linhas[i]
+                    bloco_pv = []
+
+                    # Detecta início de bloco PVSystem
+                    if padrao_inicio_pv.search(linha):
+                        bloco_pv.append(linha)
+                        i += 1
+                        while i < len(linhas) and linhas[i].strip().startswith("~"):
+                            bloco_pv.append(linhas[i])
+                            i += 1
+
+                        # Juntar tudo para aplicar regex
+                        bloco_completo = ' '.join(bloco_pv)
+                        match_kv = padrao_kv.search(bloco_completo)
+                        match_kva = padrao_kva.search(bloco_completo)
+
+                        if match_kv and match_kva:
+                            kv_val = float(match_kv.group(1))
+                            kva_val = float(match_kva.group(1))
+
+                            if kv_val > 1.0:
+                                novo_kva = kva_val / 6
+                                print(f"[{os.path.basename(root)}] PV de média tensão detectado — Reduzindo kVA de {kva_val:.2f} para {novo_kva:.2f}")
+                                # Substitui no bloco o valor original do kVA pela metade
+                                bloco_completo = padrao_kva.sub(f'kva={novo_kva:.2f}', bloco_completo)
+
+                                # Quebra novamente em linhas (~ no início)
+                                novas_linhas.extend(l.strip() + '\n' for l in bloco_completo.split('~'))
+                                continue  # já avançou no índice, pula `i += 1` no fim
+                        # Caso não precise alterar, mantém o bloco como estava
+                        novas_linhas.extend(bloco_pv)
+                    else:
+                        novas_linhas.append(linha)
+                        i += 1
+
+                # Reescreve o arquivo com os ajustes
+                with open(caminho_arquivo, 'w', encoding='utf-8') as f:
+                    f.writelines(novas_linhas)
 
 
 
@@ -631,6 +703,7 @@ class Agrega_Carga_Trafos:
         self.criar_run_cargas_agregadas(trafos_cargas_e_gd)
         self.criar_run_cargas_e_gd_agregadas(self.caminho, trafos_cargas_e_gd)
         self.adicionar_curvas_normalizadas_medias(self.caminho, trafos_cargas_e_gd)
+        self.ajustar_pvsystems_media_tensao(self.caminho)
 
         return 0
 

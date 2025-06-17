@@ -83,8 +83,8 @@ class class_Fluxo_de_Potencia:
 
             tempo_inicio = time.time()  # ✅ INÍCIO DA MEDIÇÃO DE TEMPO
             for i in range(288):  # Iteração para 96 pontos do dia
-                dss.solution.max_iterations = 70
-                dss.solution.max_control_iterations = 70
+                dss.solution.max_iterations = 15
+                dss.solution.max_control_iterations = 15
                 carga_dict = class_Fluxo_de_Potencia.carrega_curvas()
                 class_Fluxo_de_Potencia.cargas_atualiza(i, mes_index, carga_dict)
                 
@@ -126,7 +126,7 @@ class class_Fluxo_de_Potencia:
 
                 print("Iterações necessárias: {}".format(dss.solution.iterations))
 
-                if i % 5 == 0:
+                if i % 10 == 0:
                     nome_alimentador = os.path.basename(os.path.dirname(caminho))
 
 
@@ -144,9 +144,9 @@ class class_Fluxo_de_Potencia:
             minutos, segundos = divmod(duracao, 60)
 
             class_Fluxo_de_Potencia.plot_potencia_e_tensao(nome_alimentador, potencias, tensoes)
-            class_Fluxo_de_Potencia.salvar_correntes_em_json(correntes_linhas)
+            #class_Fluxo_de_Potencia.salvar_correntes_em_json(correntes_linhas)
 
-            class_Fluxo_de_Potencia.plot_circuito_corrente(correntes_linhas, tensoes, minutos, segundos, titulo=f"Circuito - {nome_alimentador}")
+            #class_Fluxo_de_Potencia.plot_circuito_corrente(correntes_linhas, tensoes, minutos, segundos, titulo=f"Circuito - {nome_alimentador}")
 
             print("here")
 
@@ -792,7 +792,7 @@ class class_Fluxo_de_Potencia:
         for nome in nomes:
             min_15 = carga_dict[nome]['semana'][ponto_simulacao]
             mes_kw = carga_dict[nome]['curva_anual'][mes]
-            dss.loads.kw = min_15 * mes_kw
+            dss.loads.kw = min_15 * mes_kw 
             dss.loads.next()
 
         return
