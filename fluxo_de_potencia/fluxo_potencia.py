@@ -12,6 +12,7 @@ import numpy as np
 import time  
 from matplotlib.lines import Line2D
 import json
+import math
 
 """ Esta classe possui os métodos que configuram cenarios de simulação """
 
@@ -72,6 +73,9 @@ class class_Fluxo_de_Potencia:
             class_Fluxo_de_Potencia.config_gd(usar_gd_bt, usar_gd_mt)
             class_Fluxo_de_Potencia.config_geradores(usar_geracao_hidraulica)
             class_Fluxo_de_Potencia.config_cargas(usar_cargas_bt, usar_cargas_mt)
+
+            tensoes_base = class_Fluxo_de_Potencia.tensoes_base(caminho)
+            tensoes_base = np.array(tensoes_base) * 1000 / math.sqrt(3)
  
 
             
@@ -95,38 +99,55 @@ class class_Fluxo_de_Potencia:
                 potencias[i]['kw'] = round(dss.circuit.total_power[0], 2)  # Potência ativa
                 potencias[i]['kvar'] = round(dss.circuit.total_power[1], 2)  # Potência reativa
 
-                nomes = np.array(dss.circuit.nodes_names)
-                vpu_vals = np.array(dss.circuit.buses_vmag_pu)
-
-                # Filtro de nomes válidos e tensões > 0
-                mascara_fase = (
-                    np.char.endswith(nomes, ".1") |
-                    np.char.endswith(nomes, ".2") |
-                    np.char.endswith(nomes, ".3"))
+                #nomes = np.array(dss.circuit.nodes_names)
+                #vpu_vals = np.array(dss.circuit.buses_vmag_pu)
+    
+                arm_v = []
+                dss.loads.first()
+                for n in range(dss.loads.count):
+                    list_tensoes = np.array(dss.cktelement.voltages_mag_ang[0::2])
+                    nome = dss.loads.name
                 
-                mascara_valida = (vpu_vals > 0) & mascara_fase
 
-                #nomes_filtrados = nomes[mascara_valida]
-                tensoes_filtradas = vpu_vals[mascara_valida]
+                    list_tensoes_pu = []
+                    for vt in list_tensoes:
+         
+    
+                        # Converter base para volts antes de comparar
+                        base_proxima_v = min([b for b in tensoes_base], key=lambda b: abs(vt - b))
+                        list_tensoes_pu.append(vt / base_proxima_v)
 
-                if tensoes_filtradas.size > 0:
-                    n_pontos = max(1, int(np.ceil(0.005 * tensoes_filtradas.size)))
+                    arm_v.append(list_tensoes_pu)
+                    dss.loads.next()
+
+                arm_v = np.array(arm_v, dtype=object)
+                tensoes_flat = np.concatenate(arm_v)
+                tensoes_flat = tensoes_flat[tensoes_flat > 0.1]
+                                
+                
+
+                if tensoes_flat.size > 0:
+                    n_pontos = min(tensoes_flat.size - 1, max(1, int(np.ceil(0.9 * tensoes_flat.size))))
 
                     # Usa np.argpartition para evitar sort completo (mais rápido)
-                    idx_menores = np.argpartition(tensoes_filtradas, n_pontos)[:n_pontos]
-                    idx_maiores = np.argpartition(-tensoes_filtradas, n_pontos)[:n_pontos]
+                    idx_menores = np.argpartition(tensoes_flat, n_pontos)[:n_pontos]
+                    idx_maiores = np.argpartition(-tensoes_flat, n_pontos)[:n_pontos]
 
-                    menores_valores = tensoes_filtradas[idx_menores]
-                    maiores_valores = tensoes_filtradas[idx_maiores]
+                    menores_valores = tensoes_flat[idx_menores]
+                    maiores_valores = tensoes_flat[idx_maiores]
+                    # 90% maiores valores dentro de "maiores_valores"
+                    menores_valores_90 = np.sort(menores_valores)[-int(0.9 * len(menores_valores)):]
 
-                    tensoes[i] = np.concatenate((menores_valores, maiores_valores)).tolist()
+                    # Ordena e pega 90% menores dentro dos maiores
+                    maiores_valores_90 = np.sort(maiores_valores)[:int(0.9 * len(maiores_valores))]
+                    tensoes[i] = np.concatenate((menores_valores_90, maiores_valores_90)).tolist()
                     # Correntes por linha neste instante
                     correntes_linhas[i] = class_Fluxo_de_Potencia.coletar_correntes_linhas()
 
 
                 print("Iterações necessárias: {}".format(dss.solution.iterations))
 
-                if i % 10 == 0:
+                if i % 2 == 0:
                     nome_alimentador = os.path.basename(os.path.dirname(caminho))
 
 
@@ -149,6 +170,32 @@ class class_Fluxo_de_Potencia:
             #class_Fluxo_de_Potencia.plot_circuito_corrente(correntes_linhas, tensoes, minutos, segundos, titulo=f"Circuito - {nome_alimentador}")
 
             print("here")
+
+
+
+    @staticmethod
+    def tensoes_base(caminho):
+        """ Coleta as tensões base do arquivo .dss fornecido """
+
+        tensoes_base = []
+
+        try:
+            with open(caminho, 'r', encoding='utf-8') as arquivo:
+                for linha in arquivo:
+                    linha = linha.strip()
+                    if linha.lower().startswith("set voltagebases"):
+                        # Exemplo: Set VoltageBases = "0.220, 0.230, 0.240, 13.800"
+                        inicio = linha.find('"')
+                        fim = linha.rfind('"')
+                        if inicio != -1 and fim != -1 and fim > inicio:
+                            valores_str = linha[inicio+1:fim]
+                            tensoes_base = [float(v.strip()) for v in valores_str.split(',')]
+                        break
+        except Exception as e:
+            print(f"Erro ao ler tensões base: {e}")
+
+        return tensoes_base
+
 
 
     @staticmethod
