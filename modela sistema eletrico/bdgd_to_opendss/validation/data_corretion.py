@@ -915,6 +915,13 @@ class ValidadorTransformadoresMediaTensao:
         df['xhl'] = df['xhl'].apply(lambda x: validate_limit(x, self.xhl_default))
         df['per_fer'] = df['per_fer'].apply(lambda x: validate_limit(x, self.per_fer_default))
 
+
+        # formatando as coordendas deste formato: (-10.50839071, -59.42402625) para este formato: -10_50839071__-59_42402625        
+        df["coord_formatada"] = df["coord_latlon"].apply(
+            lambda x: "__".join(part.strip().replace(".", "_") for part in str(x).strip("()").split(","))
+        )
+
+
         return df.reset_index(drop=True)
 
 

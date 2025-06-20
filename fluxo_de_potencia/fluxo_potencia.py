@@ -66,6 +66,15 @@ class class_Fluxo_de_Potencia:
                 table.add_column("Percentual")
                 table.add_column("Status")
 
+                total = len(arquivos_dss)
+                concluidos = sum(1 for i in progresso_dict if progresso_dict[i] >= 288)
+                percentual_global = (concluidos / total) * 100
+                barra_global = class_Fluxo_de_Potencia.render_bar(percentual_global)
+
+                # Adiciona linha da barra de progresso global no topo
+                table.add_row("📊 Geral", barra_global, f"{percentual_global:.1f}%", f"{concluidos}/{total} concluídos")
+                table.add_section()
+
                 for i, caminho in enumerate(arquivos_dss):
                     nome = os.path.basename(os.path.dirname(caminho))
                     progresso = progresso_dict.get(i, 0)
@@ -73,7 +82,6 @@ class class_Fluxo_de_Potencia:
                     status = "✔ Concluído" if percentual >= 100 else "Em execução"
                     barra = class_Fluxo_de_Potencia.render_bar(percentual)
                     table.add_row(nome, barra, f"{percentual:.1f}%", status)
-                    
 
                 return table
 
@@ -97,7 +105,7 @@ class class_Fluxo_de_Potencia:
                 for i, caminho in enumerate(arquivos_dss)
             ]
 
-            with ProcessPoolExecutor(max_workers=2) as executor:
+            with ProcessPoolExecutor(max_workers=1) as executor:
                 executor.map(class_Fluxo_de_Potencia.processa_alimentador, args_list)
 
             monitor.join()
@@ -118,7 +126,9 @@ class class_Fluxo_de_Potencia:
         from collections import defaultdict
         import time, os
 
+        potencias_somadas = defaultdict(lambda: defaultdict(float))
         potencias = defaultdict(lambda: defaultdict(float))
+
         tensoes = defaultdict(lambda: defaultdict(float))
         correntes_linhas = defaultdict(dict)
 
@@ -136,9 +146,17 @@ class class_Fluxo_de_Potencia:
             dss.solution.max_iterations = 15
             dss.solution.max_control_iterations = 15
             carga_dict = class_Fluxo_de_Potencia.carrega_curvas(dss)
+
+            # potências somadas para comparação no grafico
+            total_kw = class_Fluxo_de_Potencia.soma_potencia_curvas(mes_index, carga_dict, i)
+            gd_power_kw = class_Fluxo_de_Potencia.soma_potencia_gd(i, dss)
+
+            liquido = total_kw - gd_power_kw
+            potencias_somadas[i]['kw'] = liquido
             class_Fluxo_de_Potencia.cargas_atualiza(i, mes_index, carga_dict, dss)
             class_Fluxo_de_Potencia.gd_ufs_atualiza(i, dss)
             dss.solution.solve()
+            ite = dss.solution.total_iterations
 
             potencias[i]['kw'] = round(dss.circuit.total_power[0], 2)
             potencias[i]['kvar'] = round(dss.circuit.total_power[1], 2)
@@ -149,7 +167,7 @@ class class_Fluxo_de_Potencia:
         duracao = time.time() - tempo_inicio
         minutos, segundos = divmod(duracao, 60)
 
-        class_Fluxo_de_Potencia.plot_potencia_e_tensao(nome_alimentador, potencias, tensoes)
+        class_Fluxo_de_Potencia.plot_potencia_e_tensao(nome_alimentador, potencias, tensoes, potencias_somadas)
         #class_Fluxo_de_Potencia.plot_circuito_corrente(correntes_linhas, tensoes, minutos, segundos,
         #                                            titulo=f"Circuito - {nome_alimentador}")
         print(f"[{nome_alimentador}] Finalizado.")
@@ -385,8 +403,11 @@ class class_Fluxo_de_Potencia:
         )
 
 
+
+
+
     @staticmethod
-    def plot_potencia_e_tensao(nome_alimentador, potencias, tensoes_dict):
+    def plot_potencia_e_tensao(nome_alimentador, potencias, tensoes_dict, potencias_somadas=None):
         if not tensoes_dict:
             print("Nenhuma tensão válida para exibir.")
             return
@@ -417,23 +438,32 @@ class class_Fluxo_de_Potencia:
         total_pontos = pontos_por_dia * 3
         potencias_ativas = [-potencias[i]['kw'] for i in range(total_pontos)]
 
+        # ➤ Adiciona a nova curva: potência líquida das curvas
+        if potencias_somadas:
+            potencias_somadas_liquidas = [potencias_somadas[i]['kw'] for i in range(total_pontos)]
+        else:
+            potencias_somadas_liquidas = None
+
         indices_tempo = sorted(tensoes_dict.keys())
         tensoes_min = [min(tensoes_dict[i]) for i in indices_tempo]
         tensoes_max = [max(tensoes_dict[i]) for i in indices_tempo]
 
         fig, ax1 = plt.subplots(figsize=(15, 6))
 
-        # Faixa fluxo reverso (vermelho mais forte, apenas abaixo de zero)
         ax1.axhspan(ymin=min(potencias_ativas) - 500, ymax=0, xmin=0, xmax=1,
                     facecolor='#ffcccc', alpha=0.6, label='Fluxo Reverso')
 
-        # Plot potência ativa
+        # ➤ Potência ativa real do circuito (do dss)
         ax1.plot(range(total_pontos), potencias_ativas,
-                label='Potência Ativa (kW)', color='black', linewidth=1.8)
-        
+                label='Potência Ativa (DSS)', color='black', linewidth=1.8)
+
+        # ➤ Potência somada das curvas (liquida = carga - gd)
+        if potencias_somadas_liquidas:
+            ax1.plot(range(total_pontos), potencias_somadas_liquidas,
+                    label='Potência Curvas (Carga - GD)', color='royalblue', linewidth=1.8, linestyle='--')
+
         margem = (max(potencias_ativas) - min(potencias_ativas)) * 0.1
 
-        # Preenchimento elegante abaixo da curva preta (Potência Ativa)
         ax1.fill_between(
             range(total_pontos),
             potencias_ativas,
@@ -445,17 +475,14 @@ class class_Fluxo_de_Potencia:
             zorder=0
         )
 
-
-
         ax1.set_ylabel("Potência Ativa (kW)", color='black')
         ax1.tick_params(axis='y', labelcolor='black')
 
-        # Eixo X com rótulos a cada 2h e marcações de dias
         dias = ['Dia Útil', 'Sábado', 'Domingo']
         xticks_pos = []
         xticks_labels = []
 
-        for i in range(0, total_pontos, 4):  # a cada 2 horas (8 * 15min)
+        for i in range(0, total_pontos, 4):
             dia = i // pontos_por_dia
             hora = (i % pontos_por_dia) // 4
             label = f"{hora:02d}h"
@@ -467,15 +494,12 @@ class class_Fluxo_de_Potencia:
         ax1.set_xticks(xticks_pos)
         ax1.set_xticklabels(xticks_labels, rotation=0, ha='center')
         ax1.set_xlabel("Tempo (Horas)")
-
-        margem = (max(potencias_ativas) - min(potencias_ativas)) * 0.1
         ax1.set_ylim(min(potencias_ativas) - margem, max(potencias_ativas) + margem)
 
-        # Linhas verticais separando os dias
         for x in [pontos_por_dia, 2 * pontos_por_dia]:
             ax1.axvline(x=x, color='gray', linestyle='--', linewidth=1)
 
-        # Eixo Y secundário
+        # ➤ Tensão (eixo secundário)
         ax2 = ax1.twinx()
         if tensoes_min and tensoes_max:
             ax2.plot(indices_tempo, tensoes_min, linestyle='-', linewidth=1.5,
@@ -493,12 +517,12 @@ class class_Fluxo_de_Potencia:
 
         plt.title(f"Potência e Tensão - Alimentador {nome_alimentador}", fontsize=14)
 
-        # Legendas combinadas
+        # ➤ Combina as legendas
         handles1, labels1 = ax1.get_legend_handles_labels()
         handles2, labels2 = ax2.get_legend_handles_labels()
         ax1.legend(handles1 + handles2, labels1 + labels2,
-           loc='upper center', bbox_to_anchor=(0.5, -0.15),
-           ncol=len(labels1 + labels2), frameon=False)
+                loc='upper center', bbox_to_anchor=(0.5, -0.15),
+                ncol=len(labels1 + labels2), frameon=False)
 
         sns.despine(ax=ax1)
         sns.despine(ax=ax2, right=False)
@@ -652,6 +676,47 @@ class class_Fluxo_de_Potencia:
 
 
     @staticmethod
+    def soma_potencia_gd(ponto_simulacao, dss):
+        """
+        Calcula a potência total injetada pelos sistemas fotovoltaicos (GD)
+        no ponto de simulação, considerando a irradiância atual.
+
+        Parâmetros:
+        - ponto_simulacao: índice da simulação (0 a 95)
+        - dss: objeto de controle do OpenDSS
+
+        Retorna:
+        - total_kw: soma da potência ativa gerada pelos PVs (em kW)
+        """
+        irradiance_96 = [
+            0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001,
+            0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001,
+            0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.168, 0.227, 0.288, 0.349,
+            0.409, 0.468, 0.525, 0.581, 0.633, 0.684, 0.731, 0.775, 0.816, 0.852,
+            0.886, 0.915, 0.940, 0.961, 0.977, 0.989, 0.997, 1.000, 0.999, 0.993,
+            0.982, 0.968, 0.948, 0.925, 0.897, 0.866, 0.830, 0.791, 0.748, 0.702,
+            0.653, 0.601, 0.547, 0.490, 0.432, 0.372, 0.311, 0.250, 0.190, 0.133,
+            0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001,
+            0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001,
+            0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001
+        ]
+
+        # Garante que o índice não extrapola
+        irradi = irradiance_96[ponto_simulacao % len(irradiance_96)]
+
+        total_kw = 0.0
+        dss.pvsystems.first()
+        for _ in range(dss.pvsystems.count):
+            kva = dss.pvsystems.kva
+            kw_gerado = kva * irradi
+            total_kw += kw_gerado
+            dss.pvsystems.next()
+
+        return total_kw
+
+
+
+    @staticmethod
     def carrega_curvas(dss):
         """ Carrega as curvas de carga """
 
@@ -718,6 +783,44 @@ class class_Fluxo_de_Potencia:
             dss.loads.next()
 
         return carga_dict
+
+
+    @staticmethod
+    def soma_potencia_curvas(mes_index: int, curvas_dict: dict, indice_ponto: int) -> float:
+        """
+        Soma a potência de todas as cargas para um ponto de simulação,
+        aplicando os multiplicadores das curvas semanais e anual.
+        
+        Parâmetros:
+        - mes_index: índice do mês (0 = janeiro)
+        - curvas_dict: dicionário retornado por carrega_curvas
+        - indice_ponto: ponto da simulação (0 a 287)
+
+        Retorna:
+        - Soma total de potência relativa considerando os fatores
+        """
+        total_kw = 0.0
+
+        for carga in curvas_dict.values():
+            semana = carga['semana']
+            curva_anual = carga['curva_anual']
+
+            if len(curva_anual) <= mes_index:
+                continue  # pula se curva anual está incompleta
+
+            fator_anual = curva_anual[mes_index]
+
+            # Identificar qual tipo de dia está sendo simulado com base no índice do ponto
+            if indice_ponto < 96:
+                fator_diario = semana[indice_ponto]  # dia útil
+            elif indice_ponto < 192:
+                fator_diario = semana[96 + (indice_ponto - 96)]  # sábado
+            else:
+                fator_diario = semana[192 + (indice_ponto - 192)]  # domingo
+
+            total_kw += fator_anual * fator_diario
+
+        return total_kw
 
 
 
@@ -866,6 +969,24 @@ class class_Fluxo_de_Potencia:
 
     @staticmethod
     def processa_tensoes(tensoes, correntes_linhas, i, dss):
+
+        # import py_dss_interface
+        # dss = py_dss_interface.DSS()
+        # dss.transformers.first()
+
+        # for _ in range(dss.transformers.count):
+        #     # Obtém as magnitudes e ângulos das tensões do elemento atual
+        #     volts = dss.cktelement.voltages_mag_ang
+
+        #     # Seleciona apenas as posições pares (magnitude das tensões)
+        #     magnitudes = volts[0]
+        #     nome = dss.transformers.name
+
+        #     # Verifica se alguma das tensões é zero
+        #     if magnitudes < 1.0:
+        #         print("hetr")
+        #     dss.transformers.next()
+
 
         barra_tensao = list(zip(dss.circuit.nodes_names, dss.circuit.buses_vmag_pu))
         barra_tensao_filtrada = [(nome, vpu) for nome, vpu in barra_tensao

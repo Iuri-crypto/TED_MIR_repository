@@ -714,12 +714,29 @@ class load_bdgd:
                 ucbt_tab.uni_tr_mt, 
                 ucbt_tab.cod_id, 
                 ucbt_tab.ctmt, 
-                ctmt.nome 
+                ctmt.nome,
+                
+                -- concatenação formatada
+                ucbt_tab.uni_tr_mt || '_coord_' ||
+                REPLACE(
+                    REPLACE(
+                        REPLACE(
+                            REPLACE(untrmt.coord_latlon::TEXT, '(', ''), 
+                        ')', ''), 
+                    '.', '_'), 
+                ', ', '__') AS coord_latlon
+
             FROM 
                 ucbt_tab
+
             JOIN 
                 ctmt 
-                ON ctmt.cod_id = ucbt_tab.ctmt;
+                ON ctmt.cod_id = ucbt_tab.ctmt
+
+            LEFT JOIN 
+                untrmt 
+                ON untrmt.cod_id = ucbt_tab.uni_tr_mt;
+
                 """
         )
 
@@ -741,12 +758,29 @@ class load_bdgd:
                 ugbt_tab.uni_tr_mt, 
                 ugbt_tab.cod_id, 
                 ugbt_tab.ctmt, 
-                ctmt.nome 
+                ctmt.nome,
+
+                -- concatenação formatada
+                ugbt_tab.uni_tr_mt || '_coord_' ||
+                REPLACE(
+                    REPLACE(
+                        REPLACE(
+                            REPLACE(untrmt.coord_latlon::TEXT, '(', ''), 
+                        ')', ''), 
+                    '.', '_'), 
+                ', ', '__') AS coord_latlon
+
             FROM 
                 ugbt_tab
+
             JOIN 
                 ctmt 
-                ON ctmt.cod_id = ugbt_tab.ctmt;
+                ON ctmt.cod_id = ugbt_tab.ctmt
+
+            LEFT JOIN 
+                untrmt 
+                ON untrmt.cod_id = ugbt_tab.uni_tr_mt;
+
                 """
         )
 

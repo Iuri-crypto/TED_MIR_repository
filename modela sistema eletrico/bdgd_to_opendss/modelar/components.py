@@ -1525,25 +1525,25 @@ class TransformerMediumVoltage:
                     lig_fas_s, rec_fases_s = row["lig_fas_s"], row["rec_fases_s"]
                     xhl, per_fer, r = row["xhl"], row["per_fer"], row["r"]
                     rec_fases_t = row.get("rec_fases_t", "")
-                    coord = row["coord_latlon"]
+                    coord = row["coord_formatada"]
 
                     if phases_p == 1:
                         return (
-                            f"New Transformer.{cod_id} Phases=3 Windings=2 xhl={xhl} %noloadloss={per_fer}\n"
+                            f"New Transformer.{cod_id}_coord_{coord} Phases=3 Windings=2 xhl={xhl} %noloadloss={per_fer}\n"
                             f"~ wdg=1 bus={pac_1}.1.2.3 conn=delta kv={ten_pri} kva={pot_nom} %r={r} tap=1\n"
                             f"~ wdg=2 bus={pac_2}.1.2.3.0 conn=wye kv={ten_sec} kva={pot_nom} %r={r} tap=1\n\n"
                         )
                     elif phases_p == 2:
                         ten_sec_adj = round(ten_sec / math.sqrt(3), 3)
                         return (
-                            f"New Transformer.{cod_id} Phases=2 Windings=3 xhl={xhl} %noloadloss={per_fer}\n"
+                            f"New Transformer.{cod_id}_coord_{coord} Phases=2 Windings=3 xhl={xhl} %noloadloss={per_fer}\n"
                             f"~ wdg=1 bus={pac_1}{rec_fases_p} conn=delta kv={ten_pri} kva={pot_nom} %r={r/2} tap=1\n"
                             f"~ wdg=2 bus={pac_2}{rec_fases_s} conn=wye kv={ten_sec_adj} kva={pot_nom} %r={r} tap=1\n"
                             f"~ wdg=3 bus={pac_2}{rec_fases_t} conn=wye kv={ten_sec_adj} kva={pot_nom} %r={r} tap=1\n\n"
                         )
                     elif phases_p == 3:
                         return (
-                            f"New Transformer.{cod_id} Phases=3 Windings=2 xhl={xhl} %noloadloss={per_fer}\n"
+                            f"New Transformer.{cod_id}_coord_{coord} Phases=3 Windings=2 xhl={xhl} %noloadloss={per_fer}\n"
                             f"~ wdg=1 bus={pac_1}.1.2.3 conn=delta kv={ten_pri} kva={pot_nom} %r={r} tap=1\n"
                             f"~ wdg=2 bus={pac_2}.1.2.3.0 conn=wye kv={ten_sec} kva={pot_nom} %r={r} tap=1\n\n"
                         )

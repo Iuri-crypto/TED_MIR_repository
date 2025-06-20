@@ -260,27 +260,27 @@ class ModelRunner:
             # # Juntando pastas em uma só
             # processa_subpastas_gerando_run_dss(caminho)
 
-            # # Agregação das cargas nos trafos de média tensão
-            # df_cargas_Agregadas = load_bdgd.Consulta_Cargas_Agregadas(conn_mt)
-            # df_GD_FV_Agregadas = load_bdgd.Consulta_GD_FV_BT_Agregados(conn_mt)
+            # Agregação das cargas nos trafos de média tensão
+            df_cargas_Agregadas = load_bdgd.Consulta_Cargas_Agregadas(conn_mt)
+            df_GD_FV_Agregadas = load_bdgd.Consulta_GD_FV_BT_Agregados(conn_mt)
 
-            # # Agregação dos GD_FV's nos transformadores de média tensão
-            # sub_cenarios = Agrega_Carga_Trafos(caminho, df_cargas_Agregadas, df_GD_FV_Agregadas)
-            # sub_cenarios.run()
+            # Agregação dos GD_FV's nos transformadores de média tensão
+            sub_cenarios = Agrega_Carga_Trafos(caminho, df_cargas_Agregadas, df_GD_FV_Agregadas)
+            sub_cenarios.run()
 
 
-            # # Atribuindo as tensões bases 
-            # config = load_validation_config("tensoes_de_linha")
-            # tabela_tensoes = config.get("tensoes_de_linha", {})
-            # grafo = GrafoDSS(caminho, tabela_tensoes)
-            # grafo.encontrar_tensoes_base()
+            # Atribuindo as tensões bases 
+            config = load_validation_config("tensoes_de_linha")
+            tabela_tensoes = config.get("tensoes_de_linha", {})
+            grafo = GrafoDSS(caminho, tabela_tensoes)
+            grafo.encontrar_tensoes_base()
             
             
-            # Criando barra slack para as SE desconectadas
+            #Criando barra slack para as SE desconectadas
             processa_arquivos_dss(caminho)
             
-            # Renomeando arquivos sem "New Line"
-            #renomear_arquivos_sem_new_line(caminho)
+            #Renomeando arquivos sem "New Line"
+            renomear_arquivos_sem_new_line(caminho)
 
             # Eliminando os elementos que estão desconectados --- REVIAR POR QUE ESTÁ SENDO ELIMINADO ELEMENTOS DE MANEIRA ERRADA
             # remover_elementos_desconectados(caminho)

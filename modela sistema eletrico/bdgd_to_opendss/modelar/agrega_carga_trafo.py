@@ -39,7 +39,7 @@ class Agrega_Carga_Trafos:
         # Padrões regex mantidos...
         padrao_carga = re.compile(r"(?i)new\s+load\.nome_([^_\s]+).*?(carga_pip|carga_baixa)\b")
         padroes_gd = ("New pvsystem", "New xycurve", "New loadshape", "New tshape")
-        padrao_trafo = re.compile(r"(?i)new\s+transformer\.(\S+)")
+        padrao_trafo = re.compile(r"(?i)new\s+transformer\.([^\s~]+)")
         padrao_kv2 = re.compile(r"(?i)~\s*wdg\s*=\s*2.*?kv\s*=\s*([\d.]+)")
         padrao_bus2 = re.compile(r"(?i)~\s*wdg\s*=\s*2.*?bus\s*=\s*(\S+)")
         padrao_kva_trafo = re.compile(r"(?i)~\s*wdg\s*=\s*2.*?kva\s*=\s*([\d.]+)")
@@ -69,12 +69,12 @@ class Agrega_Carga_Trafos:
                     continue
 
                 df_cargas = dicionario_cargas_por_nome[nome_pasta]
-                cod_id_para_trafo = dict(zip(df_cargas["cod_id"].astype(str), df_cargas["uni_tr_mt"]))
+                cod_id_para_trafo = dict(zip(df_cargas["cod_id"].astype(str), df_cargas["coord_latlon"]))
 
                 df_gd = dicionario_gd_por_nome.get(nome_pasta)
                 cod_id_para_trafo_gd = {}
                 if df_gd is not None:
-                    cod_id_para_trafo_gd = dict(zip(df_gd["cod_id"].astype(str), df_gd["uni_tr_mt"]))
+                    cod_id_para_trafo_gd = dict(zip(df_gd["cod_id"].astype(str), df_gd["coord_latlon"]))
 
                 caminho_arquivo = os.path.join(root, 'run.dss')
                 with open(caminho_arquivo, 'r', encoding='utf-8') as f:
