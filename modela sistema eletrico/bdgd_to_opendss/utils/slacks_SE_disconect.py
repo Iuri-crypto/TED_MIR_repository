@@ -116,7 +116,7 @@ def processa_arquivos_dss(caminho_base):
                         line_geom_utm = transform(project, line_geom)
 
                         if polygon:
-                            buffer_polygon = polygon_utm.buffer(30)
+                            buffer_polygon = polygon_utm.buffer(3000)
                             nome_linha = f"{linha['bus1']['nome']} → {linha['bus2']['nome']}"
 
                             if polygon_utm.contains(line_geom_utm):

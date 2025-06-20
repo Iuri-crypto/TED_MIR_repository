@@ -5,7 +5,9 @@ import math
 from collections import defaultdict
 console = Console()
 import ast
-
+import warnings
+warnings.simplefilter(action='ignore', category=pd.errors.SettingWithCopyWarning)
+warnings.filterwarnings("ignore", category=RuntimeWarning)
 
 
 class SlackBus:
@@ -97,32 +99,81 @@ class ReactiveCompensatorMT:
             coord_col = chunk['coord_latlon']
 
             for i in chunk.index:
-                bus1 = f"{pac_1[i]}{rec_fases[i]}"
                 kv = basekv[i]
-                kvar = pot_nom[i]
+                kvar = float(pot_nom[i])
                 fases = phases[i]
                 cod_id_rec = cod_id[i]
-
                 coord_formatada = format_coord(coord_col[i])
+                fases_raw = rec_fases[i].strip('.').split('.')
+                fases_validas = [f for f in fases_raw if f in {'1', '2', '3'}]
 
-                if fases < 2:
-                    kv = round(kv / math.sqrt(3), 3)
-                    rec = '.0'
-                else:
-                    rec = ''
 
+                linhas = []
                 if tip_unid[i] == '56':
-                    linha = (
-                        f"New Reactor.coord_{coord_formatada}_{cod_id_rec}_Banco_de_Reator Bus1 = {bus1}{rec} "
-                        f"kv = {kv} kvar = {kvar} phases = {fases} conn = wye\n\n"
-                    )
-                else:
-                    linha = (
-                        f"New Capacitor.coord_{coord_formatada}_{cod_id_rec}_Banco_de_Capacitor Bus1 = {bus1} "
-                        f"kv = {kv} kVAR = {kvar} phases = {fases} conn = wye\n\n"
-                    )
+                    if fases == 1:
+                        f = fases_validas[0] if fases_validas else '1'
+                        rec = f".{f}.0"
+                        linha = (
+                            f"New Reactor.coord_{coord_formatada}_{cod_id_rec}_Banco_de_Reator "
+                            f"Bus1 = {pac_1[i]}{rec} kv = {kv} kvar = {kvar} phases = 1 conn = wye\n\n"
+                        )
+                        linhas.append(linha)
 
-                chunk_result.setdefault(str(sub[i]), {}).setdefault(nome[i], []).append(linha)
+                    elif fases == 2 and len(fases_validas) >= 2:
+                        for idx, f in enumerate(fases_validas[:2], start=1):
+                            rec = f".{f}.0"
+                            linha = (
+                                f"New Reactor.coord_{coord_formatada}_{cod_id_rec}_Banco_de_Reator_{idx} "
+                                f"Bus1 = {pac_1[i]}{rec} kv = {kv / math.sqrt(3):.4f} "
+                                f"kvar = {kvar / 2:.4f} phases = 1 conn = wye\n\n"
+                            )
+                            linhas.append(linha)
+
+                    elif fases == 3 and len(fases_validas) >= 3:
+                        for idx, f in enumerate(fases_validas[:3], start=1):
+                            rec = f".{f}.0"
+                            linha = (
+                                f"New Reactor.coord_{coord_formatada}_{cod_id_rec}_Banco_de_Reator_{idx} "
+                                f"Bus1 = {pac_1[i]}{rec} kv = {kv / math.sqrt(3):.4f} "
+                                f"kvar = {kvar / 3:.4f} phases = 1 conn = wye\n\n"
+                            )
+                            linhas.append(linha)
+
+                else:
+                    linhas = []
+
+                    if fases == 1:
+                        f = fases_validas[0] if fases_validas else '1'
+                        rec = f".{f}.0"
+                        linha = (
+                            f"New Capacitor.coord_{coord_formatada}_{cod_id_rec}_Banco_de_Capacitor "
+                            f"Bus1 = {pac_1[i]}{rec} kv = {kv} kvar = {kvar} phases = 1 conn = wye\n\n"
+                        )
+                        linhas.append(linha)
+
+                    elif fases == 2 and len(fases_validas) >= 2:
+                        for idx, f in enumerate(fases_validas[:2], start=1):
+                            rec = f".{f}.0"
+                            linha = (
+                                f"New Capacitor.coord_{coord_formatada}_{cod_id_rec}_Banco_de_Capacitor_{idx} "
+                                f"Bus1 = {pac_1[i]}{rec} kv = {kv / math.sqrt(3):.4f} "
+                                f"kvar = {kvar / 2:.4f} phases = 1 conn = wye\n\n"
+                            )
+                            linhas.append(linha)
+
+                    elif fases == 3 and len(fases_validas) >= 3:
+                        for idx, f in enumerate(fases_validas[:3], start=1):
+                            rec = f".{f}.0"
+                            linha = (
+                                f"New Capacitor.coord_{coord_formatada}_{cod_id_rec}_Banco_de_Capacitor_{idx} "
+                                f"Bus1 = {pac_1[i]}{rec} kv = {kv / math.sqrt(3):.4f} "
+                                f"kvar = {kvar / 3:.4f} phases = 1 conn = wye\n\n"
+                            )
+                            linhas.append(linha)
+
+
+                for linha in linhas:
+                    chunk_result.setdefault(str(sub[i]), {}).setdefault(nome[i], []).append(linha)
 
             return chunk_result  # ← ESSENCIAL para retorno correto
 
@@ -1011,40 +1062,99 @@ class LoadMediumVoltage:
         df = df.drop_duplicates(subset="cod_id")
         console = Console()
 
+
         def to_dss_vetorizado_chunk(chunk: pd.DataFrame) -> dict:
             # Ajustar tensão nominal para monofásico
-            ten_nom_voltage = chunk["ten_nom_voltage"] / 1000
-            ten_nom_voltage = ten_nom_voltage.where(chunk["phases"] >= 2,
-                                                    ten_nom_voltage / math.sqrt(3))
-
-            # Ajustar rec_fases: adicionar '.4' apenas onde phase == 1 e não termina com '.4'
-            rec_fases = chunk["rec_fases"].astype(str).copy()
-            mask = (chunk["phases"] == 1) & (~rec_fases.str.endswith('.4'))
-            rec_fases.loc[mask] = rec_fases.loc[mask] + '.4'
-
-            # Substituir espaços por tabs na string de potências
-            potencias_tab = chunk["potencias"].astype(str).str.replace(" ", "_")
-
-            # Montar as linhas DSS vetorized
-            linhas = (
-                'New Load.nome_' + chunk["cod_id"].astype(str)
-                + '_curva_diaria_' + chunk["tip_cc"].astype(str)
-                + '_curva_anual_' + potencias_tab
-                + '_carga_media '
-                + 'Bus1=' + chunk["pac"].astype(str) + '.1.2.3.0' + ' '
-                + 'Phases = 3\n '
-                + '~ Conn=' + chunk["conn"].astype(str)
-                + ' Model=1 Kv=' + ten_nom_voltage.round(4).astype(str)
-                + ' Kw=1 pf=0.92\n\n'
+            chunk["ten_nom_voltage"] = chunk["ten_nom_voltage"] / 1000
+            chunk["ten_nom_voltage"] = chunk.apply(
+                lambda row: row["ten_nom_voltage"] if row["phases"] >= 2 else row["ten_nom_voltage"] / math.sqrt(3),
+                axis=1
             )
 
-            # Organizar por sub -> nome -> [linhas]
+            # Ajustar rec_fases
+            chunk["rec_fases"] = chunk["rec_fases"].astype(str)
+            mask = (chunk["phases"] == 1) & (~chunk["rec_fases"].str.endswith('.4'))
+            chunk.loc[mask, "rec_fases"] = chunk.loc[mask, "rec_fases"] + '.0'
+
+            # Potências com _ no lugar de espaços
+            chunk["potencias_tab"] = chunk["potencias"].astype(str).str.replace(" ", "_")
+
+            def contar_fases(rec_fase_str):
+                return len(set(filter(lambda x: x in {'1', '2', '3'}, rec_fase_str.split('.'))))
+
+            chunk["num_fases"] = chunk["rec_fases"].apply(contar_fases)
+
             chunk_result = {}
-            for i in chunk.index:
-                sub = chunk.at[i, "sub"]
-                nome = chunk.at[i, "nome"]
-                linha = linhas[i]
-                chunk_result.setdefault(sub, {}).setdefault(nome, []).append(linha)
+
+            for _, row in chunk.iterrows():
+                cod_id = row["cod_id"]
+                tip_cc = row["tip_cc"]
+                #pot = row["potencias_tab"]
+                pac = row["pac"]
+                ten_nom_voltage = row["ten_nom_voltage"]
+                rec_fases = row["rec_fases"]
+                num_fases = row["num_fases"]
+                sub = row["sub"]
+                nome = row["nome"]
+                
+                # Ajusta curva de potências por fase
+                pot_str = row["potencias_tab"]  # Ex: "3.0_2.0_1.5"
+                try:
+                    pot_valores = list(map(float, pot_str.split("_")))
+                    if num_fases == 1:
+                        pot_dividido = pot_valores
+                    elif num_fases == 2:
+                        pot_dividido = [round(p / 2, 4) for p in pot_valores]
+                    elif num_fases == 3:
+                        pot_dividido = [round(p / 3, 4) for p in pot_valores]
+                    else:
+                        pot_dividido = pot_valores
+                    pot = "_".join(f"{p}".replace('.', '-') for p in pot_dividido)  # Substitui . por -
+                except Exception:
+                    pot = pot_str.replace('.', '-')  # fallback com substituição também
+
+
+
+                fases_raw = rec_fases.strip('.').split('.')
+                fases_validas = [f for f in fases_raw if f in {'1', '2', '3'}]
+
+                linhas = []
+
+                if num_fases == 1:
+                    f1 = fases_validas[:1]
+                    f1 = f'.{f1}.0'
+
+                    linha = (
+                        f"New Load.nome_{cod_id}_curva_diaria_{tip_cc}_curva_anual_{pot}_carga_media "
+                        f"Bus1={pac}{f1} Phases=1\n"
+                        f"~ Conn=wye Model=1 Kv={ten_nom_voltage:.4f} Kw=1 pf=0.92\n\n"
+                    )
+                    linhas.append(linha)
+
+                elif num_fases == 2 and len(fases_validas) >= 2:
+                    f1, f2 = fases_validas[:2]
+                    for i, f in enumerate([f1, f2], start=1):
+                        rec = f".{f}.0"
+                        linha = (
+                            f"New Load.nome_{cod_id}_{i}_curva_diaria_{tip_cc}_curva_anual_{pot}_carga_media "
+                            f"Bus1={pac}{rec} Phases=1\n"
+                            f"~ Conn=wye Model=1 Kv={ten_nom_voltage / math.sqrt(3):.4f} Kw=0.5 pf=0.92\n\n"
+                        )
+                        linhas.append(linha)
+
+                elif num_fases == 3 and len(fases_validas) >= 3:
+                    f1, f2, f3 = fases_validas[:3]
+                    for i, f in enumerate([f1, f2, f3], start=1):
+                        rec = f".{f}.0"
+                        linha = (
+                            f"New Load.nome_{cod_id}_{i}_curva_diaria_{tip_cc}_curva_anual_{pot}_carga_media "
+                            f"Bus1={pac}{rec} Phases=1\n"
+                            f"~ Conn=wye Model=1 Kv={ten_nom_voltage / math.sqrt(3):.4f} Kw=0.33 pf=0.92\n\n"
+                        )
+                        linhas.append(linha)
+
+                for linha in linhas:
+                    chunk_result.setdefault(sub, {}).setdefault(nome, []).append(linha)
 
             return chunk_result
 
@@ -1178,28 +1288,92 @@ class GD_FV_MT:
                     ten_nom_voltage = ten_nom_voltage / math.sqrt(3)
 
                 fases = rec_fases.strip('.').split('.')  # Ex: ['1', '2', '3']
+                fases.append('.0')
 
                 # Adiciona '.4' somente se phases == 1 e ainda não contém '4'
-                if phases == 1 and '4' not in fases:
-                    fases.append('4')
+                #if phases == 1 and '4' not in fases:
+                #    fases.append('4')
 
                 rec = '.' + '.'.join(fases)
 
-                linha =  (
-                    f"New xycurve.mypvst_{cod_id}_gd_media_tensao npts = 4 xarray=[0 25 75 100] yarray=[1.2 1.0 0.8 0.6]\n"
-                    f"New xycurve.myeff_{cod_id} npts = 4 xarray=[.1 .2 .4 1.0] yarray=[.86 .9 .93 .97]\n"
-                    f"New loadshape.myirrad_{cod_id} npts = 1 interval = 1 mult = [1]\n"
-                    f"New tshape.mytemp_{cod_id} npts = 1 interval = 1 temp = [25]\n\n"
-                    f"New pvsystem.pv_{cod_id} phases = {phases} conn = wye bus1 = {pac}{rec}\n"
-                    f"~ kv = {ten_nom_voltage} kva = {mdpotenciaoutorgada} pmpp = {mdpotenciainstalada}\n"
-                    f"~ pf = 1 %cutin = 0.00005 %cutout = 0.00005 varfollowinverter = Yes effcurve = myeff_{cod_id}\n"
-                    f"~ p-tcurve = mypvst_{cod_id} daily = myirrad_{cod_id} tdaily = mytemp_{cod_id}\n\n"
-                    f"New load.{cod_id}_carga_no_pv bus1 = {pac}{rec} phases = {phases}\n"
-                    f"~ conn = wye model = 1 kv = {ten_nom_voltage} kw = 0.0001\n\n"
-                )
+                if phases == 1:
+                    linha =  (
+                        f"New xycurve.mypvst_{cod_id}_gd_media_tensao npts = 4 xarray=[0 25 75 100] yarray=[1.2 1.0 0.8 0.6]\n"
+                        f"New xycurve.myeff_{cod_id} npts = 4 xarray=[.1 .2 .4 1.0] yarray=[.86 .9 .93 .97]\n"
+                        f"New loadshape.myirrad_{cod_id} npts = 1 interval = 1 mult = [1]\n"
+                        f"New tshape.mytemp_{cod_id} npts = 1 interval = 1 temp = [25]\n\n"
+                        f"New pvsystem.pv_{cod_id} phases = {phases} conn = wye bus1 = {pac}{rec}\n"
+                        f"~ kv = {ten_nom_voltage} kva = {mdpotenciaoutorgada} pmpp = {mdpotenciainstalada}\n"
+                        f"~ pf = 1 %cutin = 0.00005 %cutout = 0.00005 varfollowinverter = Yes effcurve = myeff_{cod_id}\n"
+                        f"~ p-tcurve = mypvst_{cod_id} daily = myirrad_{cod_id} tdaily = mytemp_{cod_id}\n\n"
+
+                    )
+                
+                elif phases == 2:
+                    
+                    # Extrair fases válidas
+                    fases_raw = rec_fases.strip('.').split('.')
+                    fases_validas = [f for f in fases_raw if f in {'1', '2', '3'}]
+
+                    # Verifica se temos pelo menos 2 fases
+                    f1, f2 = fases_validas[:2]  # pega as duas primeiras
+
+                    rec1 = f".{f1}.0"
+                    rec2 = f".{f2}.0"
+                        
+                    linha =  (
+                        f"New xycurve.mypvst_{cod_id}_gd_media_tensao npts = 4 xarray=[0 25 75 100] yarray=[1.2 1.0 0.8 0.6]\n"
+                        f"New xycurve.myeff_{cod_id} npts = 4 xarray=[.1 .2 .4 1.0] yarray=[.86 .9 .93 .97]\n"
+                        f"New loadshape.myirrad_{cod_id} npts = 1 interval = 1 mult = [1]\n"
+                        f"New tshape.mytemp_{cod_id} npts = 1 interval = 1 temp = [25]\n\n"
+                        f"New pvsystem.pv_{cod_id}_1 phases = 1 conn = wye bus1 = {pac}{rec1}\n"
+                        f"~ kv = {ten_nom_voltage / math.sqrt(3)} kva = {mdpotenciaoutorgada / 2} pmpp = {mdpotenciainstalada / 2}\n"
+                        f"~ pf = 1 %cutin = 0.00005 %cutout = 0.00005 varfollowinverter = Yes effcurve = myeff_{cod_id}\n"
+                        f"~ p-tcurve = mypvst_{cod_id} daily = myirrad_{cod_id} tdaily = mytemp_{cod_id}\n\n"
+
+                        
+                        f"New pvsystem.pv_{cod_id}_2 phases = 1 conn = wye bus1 = {pac}{rec2}\n"
+                        f"~ kv = {ten_nom_voltage / math.sqrt(3)} kva = {mdpotenciaoutorgada / 2} pmpp = {mdpotenciainstalada / 2}\n"
+                        f"~ pf = 1 %cutin = 0.00005 %cutout = 0.00005 varfollowinverter = Yes effcurve = myeff_{cod_id}\n"
+                        f"~ p-tcurve = mypvst_{cod_id} daily = myirrad_{cod_id} tdaily = mytemp_{cod_id}\n\n"
+
+                    )
+                elif phases == 3:
+                     # Extrair fases válidas
+                    fases_raw = rec_fases.strip('.').split('.')
+                    fases_validas = [f for f in fases_raw if f in {'1', '2', '3'}]
+
+                    # Verifica se temos pelo menos 2 fases
+                    f1, f2, f3 = fases_validas[:3]  # pega as duas primeiras
+
+                    rec1 = f".{f1}.0"
+                    rec2 = f".{f2}.0"
+                    rec3 = f".{f3}.0"
+                    linha =  (
+                        f"New xycurve.mypvst_{cod_id}_gd_media_tensao npts = 4 xarray=[0 25 75 100] yarray=[1.2 1.0 0.8 0.6]\n"
+                        f"New xycurve.myeff_{cod_id} npts = 4 xarray=[.1 .2 .4 1.0] yarray=[.86 .9 .93 .97]\n"
+                        f"New loadshape.myirrad_{cod_id} npts = 1 interval = 1 mult = [1]\n"
+                        f"New tshape.mytemp_{cod_id} npts = 1 interval = 1 temp = [25]\n\n"
+                        f"New pvsystem.pv_{cod_id}_1 phases = 1 conn = wye bus1 = {pac}{rec1}\n"
+                        f"~ kv = {ten_nom_voltage / math.sqrt(3)} kva = {mdpotenciaoutorgada / 3} pmpp = {mdpotenciainstalada / 3}\n"
+                        f"~ pf = 1 %cutin = 0.00005 %cutout = 0.00005 varfollowinverter = Yes effcurve = myeff_{cod_id}\n"
+                        f"~ p-tcurve = mypvst_{cod_id} daily = myirrad_{cod_id} tdaily = mytemp_{cod_id}\n\n"
+
+                        f"New pvsystem.pv_{cod_id}_2 phases = 1 conn = wye bus1 = {pac}{rec2}\n"
+                        f"~ kv = {ten_nom_voltage / math.sqrt(3)} kva = {mdpotenciaoutorgada / 3} pmpp = {mdpotenciainstalada / 3}\n"
+                        f"~ pf = 1 %cutin = 0.00005 %cutout = 0.00005 varfollowinverter = Yes effcurve = myeff_{cod_id}\n"
+                        f"~ p-tcurve = mypvst_{cod_id} daily = myirrad_{cod_id} tdaily = mytemp_{cod_id}\n\n"
+
+                        f"New pvsystem.pv_{cod_id}_3 phases = 1 conn = wye bus1 = {pac}{rec3}\n"
+                        f"~ kv = {ten_nom_voltage / math.sqrt(3)} kva = {mdpotenciaoutorgada / 3} pmpp = {mdpotenciainstalada / 3}\n"
+                        f"~ pf = 1 %cutin = 0.00005 %cutout = 0.00005 varfollowinverter = Yes effcurve = myeff_{cod_id}\n"
+                        f"~ p-tcurve = mypvst_{cod_id} daily = myirrad_{cod_id} tdaily = mytemp_{cod_id}\n\n"
+
+                    )
 
                 chunk_dict.setdefault(sub, {}).setdefault(nome, []).append(linha)
                 progress.advance(task)
+                
 
         return chunk_dict
 

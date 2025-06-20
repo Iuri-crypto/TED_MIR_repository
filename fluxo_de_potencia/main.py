@@ -38,9 +38,9 @@ gerar_grafico_circuito = True
 
 # caminho da modelagem
 caminho_base = r"C:\TED_MIDR\Output_modelagem_DSS"
-nomes_que_devem_ser_carregados = ['279013','279012','279011','279014','279015','279003','279002','279001']
 
+if __name__ == '__main__':
 # Executa o fluxo de potência
-class_Fluxo_de_Potencia.config_run(modo_snapshot, modo_daily, modo_yearly, mes_index, modelo_carga, usar_cargas_bt, 
-                               usar_cargas_mt, usar_gd_bt, usar_gd_mt, usar_geracao_hidraulica, exibir_tensao, exibir_corrente, 
-                               exibir_DEC, exibir_FEC, monitorar_subestacao, gerar_grafico_circuito, caminho_base)
+    class_Fluxo_de_Potencia.config_run(modo_snapshot, modo_daily, modo_yearly, mes_index, modelo_carga, usar_cargas_bt, 
+                                usar_cargas_mt, usar_gd_bt, usar_gd_mt, usar_geracao_hidraulica, exibir_tensao, exibir_corrente, 
+                                exibir_DEC, exibir_FEC, monitorar_subestacao, gerar_grafico_circuito, caminho_base)

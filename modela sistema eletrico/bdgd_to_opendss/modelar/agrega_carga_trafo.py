@@ -401,17 +401,19 @@ class Agrega_Carga_Trafos:
                     curva_diaria_media_do = curva_diaria_do / n_validas
                     curva_diaria_media_du = curva_diaria_du / n_validas
                     curva_diaria_media_sa = curva_diaria_sa / n_validas
-                    curva_diaria_str_do = "_".join(f"{x:.4f}" for x in curva_diaria_media_do)
-                    curva_diaria_str_du = "_".join(f"{x:.4f}" for x in curva_diaria_media_du)
-                    curva_diaria_str_sa = "_".join(f"{x:.4f}" for x in curva_diaria_media_sa)
 
-                    curva_anual_str = "_".join(f"{x:.2f}" for x in curva_anual_total)
+                    curva_diaria_str_do = "_".join(f"{x:.4f}".replace('.', '-') for x in curva_diaria_media_do)
+                    curva_diaria_str_du = "_".join(f"{x:.4f}".replace('.', '-') for x in curva_diaria_media_du)
+                    curva_diaria_str_sa = "_".join(f"{x:.4f}".replace('.', '-') for x in curva_diaria_media_sa)
+
+                    curva_anual_str = "_".join(f"{x:.2f}".replace('.', '-') for x in curva_anual_total)
 
                     linhas_agg.append(
                         f"New Load.nome_{trafo}_curva_diaria_{tip_cc}_du_{curva_diaria_str_du}_sa_{curva_diaria_str_sa}_do_{curva_diaria_str_do}_curva_anual_{curva_anual_str}_carga_agregada "
                         f"Bus1={bus2} Phases=3\n"
                         f"~ Conn=wye Model=1 Kv={tensao_trafo} Kw=1 pf=0.92"
                     )
+
 
             # ... código anterior permanece igual até a etapa 3
 
@@ -670,9 +672,10 @@ class Agrega_Carga_Trafos:
                     curva_du = curvas_de_carga[nome_curva].get("DU")
                     curva_sa = curvas_de_carga[nome_curva].get("SA")
 
-                    curva_str_do = "_".join(f"{v:.4f}" for v in curva_do)
-                    curva_str_du = "_".join(f"{v:.4f}" for v in curva_du)
-                    curva_str_sa = "_".join(f"{v:.4f}" for v in curva_sa)
+                    curva_str_do = "_".join(f"{v:.4f}".replace('.', '-') for v in curva_do)
+                    curva_str_du = "_".join(f"{v:.4f}".replace('.', '-') for v in curva_du)
+                    curva_str_sa = "_".join(f"{v:.4f}".replace('.', '-') for v in curva_sa)
+
 
                     match_insercao = re.search(
                         r"(curva_diaria_" + re.escape(nome_curva) + r")(_curva_anual_)", linha
